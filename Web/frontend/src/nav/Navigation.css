@@ -1,0 +1,42 @@
+header {
+    display: flex;
+    justify-content: center;
+
+}
+#nav-logo {
+    position: absolute;
+    left:15px;
+    right: 0;
+    user-select: none;
+
+    -webkit-user-drag: none;
+}
+.nav-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.nav-content > ul  {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+
+}
+.nav-link {
+    margin-left: 30px;
+    font-family: "Open sans",sans-serif;
+    font-size: 25px;
+    font-weight: 600;
+    margin-top: 20px;
+    user-select: none;
+
+
+}
+.nav-link > a {
+    text-decoration: none;
+    color: black;
+}
+.nav-link:hover {
+    text-decoration: underline black;
+    cursor: grab;
+}
