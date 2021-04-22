@@ -2,5 +2,7 @@
   "nav-home": "Home",
   "downloads": "Downloads",
   "error404": "Error 404",
-  "error404-page-not-found": "Sorry, the page you're looking for was not found."
+  "error404-page-not-found": "Sorry, the page you're looking for was not found.",
+  "my-password-manager": "My password manager",
+  "created-by": "Created by"
 }

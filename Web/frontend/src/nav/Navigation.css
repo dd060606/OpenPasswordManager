@@ -1,21 +1,15 @@
-header {
-    display: flex;
-    justify-content: center;
 
-}
 #nav-logo {
-    position: absolute;
-    left:15px;
-    right: 0;
-
     user-select: none;
-
     -webkit-user-drag: none;
+    margin-left: 20px;
 }
 .nav-content {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    flex-direction: row;
+
 }
 .nav-content > ul  {
     display: flex;
@@ -23,42 +17,58 @@ header {
     list-style: none;
 
 }
-.navlink {
+.navlink, .external-link {
+
+    
     font-family: "Open sans",sans-serif;
     font-size: 25px;
     font-weight: 600;
     user-select: none;
     text-decoration: none;
     color:black;
-    padding:15px;
-
+    margin-left: 20px;
+    margin-top: 10px;
 }
 .external-link {
-    font-family: "Open sans",sans-serif;
-    font-size: 25px;
-    font-weight: 600;
-    user-select: none;
+    margin-top: 20px;
+}
+.navlink:hover {
     text-decoration: none;
     color:black;
-    padding:15px;
-    margin-top: 15px;
 }
-.navlink.current {
-    text-decoration: underline black;
+
+.link-underline {
+    position: relative;
+    display:inline-block;
 }
+.link-underline::before{
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 3px;
+        bottom: 0;
+        left: 0;
+        background-color: black;
+        visibility: "hidden";
+        transition: all 0.3s ease-in-out;
+      
+}
+.link-underline:hover::before{
+        visibility: visible;
+        width: 100%;
+}
+.current::before{
+    visibility: visible;
+    width: 100%;
+}
+
 a {
     text-decoration: none;
     color: black;
 }
-.navlink:hover, .external-link:hover {
-    text-decoration: underline black;
-    cursor: grab;
-}
+
 #language-selector-btn {
-    position: absolute;
-    left:90%;
-    margin-top: 30px;
-    right: 10%;
+
     background:transparent;
     outline: none;
     border: none;
@@ -68,9 +78,51 @@ a {
     outline: none !important;
     box-shadow: none;
  }
+.language-selector-item:focus,.language-selector-item:active {
+    background-color: red;
+
+ }
 #language-selector-btn:focus {
     outline: none;
 }
 #language-selector-btn:hover {
-    cursor: grab;
+    cursor: pointer;
+}
+
+.dropdown {
+    list-style: none; 
+    background: transparent; 
+    padding: 10px; 
+    display: inline-block;
+}
+.dropdown-menu .dropdown-item {display: inline-block; width: 100%; padding: 10px 5px;}
+.dropdown .dropdown-menu a:hover
+{
+  color: #fff;
+  background-color: #54c2f0;
+  border-color: #fff;
+}
+.my-password-manager-btn {
+    outline: none;
+    border: 2px #54c2f0 solid;
+    border-radius: 5px;
+    background-color: white;
+    color:#54c2f0;
+    font-family: "Open sans",sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px ;
+    transition: background 0.5s;
+    transition: color 0.5s;
+    width: 250px;
+
+
+}
+.my-password-manager-btn:hover {
+    background-color: #54c2f0;
+    color:white;
+    transition: background 0.5s;
+    transition: color 0.5s;
+    
+
 }

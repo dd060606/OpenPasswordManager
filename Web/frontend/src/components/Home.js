@@ -3,7 +3,9 @@ import './css/Home.css';
 function App() {
   return (
     <div className="home">
-      aeaeaeea
+      <div class="link-background">
+        <a href="" class="sec">Hover Over Me</a>
+      </div>
     </div>
   );
 }
