@@ -1,20 +1,14 @@
 let language = "en"
-let lang = {}
+let langJSON = {}
 
 function setLanguage(lang) {
     language = lang
-    fetch('./langs/' + language + ".json", {
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-
-    })
-        .then(res => res.json())
-        .then(json => { lang = json })
-    console.log(lang)
+}
+function setLangJSON(json) {
+    langJSON = json
 }
 function translate(key) {
-    return "Test"
+    return langJSON[key]
 }
-export { translate, setLanguage }
+
+export { translate, setLanguage, language, setLangJSON }

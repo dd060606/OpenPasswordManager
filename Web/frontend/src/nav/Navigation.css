@@ -7,6 +7,7 @@ header {
     position: absolute;
     left:15px;
     right: 0;
+
     user-select: none;
 
     -webkit-user-drag: none;
@@ -22,21 +23,54 @@ header {
     list-style: none;
 
 }
-.nav-link {
-    margin-left: 30px;
+.navlink {
     font-family: "Open sans",sans-serif;
     font-size: 25px;
     font-weight: 600;
-    margin-top: 20px;
     user-select: none;
-
+    text-decoration: none;
+    color:black;
+    padding:15px;
 
 }
-.nav-link > a {
+.external-link {
+    font-family: "Open sans",sans-serif;
+    font-size: 25px;
+    font-weight: 600;
+    user-select: none;
+    text-decoration: none;
+    color:black;
+    padding:15px;
+    margin-top: 15px;
+}
+.navlink.current {
+    text-decoration: underline black;
+}
+a {
     text-decoration: none;
     color: black;
 }
-.nav-link:hover {
+.navlink:hover, .external-link:hover {
     text-decoration: underline black;
+    cursor: grab;
+}
+#language-selector-btn {
+    position: absolute;
+    left:90%;
+    margin-top: 30px;
+    right: 10%;
+    background:transparent;
+    outline: none;
+    border: none;
+    color: black
+}
+#language-selector-btn:focus,#language-selector-btn:active {
+    outline: none !important;
+    box-shadow: none;
+ }
+#language-selector-btn:focus {
+    outline: none;
+}
+#language-selector-btn:hover {
     cursor: grab;
 }

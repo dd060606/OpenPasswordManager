@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 
-const langRoutes = require("./routes/langs");
 
 const app = express();
 
@@ -15,10 +14,8 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-app.use('/langs', express.static(path.join(__dirname, 'langs')));
 
 
-app.use("/api/langs", langRoutes);
 
 
 module.exports = app;
