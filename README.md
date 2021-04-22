@@ -3,4 +3,4 @@ OpenPasswordManager is a browser and desktop password manager. The app can run e
 
 OpenPasswordManager is really simple to use.
 
-
+In development...
