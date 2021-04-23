@@ -9,6 +9,8 @@ footer {
 footer > a {
     color: black;
     transition: color 0.3s;
+    font-size: 17px;
+
 
 }
 
@@ -17,3 +19,4 @@ footer > a:hover {
     color: #54c2f0;
     text-decoration: none;
 }
+

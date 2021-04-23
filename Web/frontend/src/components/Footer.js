@@ -10,7 +10,10 @@ class Footer extends Component {
             <footer>
                 <a href="https://github.com/dd060606/OpenPasswordManager" target="_blank">GitHub</a>
                 <hr />
-                <p>{translate("created-by")} dd_06</p>
+                <p class="message-cookies">{translate("essential-cookies")}</p>
+                <hr />
+                <p >{translate("created-by")} <strong>dd_06</strong></p>
+
             </footer>)
     }
 }

@@ -3,6 +3,9 @@
   "downloads": "Téléchargements",
   "error404": "Erreur 404",
   "error404-page-not-found": "Désolé, la page que vous recherchez est introuvable.",
-  "my-password-manager": "Mon gestionnaire de mots de passe",
-  "created-by": "Crée par"
+  "my-password-manager": "Mes mots de passe",
+  "created-by": "Crée par",
+  "essential-cookies": "Ce site utilise uniquement des cookies essentiels, en continuant de naviguer sur ce site vous acceptez l'utilisation des cookies.",
+  "home-slogan": "Un gestionnaire de mots de passe multiplateforme gratuit et open source",
+  "features": "Fonctionnalités"
 }

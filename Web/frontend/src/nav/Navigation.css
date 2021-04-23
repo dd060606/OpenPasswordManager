@@ -21,12 +21,14 @@
 
     
     font-family: "Open sans",sans-serif;
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 600;
-    user-select: none;
     text-decoration: none;
     color:black;
     margin-left: 20px;
+    margin-right: 20px;
+    
+
     margin-top: 10px;
 }
 .external-link {
@@ -45,7 +47,7 @@
         content: "";
         position: absolute;
         width: 0;
-        height: 3px;
+        height: 1.5px;
         bottom: 0;
         left: 0;
         background-color: black;
@@ -119,8 +121,7 @@ a {
 
 }
 .my-password-manager-btn:hover {
-    background-color: #54c2f0;
-    color:white;
+    background-color: rgba(223,223,223,0.5);
     transition: background 0.5s;
     transition: color 0.5s;
     
