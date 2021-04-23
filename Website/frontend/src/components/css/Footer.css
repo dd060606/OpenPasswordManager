@@ -1,0 +1,27 @@
+footer {
+    display: flex;
+    background-color: #E8E8E8;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: "Open Sans",sans-serif;
+
+}
+footer > a {
+    color: black;
+    transition: color 0.3s;
+    font-size: 17px;
+
+
+}
+
+footer > a:hover {
+    transition: color 0.3s;
+    color: #54c2f0;
+    text-decoration: none;
+}
+@media all and (max-width:460px) {
+    .message-cookies {
+        font-size: 10px;
+    }
+}

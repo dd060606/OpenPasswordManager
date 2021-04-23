@@ -1,0 +1,147 @@
+.home {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Open Sans", sans-serif;
+}
+.home-header {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.home-header > h1 {
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+ .home-header > .slogan {
+  margin-top: 15px;
+}
+.home-header > .icon {
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+}
+.home > .features-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(198,237,240,0.35);
+  margin-top: 50px;
+  width: 100%;
+}
+.features-title {
+  font-weight: 600;
+  font-size: 25px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.features {
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.feature {
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 650px;
+  height: 200px;
+  background-color: white;
+  border-radius: 20px;
+  -webkit-box-shadow: 3px 3px 10px 4px rgba(0,0,0,0.3); 
+  box-shadow: 3px 3px 10px 4px rgba(0,0,0,0.3);
+
+
+}
+
+.feature-info {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.feature-title {
+  margin-top: 25px;
+  font-size: 25px;
+  font-weight: 600;
+
+}
+
+.feature-icon {
+  margin-left: 15px;
+  margin-right: 25px;
+  font-size: 150px;
+
+}
+@media all and (max-width:680px) {
+  .feature {
+    width: 450px;
+  }
+  .feature-icon {
+    font-size: 100px;
+
+  }
+  .feature-title {
+    font-size: 18px;
+  }
+  .feature-desc {
+    font-size: 14px;
+  }
+}
+@media all and (max-width:460px) {
+  .feature {
+    width: 350px;
+  }
+  .feature-icon {
+    font-size: 65px;
+
+  }
+  .feature-title {
+    font-size: 16px;
+  }
+  .feature-desc {
+    font-size: 13px;
+  }
+
+  .home-header > h1 {
+    font-size: 30px;
+  }
+   .home-header > .slogan {
+    font-size: 20px;
+
+   }
+}
+
+@media all and (max-width:365px) {
+  .feature {
+    width: 250px;
+  }
+  .feature-icon {
+    font-size: 35px;
+    margin-right: 18px;
+
+  }
+  .feature-title {
+    font-size: 13px;
+  }
+  .feature-desc {
+    font-size: 10px;
+  }
+
+  .home-header > h1 {
+    font-size: 20px;
+  }
+   .home-header > .slogan {
+    font-size: 15px;
+
+   }
+} 

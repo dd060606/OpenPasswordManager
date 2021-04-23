@@ -1,0 +1,99 @@
+import { Component } from "react"
+import "./Navigation.css"
+import { translate, setLangJSON, setLanguage } from "../utils/langManager"
+import { NavLink } from "react-router-dom"
+import { DropdownButton, Dropdown } from "react-bootstrap"
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { updateRender, cookies } from "../index"
+import ResponsiveButton from "./ResponsiveButton"
+
+
+
+
+class Navigation extends Component {
+
+    state = {
+        allLanguages: ["English", "Français"],
+        currentLanguage: "en",
+        isResponsiveMenuOpened: false
+    }
+
+
+    //Arrow fx for binding
+    handleLanguageSelected = index => {
+        const { allLanguages } = this.state
+
+        fetch('assets/langs/' + allLanguages[index].substring(0, 2).toLowerCase() + '.json', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(res => res.json())
+            .then(json => {
+                setLangJSON(json)
+                setLanguage(allLanguages[index].substring(0, 2).toLowerCase())
+                cookies.set('language', allLanguages[index].substring(0, 2).toLowerCase(), { path: '/' });
+                updateRender()
+
+                this.setState({
+                    currentLanguage: allLanguages[index].substring(0, 2).toLowerCase()
+                })
+            })
+
+
+
+        console.log("Switched to " + allLanguages[index])
+
+    }
+
+
+
+    //Arrow fx for binding
+    handleResponsive = () => {
+        const { isResponsiveMenuOpened } = this.state
+        if (isResponsiveMenuOpened) {
+            this.setState({ isResponsiveMenuOpened: false })
+        }
+        else {
+            this.setState({ isResponsiveMenuOpened: true })
+        }
+    }
+
+    render() {
+        const { allLanguages, isResponsiveMenuOpened } = this.state
+
+        return (
+            <header>
+                <div className="nav-content">
+                    <NavLink exact to="/">
+                        <img src={`${process.env.PUBLIC_URL}/assets/images/logo.png`} alt="nav-logo" id="nav-logo" width={120} height={110} />
+                    </NavLink>
+                    <ul>
+                        <NavLink className="navlink " exact activeClassName="current" to="/">
+                            <li className="navlink link-underline">{translate("nav-home")}</li>
+                        </NavLink>
+
+                        <NavLink className="navlink" exact activeClassName="current" to="/Downloads">
+                            <li className="navlink  link-underline">{translate("downloads")}</li>
+                        </NavLink>
+
+                        <a href="https://github.com/dd060606/OpenPasswordManager" rel="noopener noreferrer" target="_blank"><li className="external-link link-underline">GitHub</li></a>
+                    </ul>
+                    <div>
+                        <button className="my-password-manager-btn">{translate("my-password-manager")}</button>
+                        <DropdownButton id="language-selector-btn" title={<i className="fas fa-globe fa-2x" />}>
+                            {allLanguages.map((language, index) => (
+                                <Dropdown.Item onClick={() => this.handleLanguageSelected(index)} key={index}>{language}</Dropdown.Item>
+                            ))}
+                        </DropdownButton>
+                        <ResponsiveButton />
+                    </div>
+
+
+                </div>
+
+            </header >)
+    }
+}
+
+export default Navigation
