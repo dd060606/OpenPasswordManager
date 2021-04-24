@@ -1,19 +1,21 @@
 {
-  "nav-home": "Accueil",
-  "downloads": "Téléchargements",
   "error404": "Erreur 404",
   "error404-page-not-found": "Désolé, la page que vous recherchez est introuvable.",
+  "nav-home": "Accueil",
+  "downloads": "Téléchargements",
   "my-password-manager": "Mes mots de passe",
   "created-by": "Crée par",
   "essential-cookies": "Ce site utilise uniquement des cookies essentiels, en continuant de naviguer sur ce site vous acceptez l'utilisation des cookies.",
   "home-slogan": "Un gestionnaire de mots de passe multiplateforme gratuit et open source",
+  "get-started": "Commencer",
   "features": "Fonctionnalités",
   "home-feature-db-store-title": "Vos mots de passe sont stockés dans votre base de données",
   "home-feature-db-store-desc": "Vous devez ajouter votre base de données MySQL à votre compte pour pouvoir stocker tous vos mots de passes dans votre base de données de façon sécurisée.",
   "home-feature-password-title": "Mots de passe sécurisés",
-  "home-feature-password-desc": "Vos mots de passe sont générés  sauvegardés sur votre base de données de façon sécurisée.",
+  "home-feature-password-desc": "Vos mots de passe forts sont générés aléatoirement puis sauvegardés sur votre base de données de façon sécurisée.",
   "home-feature-desktopapps-title": "Applications de bureau pour toutes les plateformes",
   "home-feature-desktopapps-desc": "Des applications de bureau pour chaque plateformes. Ces applications peuvent être utilisées sans connexion Internet.",
   "home-feature-webapp-title": "Application Web",
-  "home-feature-webapp-desc": "Accèdez à vos mots de passe directement depuis votre navigateur. Cela ne requiert aucune installation et fonctionne sur tous les navigateurs Internet."
+  "home-feature-webapp-desc": "Accèdez à vos mots de passe directement depuis votre navigateur. Cela ne requiert aucune installation et fonctionne sur tous les navigateurs Internet.",
+  "desktop-apps": "Applications de bureau"
 }

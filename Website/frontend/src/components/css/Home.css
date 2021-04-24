@@ -24,6 +24,27 @@
   -webkit-user-drag: none;
   -webkit-user-select: none;
 }
+.get-started-button {
+
+  margin-top: 15px;
+  outline: none;
+  border: 2px #54c2f0 solid;
+  border-radius: 5px;
+  background-color: white;
+  color:#54c2f0;
+  font-family: "Open sans",sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 10px ;
+  transition: background 0.5s;
+  transition: color 0.5s;
+  width: 200px;
+}
+.get-started-button:hover {
+  background-color: rgba(223,223,223,0.5);
+  transition: background 0.5s;
+  transition: color 0.5s;
+}
 .home > .features-section {
   display: flex;
   justify-content: center;

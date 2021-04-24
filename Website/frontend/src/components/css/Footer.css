@@ -5,6 +5,7 @@ footer {
     align-items: center;
     text-align: center;
     font-family: "Open Sans",sans-serif;
+    overflow: hidden;
 
 }
 footer > a {

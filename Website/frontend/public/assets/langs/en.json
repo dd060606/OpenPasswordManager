@@ -1,19 +1,21 @@
 {
-  "nav-home": "Home",
-  "downloads": "Downloads",
   "error404": "Error 404",
   "error404-page-not-found": "Sorry, the page you're looking for was not found.",
+  "nav-home": "Home",
+  "downloads": "Downloads",
   "my-password-manager": "My passwords",
   "created-by": "Created by",
   "essential-cookies": "This website only uses essential cookies, by continuing to browse this website you accept cookies.",
   "home-slogan": "Free cross-platform and open source password manager",
+  "get-started": "Get started",
   "features": "Features",
   "home-feature-db-store-title": "Your passwords are stored in your database",
   "home-feature-db-store-desc": "You must add your MySQL database to your account to be able to store all your passwords in your database securely.",
   "home-feature-password-title": "Secure passwords",
-  "home-feature-password-desc": "Your passwords are securely stored in your database.",
+  "home-feature-password-desc": "Your generated passwords are strong and securely stored in your database",
   "home-feature-desktopapps-title": "Desktop apps for all platforms",
   "home-feature-desktopapps-desc": "Desktop apps for each platform. Desktop apps can be used offline.",
   "home-feature-webapp-title": "Web app",
-  "home-feature-webapp-desc": "Access your passwords directly in your browser. It doesn't require any installation and works in all modern browsers."
+  "home-feature-webapp-desc": "Access your passwords directly in your browser. It doesn't require any installation and works in all modern browsers.",
+  "desktop-apps": "Desktop Apps"
 }

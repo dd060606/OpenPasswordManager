@@ -8,6 +8,7 @@ function App() {
         <h1>OpenPasswordManager</h1>
         <img src={`${process.env.PUBLIC_URL}/assets/images/icon.png`} className="icon" alt="icon" width={50} />
         <h4 className="slogan">{translate("home-slogan")}</h4>
+        <button className="get-started-button">{translate("get-started")}</button>
       </div>
       <section className="features-section">
         <h4 className="features-title">{translate("features")}</h4>

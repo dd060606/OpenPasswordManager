@@ -1,5 +1,5 @@
 import { Component } from "react"
-import "./Navigation.css"
+import "./css/Navigation.css"
 import { translate, setLangJSON, setLanguage } from "../../utils/langManager"
 import { NavLink } from "react-router-dom"
 import { DropdownButton, Dropdown } from "react-bootstrap"
