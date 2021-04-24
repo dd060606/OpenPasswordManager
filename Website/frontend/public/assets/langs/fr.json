@@ -11,7 +11,7 @@
   "home-feature-db-store-title": "Vos mots de passe sont stockés dans votre base de données",
   "home-feature-db-store-desc": "Vous devez ajouter votre base de données MySQL à votre compte pour pouvoir stocker tous vos mots de passes dans votre base de données de façon sécurisée.",
   "home-feature-password-title": "Mots de passe sécurisés",
-  "home-feature-password-desc": "Vos mots de passe sont sauvegardés sur votre base de données de façon sécurisée.",
+  "home-feature-password-desc": "Vos mots de passe sont générés  sauvegardés sur votre base de données de façon sécurisée.",
   "home-feature-desktopapps-title": "Applications de bureau pour toutes les plateformes",
   "home-feature-desktopapps-desc": "Des applications de bureau pour chaque plateformes. Ces applications peuvent être utilisées sans connexion Internet.",
   "home-feature-webapp-title": "Application Web",
