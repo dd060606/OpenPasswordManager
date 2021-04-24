@@ -8,7 +8,6 @@ import Footer from "./components/Footer"
 
 
 import Navigation from "./components/nav/Navigation"
-import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { setLanguage, setLangJSON } from "./utils/langManager"
 
