@@ -1,0 +1,41 @@
+@media all and (max-width: 1030px) {
+    .responsive-nav-ul > li{
+        display: flex;
+
+        color: #fff;
+    }
+    .responsive-nav-ul {
+        flex-flow: column nowrap;
+        background-color: #212529;
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: 300px;
+        padding-top: 3.5rem;
+        transition: transform 0.3s ease-in-out;
+    }
+}  
+.responsive-nav-ul > li  {
+    padding: 18px 10px;
+}
+
+.responsive-nav-ul {
+    display: flex;
+    font-family: "Open Sans", sans-serif;
+    list-style: none;
+    flex-flow: column nowrap;
+    z-index: 10;
+}
+.responsive-navlink {
+    text-decoration: none;
+    color: white;
+    margin-bottom: 15px;
+    font-size: 25px;
+    font-weight: 600;
+
+}
+.responsive-navlink:hover {
+    text-decoration: underline 2px white;
+
+}

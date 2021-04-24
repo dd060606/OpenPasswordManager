@@ -7,7 +7,7 @@ import Error404 from './components/errors/Error404';
 import Footer from "./components/Footer"
 
 
-import Navigation from "./nav/Navigation"
+import Navigation from "./components/nav/Navigation"
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { setLanguage, setLangJSON } from "./utils/langManager"

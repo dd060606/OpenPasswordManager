@@ -1,27 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import ResponsiveNav from './ResponsiveNav';
+import "./css/ResponsiveButton.css"
 
+
+let setMenuOpen;
 const StyledResponsiveButton = styled.div`
-  width: 2rem;
-  height: 2rem;
-  position: absolute;
-  top: 35px;
-  right: 20px;
-  z-index: 20;
-  display: none;
-  @media (max-width: 1030px) {
-    display: flex;
-    justify-content: space-around;
-    flex-flow: column nowrap;
-  }
+
+  
   div {
-    width: 2rem;
-    height: 0.25rem;
+
     background-color: ${({ open }) => open ? '#ccc' : '#333'};
-    border-radius: 10px;
-    transform-origin: 1px;
-    transition: all 0.3s linear;
+
     &:nth-child(1) {
       transform: ${({ open }) => open ? 'rotate(45deg)' : 'rotate(0)'};
     }
@@ -37,17 +27,18 @@ const StyledResponsiveButton = styled.div`
 
 const ResponsiveButton = () => {
   const [open, setOpen] = useState(false)
-  
+  setMenuOpen = setOpen
   return (
     <>
-      <StyledResponsiveButton open={open} onClick={() => setOpen(!open)}>
+      <StyledResponsiveButton className="responsive-btn" style={{ position: open ? "fixed" : "absolute" }} open={open} onClick={() => setOpen(!open)}>
         <div />
         <div />
         <div />
       </StyledResponsiveButton>
-      <ResponsiveNav open={open}/>
+      <ResponsiveNav open={open} />
     </>
   )
 }
 
 export default ResponsiveButton
+export { setMenuOpen }

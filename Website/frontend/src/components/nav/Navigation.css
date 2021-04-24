@@ -128,8 +128,13 @@ a {
 
 }
 @media all and (max-width: 1030px) {
-    .navlink, .external-link, #language-selector-btn, .my-password-manager-btn {
+    .navlink, .external-link, .my-password-manager-btn {
         display: none;
+    }
+    #language-selector-btn {
+        position: absolute;
+        top: -12.5px;
+        right: 0px;
     }
 }
 

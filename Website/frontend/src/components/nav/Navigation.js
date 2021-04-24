@@ -1,10 +1,10 @@
 import { Component } from "react"
 import "./Navigation.css"
-import { translate, setLangJSON, setLanguage } from "../utils/langManager"
+import { translate, setLangJSON, setLanguage } from "../../utils/langManager"
 import { NavLink } from "react-router-dom"
 import { DropdownButton, Dropdown } from "react-bootstrap"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { updateRender, cookies } from "../index"
+import { updateRender, cookies } from "../../index"
 import ResponsiveButton from "./ResponsiveButton"
 
 
@@ -14,8 +14,7 @@ class Navigation extends Component {
 
     state = {
         allLanguages: ["English", "Français"],
-        currentLanguage: "en",
-        isResponsiveMenuOpened: false
+        currentLanguage: "en"
     }
 
 
@@ -46,21 +45,8 @@ class Navigation extends Component {
 
     }
 
-
-
-    //Arrow fx for binding
-    handleResponsive = () => {
-        const { isResponsiveMenuOpened } = this.state
-        if (isResponsiveMenuOpened) {
-            this.setState({ isResponsiveMenuOpened: false })
-        }
-        else {
-            this.setState({ isResponsiveMenuOpened: true })
-        }
-    }
-
     render() {
-        const { allLanguages, isResponsiveMenuOpened } = this.state
+        const { allLanguages } = this.state
 
         return (
             <header>
