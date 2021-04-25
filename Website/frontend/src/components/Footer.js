@@ -12,7 +12,7 @@ class Footer extends Component {
                 <hr />
                 <p className="message-cookies">{translate("essential-cookies")}</p>
                 <hr />
-                <p >{translate("created-by")} <strong>dd_06</strong></p>
+                <p >{translate("created-by")} <strong><a href="https://github.com/dd060606" rel="noopener noreferrer" target="_blank">dd_06</a></strong></p>
             </footer >)
     }
 }

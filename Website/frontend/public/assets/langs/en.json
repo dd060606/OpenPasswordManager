@@ -17,5 +17,7 @@
   "home-feature-desktopapps-desc": "Desktop apps for each platform. Desktop apps can be used offline.",
   "home-feature-webapp-title": "Web app",
   "home-feature-webapp-desc": "Access your passwords directly in your browser. It doesn't require any installation and works in all modern browsers.",
-  "desktop-apps": "Desktop Apps"
+  "desktop-apps": "Desktop Apps",
+  "download": "Download",
+  "all-releases": "All releases"
 }

@@ -17,5 +17,7 @@
   "home-feature-desktopapps-desc": "Des applications de bureau pour chaque plateformes. Ces applications peuvent être utilisées sans connexion Internet.",
   "home-feature-webapp-title": "Application Web",
   "home-feature-webapp-desc": "Accèdez à vos mots de passe directement depuis votre navigateur. Cela ne requiert aucune installation et fonctionne sur tous les navigateurs Internet.",
-  "desktop-apps": "Applications de bureau"
+  "desktop-apps": "Applications de bureau",
+  "download": "Télécharger",
+  "all-releases": "Toutes les versions"
 }
