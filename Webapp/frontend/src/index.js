@@ -1,13 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Home from './components/Home';
-import Downloads from './components/Downloads';
+
 import Error404 from './components/errors/Error404';
-import Footer from "./components/Footer"
+import Login from "./components/auth/Login"
 
-
-import Navigation from "./components/nav/Navigation"
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { setLanguage, setLangJSON } from "./utils/langManager"
 
@@ -37,13 +34,10 @@ function updateRender() {
   ReactDOM.render(
     <React.StrictMode>
       <Router>
-        <Navigation />
         <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/Downloads" exact component={Downloads} />
+          <Route path="/" exact component={Login} />
           <Route path="/" component={Error404} />
         </Switch>
-        <Footer />
       </Router>
     </React.StrictMode >,
     document.getElementById('root')
