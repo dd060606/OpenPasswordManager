@@ -1,5 +1,6 @@
 footer {
     display: flex;
+    flex-direction: column;
     background-color: #E8E8E8;
     justify-content: center;
     align-items: center;
@@ -20,6 +21,9 @@ footer > a:hover {
     transition: color 0.3s;
     color: #54c2f0;
     text-decoration: none;
+}
+footer > .message-cookies {
+    margin-top: 10px;
 }
 @media all and (max-width:460px) {
     .message-cookies {
