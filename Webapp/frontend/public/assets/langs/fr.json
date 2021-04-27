@@ -2,7 +2,11 @@
   "error404": "Erreur 404",
   "error404-page-not-found": "Désolé, la page que vous recherchez est introuvable.",
   "welcome-on": "Bienvenue sur",
-  "please-connect-to-opm": "Veuillez vous connectez à OpenPasswordManager",
-  "login-to-opm": "Se connecter à OpenPasswordManager",
-  "email": "Adresse E-Mail"
+  "new-on-opm": "Nouveau sur OpenPasswordManager ?",
+  "login": "Se connecter",
+  "signup": "S'inscrire",
+  "email": "Adresse E-Mail",
+  "password": "Mot de passe",
+  "forgot-password": "Mot de passe oublié ?",
+  "already-have-account": "Vous n'avez pas de compte ? Inscription"
 }

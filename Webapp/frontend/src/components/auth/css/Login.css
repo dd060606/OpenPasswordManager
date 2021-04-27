@@ -28,15 +28,46 @@
 .welcome-login > .welcome {
     font-size: 30Px;
 }
+.welcome-login > .signup-btn {
+
+        outline: none;
+        cursor: pointer;
+        border: 2px #54c2f0 solid;
+        border-radius: 5px;
+        background-color: white;
+        color:#54c2f0;
+        font-family: "Open sans",sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        padding: 10px ;
+        transition: background 0.5s;
+        transition: color 0.5s;
+        width: 250px;
+}
+.welcome-login > .signup-btn:hover {
+    background-color: rgba(223,223,223,0.5);
+    transition: background 0.5s;
+    transition: color 0.5s;
+}
 .login-form {
+    
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
+
     width: 45%;
 }
+.login-form > #nav-logo-responsive {
+    display: none;
+}
+.login-form > h2 {
+    margin-bottom: 50px;
+}
 
-.login-form > .email-field {
+.login-form > .email-field, .login-form > .password-field {
+    margin-bottom: 15px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -44,24 +75,53 @@
 
     width: 300px;
     height: 35px;
-    border: 1px grey solid;
+    background-color: rgba(236, 236, 236, 0.8);
     border-radius: 5px;
     
 }
-.login-form > .email-field > input[type="email"] {
-    width: 250px;
+
+.login-form > .email-field > #email-input, .login-form > .password-field > #password-input {
+    width: 100%;
     height: 35px;
     border:none;
     outline: none;
     font-size: 17px;
-    
-
     background: transparent;
     text-align: center;
 }
-.login-form > .email-field > .field-icon {
-    font-size: 30px;
-    margin-left: 5px;
+.login-form > .forgot-password, .login-form > .already-account {
+    color: black;
+    text-decoration: none;
+}
+.login-form > .already-account {
+    display: none;
+    margin-top: 15px;
+}
+.login-form > .forgot-password:hover, .login-form > .already-account:hover {
+    text-decoration: underline black;
+}
+.login-form > .login-btn {
+    cursor: pointer;
+    font-family:  "Open Sans", sans-serif;
+    margin-top: 20px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: #54c2f0;
+    color:white;
+    font-family: "Open sans",sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px ;
+    transition: all 0.5s;
+    width: 250px;
+}
+.login-form > .login-btn:hover {
+    background-color: #4CB1DC;
+    transition: all 0.5s;
+}
+.field-icon {
+    margin-left: 10px;
 }
 .login-form > .email-field:focus {
     border: solid 2px #54c2f0;
@@ -70,3 +130,42 @@
 body > #root > .auth-login > .welcome-login {
     height: 100vh;
   }
+
+  @media all and (max-width: 1080px) {
+    .welcome-login {
+        display: none;
+    }
+
+    .auth-login { 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #nav-logo {
+        display: none;
+    }
+    .login-form > #nav-logo-responsive {
+        display: inline;
+    }
+    .login-form > .already-account {
+        display: inline;
+    }
+
+  }
+  @media all and (max-width: 370px) {
+    .login-form > .forgot-password, .login-form > .already-account {
+        font-size: 13px;
+    }
+    .login-form > h2 {
+        font-size: 19px;
+
+    }
+    .login-form > .email-field > #email-input, .login-form > .password-field > #password-input, .login-form > .email-field, .login-form > .password-field {
+        width: 240px;
+    }
+    .login-form > .login-btn {
+        width: 230px;
+    }
+
+  }
+  

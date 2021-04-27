@@ -1,14 +1,10 @@
-let language = "en"
-let langJSON = {}
+let lang = {}
 
-function setLanguage(lang) {
-    language = lang
-}
-function setLangJSON(json) {
-    langJSON = json
+function setLang(json) {
+    lang = json
 }
 function translate(key) {
-    return langJSON[key]
+    return lang[key]
 }
 
-export { translate, setLanguage, language, setLangJSON }
+export { translate, setLang }
