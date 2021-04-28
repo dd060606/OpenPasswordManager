@@ -8,7 +8,6 @@ import Login from "./components/auth/Login"
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { setLang } from "./utils/langManager"
-import Swal from 'sweetalert2'
 
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();

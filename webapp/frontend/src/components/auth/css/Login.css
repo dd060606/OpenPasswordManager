@@ -79,7 +79,9 @@
     border-radius: 5px;
     
 }
-
+.login-form > .email-field > #email-input {
+    margin-right: 25px;
+}
 .login-form > .email-field > #email-input, .login-form > .password-field > #password-input {
     width: 100%;
     height: 35px;
@@ -160,8 +162,11 @@ body > #root > .auth-login > .welcome-login {
         font-size: 19px;
 
     }
-    .login-form > .email-field > #email-input, .login-form > .password-field > #password-input, .login-form > .email-field, .login-form > .password-field {
+    .login-form > .email-field > #email-input, .login-form > .password-field > #password-input, .login-form > .email-field , .login-form > .password-field{
         width: 240px;
+    }
+    .login-form > .password-field > .show-password-btn  {
+        display: none;
     }
     .login-form > .login-btn {
         width: 230px;

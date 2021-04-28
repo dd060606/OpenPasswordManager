@@ -1,6 +1,7 @@
 {
   "error404": "Erreur 404",
   "error404-page-not-found": "Désolé, la page que vous recherchez est introuvable.",
+  "error": "Erreur",
   "welcome-on": "Bienvenue sur",
   "new-on-opm": "Nouveau sur OpenPasswordManager ?",
   "login": "Se connecter",
@@ -8,5 +9,7 @@
   "email": "Adresse E-Mail",
   "password": "Mot de passe",
   "forgot-password": "Mot de passe oublié ?",
-  "already-have-account": "Vous n'avez pas de compte ? Inscription"
+  "already-have-account": "Vous n'avez pas de compte ? Inscription",
+  "complete-all-fields": "Merci de compléter tous les champs !",
+  "invalid-email": "Merci d'entrer une adresse E-Mail valide !"
 }
