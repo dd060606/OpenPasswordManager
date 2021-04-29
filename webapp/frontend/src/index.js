@@ -4,6 +4,7 @@ import './index.css';
 
 import Error404 from './components/errors/Error404';
 import Login from "./components/auth/Login"
+import Register from "./components/auth/Register"
 
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
@@ -28,7 +29,7 @@ function updateRender() {
       <Router>
         <Switch>
           <Route path="/Login" exact component={Login} />
-
+          <Route path="/Register" exact component={Register} />
           <Route path="/" component={Error404} />
         </Switch>
       </Router>
