@@ -27,8 +27,6 @@
     font-size: 30Px;
 }
 .welcome-register > .login-btn {
-
-        outline: none;
         cursor: pointer;
         border: 2px #54c2f0 solid;
         border-radius: 5px;
@@ -41,6 +39,7 @@
         transition: background 0.5s;
         transition: color 0.5s;
         width: 250px;
+        text-decoration: none;
 }
 .welcome-register > .login-btn:hover {
     background-color: rgba(223,223,223,0.5);
@@ -82,7 +81,7 @@
     flex-direction: row;
 }
 .register-form > .name-fields >  .name-field {
-    margin-left: 5px;
+    margin-left: 3px;
     width: 175px;
 }
 .register-form > .field > #email-input {
@@ -167,7 +166,16 @@ body > #root > .auth-register > .welcome-register {
 
     }
     .register-form > .field > input, .register-form > .field {
+        font-size: 15px;
         width: 275px;
+    }
+    .register-form > .name-fields >  .name-field > input {
+        font-size: 15px;
+
+    }
+    .register-form > .name-fields >  .name-field {
+
+        width: 136px;
     }
     .register-form > .field > .show-password-btn  {
         display: none;

@@ -8,19 +8,14 @@ import Register from "./components/auth/Register"
 
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { setLang } from "./utils/langManager"
+import { setLang, language, init as initLanguage } from "./utils/langs"
+
 
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
-let language = ""
-
-let navigatorLanguage = navigator.language || navigator.userLanguage
-language = navigatorLanguage.substring(0, 2).toLowerCase()
-if (language !== "fr") {
-  language = "en"
-}
 
 
+initLanguage()
 updateLanguage()
 
 function updateRender() {
@@ -28,8 +23,8 @@ function updateRender() {
     <React.StrictMode>
       <Router>
         <Switch>
-          <Route path="/Login" exact component={Login} />
-          <Route path="/Register" exact component={Register} />
+          <Route path="/login" exact component={Login} />
+          <Route path="/signup" exact component={Register} />
           <Route path="/" component={Error404} />
         </Switch>
       </Router>
@@ -53,4 +48,4 @@ function updateLanguage() {
     })
 }
 
-export { updateRender, cookies, updateLanguage }
+export { updateRender, cookies }

@@ -12,12 +12,14 @@
   "lastname": "Nom",
   "password": "Mot de passe",
   "confirm-password": "Confirmation du mot de passe",
-  "password-require": "Le mot de passe requiert au minimum un chiffre, une lettre majuscule, une lettre minuscule et au moins 8 caractères !",
-  "available-password-chars": "Charactères spéciaux autorisés : ",
-  "password-confirmation-not-match": "Vos mots de passe ne correspondent pas !",
   "forgot-password": "Mot de passe oublié ?",
   "already-have-account": "Vous avez déjà un compte ? Connexion",
   "no-account": "Vous n'avez pas de compte ? Inscription",
   "complete-all-fields": "Merci de compléter tous les champs !",
-  "invalid-email": "Merci d'entrer une adresse E-Mail valide !"
+  "invalid-email": "Merci d'entrer une adresse E-Mail valide !",
+  "invalid-lastname": "Veuillez entrer un nom valide",
+  "invalid-firstname": "Veuillez entrer un prénom valide",
+  "password-require": "Le mot de passe requiert au minimum un chiffre, une lettre majuscule, une lettre minuscule et au moins 8 caractères !",
+  "available-password-chars": "Charactères spéciaux autorisés : ",
+  "password-confirmation-not-match": "Vos mots de passe ne correspondent pas !"
 }

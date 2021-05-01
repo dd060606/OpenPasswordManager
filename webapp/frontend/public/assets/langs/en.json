@@ -12,12 +12,14 @@
   "lastname": "Lastname",
   "password": "Password",
   "confirm-password": "Confirm password",
-  "password-require": "The password requires at least one number, one uppercase letter, one lowercase letter and 8 characters!",
-  "available-password-chars": "Available special characters : ",
-  "password-confirmation-not-match": "Password confirmation doesn't match!",
   "forgot-password": "Forgot your password?",
   "already-have-account": "Already have an account? Sign in",
   "no-account": "You don't have an account? Sign up",
   "complete-all-fields": "Please complete all fields!",
-  "invalid-email": "Please enter a valid email!"
+  "invalid-email": "Please enter a valid email!",
+  "invalid-lastname": "Please enter a valid lastname",
+  "invalid-firstname": "Please enter a valid firstname",
+  "password-require": "The password requires at least one number, one uppercase letter, one lowercase letter and 8 characters!",
+  "available-password-chars": "Available special characters : ",
+  "password-confirmation-not-match": "Password confirmation doesn't match!"
 }

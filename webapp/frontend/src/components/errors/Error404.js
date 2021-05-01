@@ -1,6 +1,6 @@
 import './css/Error404.css';
 import { Component } from "react"
-import { translate } from "../../utils/langManager"
+import { translate } from "../../utils/langs"
 
 class Error404 extends Component {
 
