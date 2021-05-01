@@ -133,8 +133,7 @@ class Register extends Component {
             })
         }
         else {
-
-            axios.post(`${process.env.REACT_APP_SERVER_URL}/api/signup`,
+            axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/signup`,
                 {
                     lastname: lastname,
                     firstname: firstname,
@@ -142,8 +141,7 @@ class Register extends Component {
                     password: password
                 }
             ).then(res => {
-                console.log(res);
-                console.log(res.data);
+                this.setState({ isConnecting: false })
             })
         }
     }

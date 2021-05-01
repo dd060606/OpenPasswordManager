@@ -1,9 +1,11 @@
-const mysql = require("mysql")
+require('dotenv').config();
 
+const mysql = require("mysql")
 const databaseHost = process.env.DB_HOST
 const databaseName = process.env.DB_NAME
 const databaseUsername = process.env.DB_USERNAME
 const databasePassword = process.env.DB_PASSWORD
+
 
 module.exports.tokenKey = process.env.AUTH_TOKEN_KEY
 
@@ -21,7 +23,7 @@ module.exports.initDatabase = function () {
         console.log("Connected to database!");
     });
 
-    database.query("CREATE TABLE IF NOT EXISTS `" + databaseName + "`.`opm_accounts` ( `id` INT NOT NULL AUTO_INCREMENT ,"
+    database.query("CREATE TABLE IF NOT EXISTS `" + databaseName + "`.`" + process.env.DB_OPM_ACCOUNTS_TABLE + "` ( `id` INT NOT NULL AUTO_INCREMENT ,"
         + " `email` VARCHAR(255) NOT NULL ,"
         + " `password` TEXT NOT NULL ,"
         + " `lastname` VARCHAR(255) NOT NULL ,"

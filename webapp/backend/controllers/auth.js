@@ -2,24 +2,22 @@ const bcyrpt = require("bcrypt")
 const mysql = require("mysql")
 const jwt = require("jsonwebtoken")
 const authUtils = require("../utils/auth-utils")
+require('dotenv').config();
+
 
 exports.signup = (req, res, next) => {
 
     if (validateSignup(req)) {
 
-        authUtils.database.query("SELECT id FROM accounts WHERE email = " + "'" + req.body.email + "'", function (err, result) {
+        authUtils.database.query("SELECT id FROM " + process.env.DB_OPM_ACCOUNTS_TABLE + " WHERE email = " + "'" + req.body.email + "'", function (err, result) {
             if (err) {
-                return res.status(500).json({
-                    result: "error",
-                    type: "error-internal",
-                    message: "Error : Internal server error!"
-                })
+                return res.status(500).json(getJsonForInternalError())
             }
             if (result.length === 0) {
                 return signupAccount(req, res)
             }
             else {
-                return res.status(500).json({
+                return res.status(400).json({
                     result: "error",
                     type: "error-email-already-exists",
                     message: "Error : e-mail already exists!"
@@ -28,7 +26,7 @@ exports.signup = (req, res, next) => {
         })
     }
     else {
-        return res.status(500).json(getJsonForArgumentsError())
+        return res.status(400).json(getJsonForArgumentsError())
     }
 
 
@@ -41,26 +39,11 @@ function getJsonForArgumentsError() {
         message: "Error : Bad request arguments!"
     })
 }
-function signupAccount(req, res) {
-    const insertAccountSQL = "INSERT INTO `accounts` (`id`, `email`, `password`, `lastname`, `firstname`) VALUES (NULL, '"
-        + req.body.email
-        + "', '" + req.body.password
-        + "', '" + req.body.lastname
-        + "', '" + req.body.firstname + "');"
-
-    authUtils.database.query(insertAccountSQL, function (err, result) {
-        if (err) {
-            return res.status(500).json({
-                result: "error",
-                type: "error-internal",
-                message: "Error : internal server error!"
-            })
-        }
-        return res.status(201).json({
-            result: "success",
-            type: "account-created-successfully",
-            message: "Account created successfully!"
-        })
+function getJsonForInternalError() {
+    return ({
+        result: "error",
+        type: "error-internal",
+        message: "Error : Internal server error!"
     })
 }
 
@@ -81,6 +64,34 @@ function validateSignup(req) {
         return false
     }
 }
+function signupAccount(req, res) {
+
+
+    bcyrpt.hash(req.body.password, 10)
+        .then(hash => {
+
+            const insertAccountSQL = "INSERT INTO `" + process.env.DB_OPM_ACCOUNTS_TABLE + "` (`id`, `email`, `password`, `lastname`, `firstname`) VALUES (NULL, '"
+                + req.body.email
+                + "', '" + hash
+                + "', '" + req.body.lastname
+                + "', '" + req.body.firstname + "');"
+
+            authUtils.database.query(insertAccountSQL, function (err, result) {
+                if (err) {
+                    return res.status(500).json(getJsonForInternalError())
+                }
+                return res.status(201).json({
+                    result: "success",
+                    type: "account-created-successfully",
+                    message: "Account created successfully!"
+                })
+            })
+        })
+        .catch(error => res.status(500).json({ error }));
+
+
+}
+
 exports.login = (req, res, next) => {
     /*
     User.findOne({ email: req.body.email })
