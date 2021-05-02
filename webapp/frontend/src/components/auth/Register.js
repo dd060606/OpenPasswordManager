@@ -141,6 +141,34 @@ class Register extends Component {
                     password: password
                 }
             ).then(res => {
+                if (res.data.result === "success") {
+                    //Go to the next page
+                }
+
+                this.setState({ isConnecting: false })
+
+            }).catch(error => {
+
+                if (error.response.data.result === "error") {
+                    if (error.response.data.type === "internal-error") {
+                        Swal.fire({
+                            title: translate("error"),
+                            text: translate("internal-error"),
+                            icon: "error",
+                            confirmButtonColor: "#54c2f0"
+                        }
+                        )
+                    }
+                    else if (error.response.data.type === "error-email-already-exists") {
+                        Swal.fire({
+                            title: translate("error"),
+                            text: translate("email-already-exists"),
+                            icon: "error",
+                            confirmButtonColor: "#54c2f0"
+                        }
+                        )
+                    }
+                }
                 this.setState({ isConnecting: false })
             })
         }

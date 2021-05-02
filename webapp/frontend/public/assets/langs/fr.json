@@ -2,6 +2,7 @@
   "error404": "Erreur 404",
   "error404-page-not-found": "Désolé, la page que vous recherchez est introuvable.",
   "error": "Erreur",
+  "internal-error": "Erreur du serveur ! Veuillez réessayer plus tard.",
   "welcome-on": "Bienvenue sur",
   "new-on-opm": "Nouveau sur OpenPasswordManager ?",
   "already-registered": "Déjà inscrit ?",
@@ -21,5 +22,6 @@
   "invalid-firstname": "Veuillez entrer un prénom valide",
   "password-require": "Le mot de passe requiert au minimum un chiffre, une lettre majuscule, une lettre minuscule et au moins 8 caractères !",
   "available-password-chars": "Charactères spéciaux autorisés : ",
-  "password-confirmation-not-match": "Vos mots de passe ne correspondent pas !"
+  "password-confirmation-not-match": "Vos mots de passe ne correspondent pas !",
+  "email-already-exists": "Adresse e-mail déjà existante !"
 }

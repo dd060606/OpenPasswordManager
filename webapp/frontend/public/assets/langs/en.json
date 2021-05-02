@@ -2,6 +2,7 @@
   "error404": "Error 404",
   "error404-page-not-found": "Sorry, the page you're looking for was not found.",
   "error": "Error",
+  "internal-error": "Internal server error! Please try again later.",
   "welcome-on": "Welcome on",
   "new-on-opm": "New on OpenPasswordManager?",
   "already-registered": "Already registered?",
@@ -21,5 +22,6 @@
   "invalid-firstname": "Please enter a valid firstname",
   "password-require": "The password requires at least one number, one uppercase letter, one lowercase letter and 8 characters!",
   "available-password-chars": "Available special characters : ",
-  "password-confirmation-not-match": "Password confirmation doesn't match!"
+  "password-confirmation-not-match": "Password confirmation doesn't match!",
+  "email-already-exists": "E-mail already exists!"
 }
