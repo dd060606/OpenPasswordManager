@@ -53,17 +53,30 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-
     width: 45%;
 }
+
 .register-form > #nav-logo-reg-responsive {
     display: none;
 }
 .register-form > h2 {
     margin-bottom: 50px;
 }
-
+.register-form > .resend-email {
+    border: none;
+    background: transparent;
+    outline: none;
+    color: #045CF0;
+    font-size: 15px;
+}
+.register-form > .resend-email:hover {
+    cursor: pointer;
+}
+.register-form > .resend-email:disabled {
+    color: #B3B3B3;
+}
 .register-form > .field, .register-form > .name-fields >  .field {
+    
     margin-bottom: 15px;
     display: flex;
     flex-direction: row;
@@ -177,9 +190,7 @@ body > #root > .auth-register > .welcome-register {
 
         width: 136px;
     }
-    .register-form > .field > .show-password-btn  {
-        display: none;
-    }
+
     .register-form > .register-btn {
         width: 230px;
     }

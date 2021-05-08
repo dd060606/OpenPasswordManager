@@ -1,19 +1,21 @@
 import './css/Error404.css';
 import { Component } from "react"
-import { translate } from "../../utils/langs"
+import { withTranslation } from 'react-i18next';
+import "../../i18n"
 
 class Error404 extends Component {
 
 
     render() {
+        const { t } = this.props;
         return (
             <div className="error404">
-                <h1>{translate("error404")}</h1>
+                <h1>{t("errors.error404")}</h1>
 
-                <p>{translate("error404-page-not-found")}</p>
+                <p>{t("errors.error404-page-not-found")}</p>
             </div>
         );
     }
 }
 
-export default Error404;
+export default withTranslation()(Error404);

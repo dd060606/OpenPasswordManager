@@ -2,7 +2,16 @@ const bcyrpt = require("bcrypt")
 const mysql = require("mysql")
 const jwt = require("jsonwebtoken")
 const authUtils = require("../utils/auth-utils")
-require('dotenv').config();
+const logger = require("../utils/logger")
+const nodemailer = require("nodemailer")
+const fs = require("fs")
+const handlebars = require('handlebars')
+const { UV_FS_O_FILEMAP } = require("constants")
+const { send } = require("process")
+require('dotenv').config()
+
+
+
 
 
 exports.signup = (req, res, next) => {
@@ -19,7 +28,7 @@ exports.signup = (req, res, next) => {
             else {
                 return res.status(400).json({
                     result: "error",
-                    type: "error-email-already-exists",
+                    type: "email-already-exists",
                     message: "Error : e-mail already exists!"
                 })
             }
@@ -35,7 +44,7 @@ exports.signup = (req, res, next) => {
 function getJsonForArgumentsError() {
     return ({
         result: "error",
-        type: "error-bad-request-args",
+        type: "bad-request-args",
         message: "Error : Bad request arguments!"
     })
 }
@@ -85,20 +94,41 @@ function signupAccount(req, res) {
     bcyrpt.hash(req.body.password, 10)
         .then(hash => {
 
-            const insertAccountSQL = "INSERT INTO `" + process.env.DB_OPM_ACCOUNTS_TABLE + "` (`id`, `email`, `password`, `lastname`, `firstname`) VALUES (NULL, '"
+            const insertAccountSQL = "INSERT INTO `" + process.env.DB_OPM_ACCOUNTS_TABLE + "` (`id`, `email`, `password`, `lastname`, `firstname`, `isVerified`) VALUES (NULL, '"
                 + req.body.email
                 + "', '" + hash
                 + "', '" + req.body.lastname
-                + "', '" + req.body.firstname + "');"
+                + "', '" + req.body.firstname
+                + "', '" + "0"
+                + "');"
 
             authUtils.database.query(insertAccountSQL, function (err, result) {
                 if (err) {
                     return res.status(500).json(getJsonForInternalError())
                 }
+
+                if (req.body.lang) {
+                    fs.exists("emails/" + req.body.lang + "/account-confirmation-template.html", function (exists) {
+                        if (exists) {
+                            sendEmail(req.body.lang, req)
+                        }
+                        else {
+                            sendEmail("en", req)
+
+                        }
+                    });
+                }
+                else {
+                    sendEmail("en", req)
+                }
+
+
+                logger.info("New account created : " + req.body.email + " - " + req.body.lastname + " " + req.body.firstname + " from " + (req.headers['x-forwarded-for'] || req.connection.remoteAddress))
                 return res.status(201).json({
                     result: "success",
-                    type: "account-created-successfully",
-                    message: "Account created successfully!"
+                    type: "account-successfully-created",
+                    message: "Account successfully created!",
+
                 })
             })
         })
@@ -106,32 +136,49 @@ function signupAccount(req, res) {
 
 
 }
-
-exports.login = (req, res, next) => {
-    /*
-    User.findOne({ email: req.body.email })
-        .then(user => {
-            if (!user) {
-                return res.status(401).json({ authresult: "error", error: error, errortype: "not-found-erro", message: "Utilisateur non trouvé !" })
-            }
-            bcyrpt.compare(req.body.password, user.password)
-                .then(valid => {
-                    if (!valid) {
-                        return res.status(401).json({ error: "Mot de pass incorrect !" })
-
-                    }
-                    res.status(200).json({
-                        userId: user._id,
-                        token: jwt.sign({ userId: user._id },
-                            "RANDOM_TOKEN_SECRET", { expiresIn: "24h" }
-                        )
+function sendEmail(lang, req) {
+    fs.readFile("emails/" + lang + "/account-confirmation-template.html", 'utf8', (err, data) => {
+        if (!err) {
+            authUtils.database.query("SELECT * FROM `" + process.env.DB_OPM_ACCOUNTS_TABLE + "` WHERE email = \"" + req.body.email + "\"", function (err, result) {
+                if (!err) {
+                    const transporter = nodemailer.createTransport({
+                        host: process.env.EMAIL_HOST,
+                        port: process.env.EMAIL_PORT,
+                        secure: true,
+                        auth: {
+                            user: process.env.EMAIL_USER,
+                            pass: process.env.EMAIL_PASSWORD
+                        }
                     });
-                })
-                .catch(error => res.status(500).json({ error }))
-        })
-        .catch(error => res.status(500).json({ error }))
-        */
+                    const url = process.env.EMAIL_CONFIRMATION_URL.endsWith("/") ? process.env.EMAIL_CONFIRMATION_URL + jwt.sign({ userId: result[0].id }, process.env.AUTH_TOKEN_KEY, { expiresIn: "24h" }) : process.env.EMAIL_CONFIRMATION_URL + "/" + jwt.sign({ userId: result[0].id }, process.env.AUTH_TOKEN_KEY, { expiresIn: "24h" })
+                    let template = handlebars.compile(data)
+                    let replacements = {
+                        firstname: req.body.firstname,
+                        email: req.body.email,
+                        emailLink: url
+                    }
+                    let htmlToSend = template(replacements)
+                    const mailOptions = {
+                        from: "\"OpenPasswordManager\" <" + process.env.EMAIL_USER + ">",
+                        to: req.body.email,
+                        subject: "E-mail confirmation",
+                        html: htmlToSend
+                    }
+                    transporter.sendMail(mailOptions, function (err, info) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    })
+                }
+            })
+
+        }
+    })
+}
+exports.login = (req, res, next) => {
+
     if (validateLogin(req)) {
+
         authUtils.database.query("SELECT * FROM `" + process.env.DB_OPM_ACCOUNTS_TABLE + "` WHERE email = \"" + req.body.email + "\"", function (err, result) {
             if (err) {
                 return res.status(500).json(getJsonForInternalError())
@@ -154,14 +201,24 @@ exports.login = (req, res, next) => {
                             })
 
                         }
-                        res.status(200).json({
-                            userId: result[0].id,
-                            token: jwt.sign({ userId: result[0].id },
-                                "RANDOM_TOKEN_SECRET", { expiresIn: "24h" }
-                            )
-                        });
+                        logger.info(req.headers['x-forwarded-for'] || req.connection.remoteAddress + " logged to " + req.body.email + " (" + result[0].id + ")")
+
+                        if (result[0].isVerified === 1) {
+                            res.status(200).json({
+                                token: jwt.sign({ userId: result[0].id },
+                                    process.env.AUTH_TOKEN_KEY, { expiresIn: "24h" }
+                                )
+                            })
+                        }
+                        else {
+                            res.status(200).json({
+                                token: "email-not-verified"
+                            })
+                        }
+
+
                     })
-                    .catch(error => res.status(500).json(getJsonForInternalError()))
+                    .catch(() => res.status(500).json(getJsonForInternalError()))
             }
 
         })
@@ -171,8 +228,49 @@ exports.login = (req, res, next) => {
     }
 
 }
+exports.emailConfirmation = (req, res, next) => {
+    try {
+        const decodedToken = jwt.verify(req.params.token, process.env.AUTH_TOKEN_KEY)
+        const userId = decodedToken.userId
+        authUtils.database.query("SELECT * FROM `" + process.env.DB_OPM_ACCOUNTS_TABLE + "` WHERE id = \"" + userId + "\"", function (err, result) {
+            if (err) {
+                return res.status(500).json(getJsonForInternalError())
+            }
+            if (result.length > 0) {
+                if (result[0].isVerified === 1) {
+                    return res.status(400).json({
+                        result: "error",
+                        type: "email-already-verified",
+                        message: "E-mail already verified!"
+                    });
+                }
+                authUtils.database.query("UPDATE `" + process.env.DB_OPM_ACCOUNTS_TABLE + "` SET `isVerified` = '1' WHERE `" + process.env.DB_OPM_ACCOUNTS_TABLE + "`.`id` = " + userId + ";", function (err2, result2) {
+                    if (err) {
+                        return res.status(500).json(getJsonForInternalError())
+                    }
+                    logger.info(req.headers['x-forwarded-for'] || req.connection.remoteAddress + " verified e-mail : " + result[0].email + " (" + result[0].id + ")")
 
-exports.logout = (req, res, next) => {
-
+                    return res.status(200).json({
+                        result: "success",
+                        type: "email-successfully-verified",
+                        message: "E-mail successfully verified!"
+                    })
+                })
+            }
+            else {
+                return res.status(400).json({
+                    result: "error",
+                    type: "invalid-account",
+                    message: "Invalid Account!"
+                });
+            }
+        })
+    } catch {
+        return res.status(401).json({
+            result: "error",
+            type: "invalid-request",
+            message: "Invalid Request!"
+        });
+    }
 
 }

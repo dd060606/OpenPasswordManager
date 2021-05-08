@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config()
 
 const mysql = require("mysql")
 const databaseHost = process.env.DB_HOST
@@ -27,8 +27,9 @@ module.exports.initDatabase = function () {
         + " `email` VARCHAR(255) NOT NULL ,"
         + " `password` TEXT NOT NULL ,"
         + " `lastname` VARCHAR(255) NOT NULL ,"
-        + " `firstname` VARCHAR(255) NOT NULL ," +
-        " PRIMARY KEY (`id`)) ENGINE = InnoDB;", function (err, result) {
+        + " `firstname` VARCHAR(255) NOT NULL ,"
+        + " `isVerified` BOOLEAN NOT NULL DEFAULT FALSE ,"
+        + " PRIMARY KEY (`id`)) ENGINE = InnoDB;", function (err, result) {
             if (err) throw err;
         })
 }
