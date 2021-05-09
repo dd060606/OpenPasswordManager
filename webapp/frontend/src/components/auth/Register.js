@@ -8,6 +8,7 @@ import "../../i18n"
 import i18n from 'i18next'
 
 
+
 class Register extends Component {
 
 
@@ -150,6 +151,15 @@ class Register extends Component {
             ).then(res => {
                 if (res.data.result === "success") {
                     this.setState({ emailConfirmationEnabled: true })
+                    let interval = setInterval(() => {
+                        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/email/validated`, { email: email })
+                            .then(res => {
+                                if (res.data.value === true) {
+                                    clearInterval(interval)
+                                    this.props.history.push("/")
+                                }
+                            })
+                    }, 5000);
 
                 }
 

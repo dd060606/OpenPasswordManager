@@ -5,5 +5,6 @@ const authCtrl = require("../controllers/auth")
 router.post("/signup", authCtrl.signup)
 router.post("/login", authCtrl.login)
 router.post("/email/resend", authCtrl.resendEmail)
-router.put("/email/confirmation/:token", authCtrl.emailConfirmation)
+router.put("/email/confirmation/", authCtrl.emailConfirmation)
+router.post("/email/validated/", authCtrl.isEmailConfirmed)
 module.exports = router

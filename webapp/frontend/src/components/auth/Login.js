@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'
 import { Link } from "react-router-dom"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
+import axios from "axios"
 
 
 class Login extends Component {
@@ -59,8 +60,58 @@ class Login extends Component {
         }
         else {
 
-        }
+            axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/login`,
+                {
+                    email: email,
+                    password: password
+                }
+            ).then(res => {
+                if (res.data.result === "success") {
+                    console.log("Connected! ")
+                    this.setState({ isConnecting: false })
 
+                }
+            })
+                .catch(err => {
+                    if (err.response.data.type === "internal-error") {
+                        Swal.fire({
+                            title: t("errors.error"),
+                            text: t("errors.internal-error"),
+                            icon: "error",
+                            confirmButtonColor: "#54c2f0"
+                        })
+                    } else if (err.response.data.type === "account-not-exists") {
+                        Swal.fire({
+                            title: t("errors.error"),
+                            text: t("errors.account-not-exists"),
+                            icon: "error",
+                            confirmButtonColor: "#54c2f0"
+                        })
+                    }
+                    else if (err.response.data.type === "wrong-password") {
+                        Swal.fire({
+                            title: t("errors.error"),
+                            text: t("errors.wrong-password"),
+                            icon: "error",
+                            confirmButtonColor: "#54c2f0"
+                        })
+                    }
+                    else if (err.response.data.type === "email-not-verified") {
+                        //Email not verified
+                    }
+                    else {
+                        Swal.fire({
+                            title: t("errors.error"),
+                            text: t("errors.unknown-error"),
+                            icon: "error",
+                            confirmButtonColor: "#54c2f0"
+                        })
+                    }
+                    this.setState({ isConnecting: false })
+
+                })
+
+        }
     }
     handleShowPassword = () => {
         const { showPassword } = this.state
@@ -71,6 +122,7 @@ class Login extends Component {
             this.setState({ showPassword: true })
         }
     }
+
 
 
     render() {

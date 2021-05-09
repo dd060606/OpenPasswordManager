@@ -16,11 +16,15 @@ import Cookies from 'universal-cookie'
 const cookies = new Cookies()
 
 
+
 ReactDOM.render(
 
   <React.StrictMode>
     <Router>
       <Switch>
+        <Route path="/" exact>
+          {cookies.get("token") === undefined && <Login />}
+        </Route>
         <Route path="/auth/login" exact component={Login} />
         <Route path="/auth/signup" exact component={Register} />
         <Route path="/auth/email/confirmation" exact component={EmailConfirmed} />

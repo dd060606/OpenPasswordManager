@@ -14,7 +14,9 @@
     "password-confirmation-not-match": "Vos mots de passe ne correspondent pas !",
     "email-already-exists": "Adresse e-mail déjà existante !",
     "check-your-network-connection": "Merci de vérifier votre connexion Internet puis réessayer.",
-    "account-confirmation-failed": "Erreur: Le lien de confirmation a expiré ou vous utilisez un compte invalide !"
+    "account-confirmation-failed": "Erreur: Le lien de confirmation a expiré ou vous utilisez un compte invalide !",
+    "account-not-exists": "Ce compte n'existe pas !",
+    "wrong-password": "Mauvais mot de passe !"
   },
   "auth": {
     "new-on-opm": "Nouveau sur OpenPasswordManager ?",

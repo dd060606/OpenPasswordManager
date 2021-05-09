@@ -20,7 +20,7 @@ class EmailConfirmed extends Component {
             this.setState({ confirmationFailed: true })
         }
         else {
-            axios.put(`${process.env.REACT_APP_SERVER_URL}/api/auth/email/confirmation/${token}`)
+            axios.put(`${process.env.REACT_APP_SERVER_URL}/api/auth/email/confirmation/`, { token: token })
                 .then(res => {
                     this.setState({ confirmationFailed: false, email: res.data.email })
                 })
@@ -45,7 +45,9 @@ class EmailConfirmed extends Component {
                     }
                     <p>{t(!confirmationFailed ? "auth.account-successfully-activated" : "errors.account-confirmation-failed")}</p>
                     {!confirmationFailed &&
-                        <button className="continue-btn">{t("continue")}</button>
+                        <Link className="continue-btn" to="/">
+                            {t("continue")}
+                        </Link>
                     }
                     {confirmationFailed &&
                         <Link className="login-btn" to="/auth/login">

@@ -69,7 +69,7 @@
     align-items: center;
     font-family:  "Open Sans", sans-serif;
 
-    width: 300px;
+    width: 350px;
     height: 35px;
     background-color: rgba(236, 236, 236, 0.8);
     border-radius: 5px;
@@ -156,11 +156,10 @@ body > #root > .auth-login > .welcome-login {
 
     }
     .login-form > .field > input, .login-form > .field {
-        width: 240px;
+        width: 275px;
+
     }
-    .login-form > .field > .show-password-btn  {
-        display: none;
-    }
+    
     .login-form > .login-btn {
         width: 230px;
     }
