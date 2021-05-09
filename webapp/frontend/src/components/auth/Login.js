@@ -1,7 +1,7 @@
 import { Component } from "react"
 import "./css/Login.css"
 import Swal from 'sweetalert2'
-import { NavLink } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 
@@ -84,7 +84,7 @@ class Login extends Component {
                     <img src={`${process.env.PUBLIC_URL}/assets/images/icon.png`} alt="welcome-icon" className="icon" width={100} height={120} />
                     <h1 className="welcome">{t("welcome-on")} OpenPasswordManager</h1>
                     <h3>{t("auth.new-on-opm")}</h3>
-                    <NavLink to="/auth/signup" className="signup-btn">{t("auth.signup")}</NavLink>
+                    <Link to="/auth/signup" className="signup-btn">{t("auth.signup")}</Link>
                 </div>
 
                 <form className="login-form">
@@ -115,7 +115,7 @@ class Login extends Component {
                         style={{ width: isConnecting ? "50px" : "" }}>{isConnecting ? <i className="fad fa-spinner-third fa-spin"></i> : t("auth.login")}
                     </button>
 
-                    <NavLink to="/auth/signup" className="no-account">{t("auth.no-account")}</NavLink>
+                    <Link to="/auth/signup" className="no-account">{t("auth.no-account")}</Link>
                 </form>
 
             </div>)

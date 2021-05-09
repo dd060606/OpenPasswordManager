@@ -1,7 +1,7 @@
 import { Component } from "react"
 import "./css/Register.css"
 import Swal from 'sweetalert2'
-import { NavLink } from "react-router-dom"
+import { Link } from "react-router-dom"
 import axios from "axios"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
@@ -181,7 +181,7 @@ class Register extends Component {
                 else {
                     Swal.fire({
                         title: t("errors.error"),
-                        text: t("errors.check-your-network-connection"),
+                        text: t("errors.unknown-error"),
                         icon: "error",
                         confirmButtonColor: "#54c2f0"
                     }
@@ -202,13 +202,20 @@ class Register extends Component {
     }
 
     handleResendEmail = event => {
+        const { lastname, firstname, email, password } = this.state
         event.target.disabled = true
-
-
-
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/email/resend`,
+            {
+                lastname: lastname,
+                firstname: firstname,
+                email: email,
+                password: password,
+                lang: i18n.language
+            }
+        )
         setTimeout(function () {
             event.target.disabled = false
-        }, 15000)
+        }, 30000)
     }
 
 
@@ -225,7 +232,7 @@ class Register extends Component {
                     <img src={`${process.env.PUBLIC_URL}/assets/images/icon.png`} alt="welcome-icon" className="icon" width={100} height={120} />
                     <h1 className="welcome">{t("welcome-on")} OpenPasswordManager</h1>
                     <h3>{t("auth.already-registered")}</h3>
-                    <NavLink to="/auth/login" className="login-btn">{t("auth.login")}</NavLink>
+                    <Link to="/auth/login" className="login-btn">{t("auth.login")}</Link>
 
                 </div>
 
@@ -285,7 +292,7 @@ class Register extends Component {
                         style={{ width: isConnecting ? "50px" : "" }}>{isConnecting ? <i className="fad fa-spinner-third fa-spin"></i> : t("auth.signup")}
                     </button>
 
-                    <NavLink to="/auth/login" className="already-account">{t("auth.already-have-account")}</NavLink>
+                    <Link to="/auth/login" className="already-account">{t("auth.already-have-account")}</Link>
 
 
                 </form>

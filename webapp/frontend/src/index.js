@@ -23,8 +23,8 @@ ReactDOM.render(
       <Switch>
         <Route path="/auth/login" exact component={Login} />
         <Route path="/auth/signup" exact component={Register} />
-        <Route path="/email/confirmation" exact component={EmailConfirmed} />
-        <Route path="/email/confirmation/:token" exact component={EmailConfirmed} />
+        <Route path="/auth/email/confirmation" exact component={EmailConfirmed} />
+        <Route path="/auth/email/confirmation/:token" exact component={EmailConfirmed} />
         <Route path="/" component={Error404} />
       </Switch>
     </Router>

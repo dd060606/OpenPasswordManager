@@ -4,6 +4,7 @@
     "error404-page-not-found": "Désolé, la page que vous recherchez est introuvable.",
     "error": "Erreur",
     "internal-error": "Erreur du serveur ! Veuillez réessayer plus tard.",
+    "unknown-error": "Erreur inconnue, veuillez réessayer plus tard.",
     "complete-all-fields": "Merci de compléter tous les champs !",
     "invalid-email": "Merci d'entrer une adresse E-Mail valide !",
     "invalid-lastname": "Veuillez entrer un nom valide !",
@@ -12,7 +13,8 @@
     "available-password-chars": "Charactères spéciaux autorisés : ",
     "password-confirmation-not-match": "Vos mots de passe ne correspondent pas !",
     "email-already-exists": "Adresse e-mail déjà existante !",
-    "check-your-network-connection": "Merci de vérifier votre connexion Internet."
+    "check-your-network-connection": "Merci de vérifier votre connexion Internet puis réessayer.",
+    "account-confirmation-failed": "Erreur: Le lien de confirmation a expiré ou vous utilisez un compte invalide !"
   },
   "auth": {
     "new-on-opm": "Nouveau sur OpenPasswordManager ?",
@@ -27,11 +29,12 @@
     "forgot-password": "Mot de passe oublié ?",
     "already-have-account": "Vous avez déjà un compte ? Connexion",
     "no-account": "Vous n'avez pas de compte ? Inscription",
-    "please-confirm-your-email": "Veuillez confirmer votre compte avec l'e-mail qui vous a été envoyé.",
+    "please-confirm-your-email": "Veuillez confirmer votre compte avec l'e-mail qui vous a été envoyé, puis vous pourrez fermer cette page.",
     "resend-email": "Ré-envoyer l'e-mail",
     "account-confirmation": "Confirmation de votre compte",
     "account-successfully-activated": "Votre compte a été activé avec succès !"
   },
 
-  "welcome-on": "Bienvenue sur"
+  "welcome-on": "Bienvenue sur",
+  "continue": "Continuer"
 }

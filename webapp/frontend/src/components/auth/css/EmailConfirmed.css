@@ -12,14 +12,19 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     width: 500px;
-    height: 300px;
-    -webkit-box-shadow: 10px 10px 11px 1px rgba(0,0,0,0.2); 
-    box-shadow: 10px 10px 11px 1px rgba(0,0,0,0.2);
+    height: 400px;
+    -webkit-box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.2); 
+    box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.2);
     
 }
+.email-confirmed > .box > .icon { 
+    user-select: none;
+    -webkit-user-drag: none;
+}
 
-.email-confirmed > .box > .continue-btn {
+.email-confirmed > .box > .continue-btn,.email-confirmed > .box >.login-btn {
     cursor: pointer;
     border: 2px #54c2f0 solid;
     border-radius: 5px;
@@ -31,13 +36,33 @@
     transition: background-color 0.2s;
     width: 250px;
     outline: none;
+    margin-top: 10px;
+    text-decoration: none;
+    
 }
 
-.email-confirmed > .box > .continue-btn:hover { 
+
+.email-confirmed > .box > .continue-btn:hover,.email-confirmed > .box >.login-btn:hover { 
     background-color: rgba(223,223,223,0.5);
     transition: background-color 0.2s;
 }
-body > #root > .email-confirmed{
+body > #root > .email-confirmed {
     height: 100vh;
     background-color: rgba(198,237,240,0.35);
-  }
+}
+
+@media all and (max-width: 519px) {
+    .email-confirmed > .box {
+        width: 95%;
+    }
+    .email-confirmed > .box > h2{
+        font-size: 18px;
+    }
+    .email-confirmed > .box > p{
+        font-size: 14px;
+    }
+    .email-confirmed > .box > .continue-btn,.email-confirmed > .box >.login-btn {
+        width: 60%;
+    }
+}
+

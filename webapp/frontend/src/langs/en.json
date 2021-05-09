@@ -4,6 +4,7 @@
     "error404-page-not-found": "Sorry, the page you're looking for was not found.",
     "error": "Error",
     "internal-error": "Internal server error! Please try again later.",
+    "unknown-error": "Unknown error, please try again later.",
     "complete-all-fields": "Please complete all fields!",
     "invalid-email": "Please enter a valid email!",
     "invalid-lastname": "Please enter a valid lastname!",
@@ -12,7 +13,8 @@
     "available-password-chars": "Available special characters : ",
     "password-confirmation-not-match": "Password confirmation doesn't match!",
     "email-already-exists": "E-mail already exists!",
-    "check-your-network-connection": "Please check your network connection and try again."
+    "check-your-network-connection": "Please check your network connection and try again.",
+    "account-confirmation-failed": "Error: Your confirmation link has expired or you are using an invalid account!"
   },
   "auth": {
     "new-on-opm": "New on OpenPasswordManager?",
@@ -27,10 +29,11 @@
     "forgot-password": "Forgot your password?",
     "already-have-account": "Already have an account? Sign in",
     "no-account": "You don't have an account? Sign up",
-    "please-confirm-your-email": "Please confirm your account with e-mail that was sent.",
+    "please-confirm-your-email": "Please confirm your account with e-mail that was sent, after that you can close this page.",
     "resend-email": "Resend e-mail",
     "account-confirmation": "Account confirmation",
     "account-successfully-activated": "Account successfully activated!"
   },
-  "welcome-on": "Welcome on"
+  "welcome-on": "Welcome on",
+  "continue": "Continue"
 }

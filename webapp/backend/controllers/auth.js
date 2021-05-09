@@ -136,6 +136,23 @@ function signupAccount(req, res) {
 
 
 }
+exports.resendEmail = (req, res, next) => {
+    if (req.body.lang) {
+        fs.exists("emails/" + req.body.lang + "/account-confirmation-template.html", function (exists) {
+            if (exists) {
+                sendEmail(req.body.lang, req)
+            }
+            else {
+                sendEmail("en", req)
+
+            }
+        });
+    }
+    else {
+        sendEmail("en", req)
+    }
+}
+
 function sendEmail(lang, req) {
     fs.readFile("emails/" + lang + "/account-confirmation-template.html", 'utf8', (err, data) => {
         if (!err) {
@@ -253,7 +270,8 @@ exports.emailConfirmation = (req, res, next) => {
                     return res.status(200).json({
                         result: "success",
                         type: "email-successfully-verified",
-                        message: "E-mail successfully verified!"
+                        message: "E-mail successfully verified!",
+                        email: result[0].email
                     })
                 })
             }
@@ -266,10 +284,10 @@ exports.emailConfirmation = (req, res, next) => {
             }
         })
     } catch {
-        return res.status(401).json({
+        return res.status(400).json({
             result: "error",
-            type: "invalid-request",
-            message: "Invalid Request!"
+            type: "invalid-account",
+            message: "Invalid Account!"
         });
     }
 
