@@ -170,7 +170,7 @@ function sendEmail(lang, req) {
                     const url = process.env.EMAIL_CONFIRMATION_URL.endsWith("/") ? process.env.EMAIL_CONFIRMATION_URL + jwt.sign({ userId: result[0].id }, process.env.AUTH_TOKEN_KEY, { expiresIn: "24h" }) : process.env.EMAIL_CONFIRMATION_URL + "/" + jwt.sign({ userId: result[0].id }, process.env.AUTH_TOKEN_KEY, { expiresIn: "24h" })
                     let template = handlebars.compile(data)
                     let replacements = {
-                        firstname: req.body.firstname,
+                        firstname: result[0].firstname,
                         email: req.body.email,
                         emailLink: url
                     }
@@ -203,8 +203,8 @@ exports.login = (req, res, next) => {
             if (result.length === 0) {
                 return res.status(401).json({
                     result: "error",
-                    type: "account-not-exists",
-                    message: "Account doesn't exists!"
+                    type: "invalid-credentials",
+                    message: "Invalid credentials!"
                 })
             }
             else {
@@ -213,8 +213,8 @@ exports.login = (req, res, next) => {
                         if (!valid) {
                             return res.status(401).json({
                                 result: "error",
-                                type: "wrong-password",
-                                message: "Wrong password!"
+                                type: "invalid-credentials",
+                                message: "Invalid credentials!"
                             })
 
                         }

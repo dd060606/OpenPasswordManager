@@ -19,6 +19,19 @@
     box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.2);
     
 }
+.email-confirmed > .box> .resend-email {
+    border: none;
+    background: transparent;
+    outline: none;
+    color: #045CF0;
+    font-size: 15px;
+}
+.email-confirmed > .box> .resend-email:hover {
+    cursor: pointer;
+}
+.email-confirmed > .box> .resend-email:disabled {
+    color: #B3B3B3;
+}
 .email-confirmed > .box > .icon { 
     user-select: none;
     -webkit-user-drag: none;

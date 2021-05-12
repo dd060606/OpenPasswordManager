@@ -16,7 +16,8 @@
     "check-your-network-connection": "Merci de vérifier votre connexion Internet puis réessayer.",
     "account-confirmation-failed": "Erreur: Le lien de confirmation a expiré ou vous utilisez un compte invalide !",
     "account-not-exists": "Ce compte n'existe pas !",
-    "wrong-password": "Mauvais mot de passe !"
+    "wrong-password": "Mauvais mot de passe !",
+    "invalid-credentials": "Mauvais identifiants !"
   },
   "auth": {
     "new-on-opm": "Nouveau sur OpenPasswordManager ?",
@@ -31,10 +32,10 @@
     "forgot-password": "Mot de passe oublié ?",
     "already-have-account": "Vous avez déjà un compte ? Connexion",
     "no-account": "Vous n'avez pas de compte ? Inscription",
-    "please-confirm-your-email": "Veuillez confirmer votre compte avec l'e-mail qui vous a été envoyé, puis vous pourrez fermer cette page.",
     "resend-email": "Ré-envoyer l'e-mail",
     "account-confirmation": "Confirmation de votre compte",
-    "account-successfully-activated": "Votre compte a été activé avec succès !"
+    "account-successfully-activated": "Votre compte a été activé avec succès !",
+    "confirm-email-to-continue": "Pour continuer, vous devez confirmer votre compte avec l'e-mail qui vous a été envoyé."
   },
 
   "welcome-on": "Bienvenue sur",

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import axios from "axios"
+import { cookies } from "../../index"
 
 
 class Login extends Component {
@@ -17,21 +18,26 @@ class Login extends Component {
         passwordFieldFocused: false,
         isConnecting: false,
         showPassword: false,
-        isEmailValid: true
+        isEmailValid: true,
+        isPasswordValid: true
     }
 
     //Arrow fx for binding
 
     handleEmailChange = event => {
-        const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         this.setState({ email: event.target.value, isEmailValid: event.target.value === "" ? true : emailRegex.test(event.target.value) })
+    }
+    handlePasswordChange = event => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*_?&]{8,}$/
+        this.setState({ password: event.target.value, isPasswordValid: event.target.value === "" ? true : passwordRegex.test(event.target.value) })
     }
 
     handleLogin = () => {
         const { t } = this.props
 
         this.setState({ isConnecting: true })
-        const { isEmailValid, email, password } = this.state
+        const { isEmailValid, email, password, isPasswordValid } = this.state
         if (email === "" || password === "") {
             Swal.fire({
                 title: t("errors.error"),
@@ -58,6 +64,18 @@ class Login extends Component {
             })
 
         }
+        else if (!isPasswordValid) {
+            Swal.fire({
+                title: t("errors.error"),
+                text: t("errors.wrong-password"),
+                icon: "error",
+                confirmButtonColor: "#54c2f0"
+            }
+            ).then(() => {
+                this.setState({ isConnecting: false })
+                return
+            })
+        }
         else {
 
             axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/login`,
@@ -67,37 +85,45 @@ class Login extends Component {
                 }
             ).then(res => {
                 if (res.data.result === "success") {
-                    console.log("Connected! ")
-                    this.setState({ isConnecting: false })
-
+                    cookies.set("token", res.data.token, { path: "/", maxAge: 60 * 60 * 3 })
+                    this.props.history.push({
+                        pathname: "/", state: {
+                            token: res.data.token
+                        }
+                    })
                 }
             })
                 .catch(err => {
-                    if (err.response.data.type === "internal-error") {
-                        Swal.fire({
-                            title: t("errors.error"),
-                            text: t("errors.internal-error"),
-                            icon: "error",
-                            confirmButtonColor: "#54c2f0"
-                        })
-                    } else if (err.response.data.type === "account-not-exists") {
-                        Swal.fire({
-                            title: t("errors.error"),
-                            text: t("errors.account-not-exists"),
-                            icon: "error",
-                            confirmButtonColor: "#54c2f0"
-                        })
-                    }
-                    else if (err.response.data.type === "wrong-password") {
-                        Swal.fire({
-                            title: t("errors.error"),
-                            text: t("errors.wrong-password"),
-                            icon: "error",
-                            confirmButtonColor: "#54c2f0"
-                        })
-                    }
-                    else if (err.response.data.type === "email-not-verified") {
-                        //Email not verified
+                    if (err.response && err.response.data) {
+                        if (err.response.data.type === "internal-error") {
+                            Swal.fire({
+                                title: t("errors.error"),
+                                text: t("errors.internal-error"),
+                                icon: "error",
+                                confirmButtonColor: "#54c2f0"
+                            })
+                        } else if (err.response.data.type === "invalid-credentials") {
+                            Swal.fire({
+                                title: t("errors.error"),
+                                text: t("errors.invalid-credentials"),
+                                icon: "error",
+                                confirmButtonColor: "#54c2f0"
+                            })
+                        }
+                        else if (err.response.data.type === "email-not-verified") {
+                            this.props.history.push({
+                                pathname: '/auth/email/confirmation',
+                                state: { redirectedAfterLogin: true, email: email }
+                            })
+                        }
+                        else {
+                            Swal.fire({
+                                title: t("errors.error"),
+                                text: t("errors.unknown-error"),
+                                icon: "error",
+                                confirmButtonColor: "#54c2f0"
+                            })
+                        }
                     }
                     else {
                         Swal.fire({
@@ -107,6 +133,7 @@ class Login extends Component {
                             confirmButtonColor: "#54c2f0"
                         })
                     }
+
                     this.setState({ isConnecting: false })
 
                 })
@@ -125,8 +152,10 @@ class Login extends Component {
 
 
 
+
+
     render() {
-        const { password, email, emailFieldFocused, passwordFieldFocused, isConnecting, showPassword, isEmailValid } = this.state
+        const { password, email, emailFieldFocused, passwordFieldFocused, isConnecting, showPassword, isEmailValid, isPasswordValid } = this.state
         const { t } = this.props
         return (
 
@@ -151,12 +180,12 @@ class Login extends Component {
                             onChange={event => this.handleEmailChange(event)} />
 
                     </div>
-                    <div className="field" style={{ border: passwordFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                    <div className="field" style={{ border: !isPasswordValid ? "1px #F42D0E solid" : passwordFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
                         <i className="fal fa-key field-icon"></i>
                         <input type={showPassword ? "text" : "password"} id="password-input" placeholder={t("auth.password")}
                             onBlur={() => this.setState({ passwordFieldFocused: false })}
                             onFocus={() => this.setState({ passwordFieldFocused: true })} value={password}
-                            onChange={event => this.setState({ password: event.target.value })} />
+                            onChange={event => this.handlePasswordChange(event)} />
 
                         <i className={`fal ${showPassword ? "fa-eye" : "fa-eye-slash"} fa-lg show-password-btn`} onClick={this.handleShowPassword}></i>
 
@@ -169,7 +198,6 @@ class Login extends Component {
 
                     <Link to="/auth/signup" className="no-account">{t("auth.no-account")}</Link>
                 </form>
-
             </div>)
     }
 }

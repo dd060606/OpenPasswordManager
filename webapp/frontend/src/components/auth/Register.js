@@ -6,6 +6,7 @@ import axios from "axios"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import i18n from 'i18next'
+import { cookies } from "../../index"
 
 
 
@@ -156,7 +157,27 @@ class Register extends Component {
                             .then(res => {
                                 if (res.data.value === true) {
                                     clearInterval(interval)
-                                    this.props.history.push("/")
+
+
+                                    axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/login`,
+                                        {
+                                            email: email,
+                                            password: password
+                                        }
+                                    ).then(res => {
+                                        if (res.data.result === "success") {
+                                            cookies.set("token", res.data.token, { path: "/", maxAge: 60 * 60 * 3 })
+                                            this.props.history.push({
+                                                pathname: "/", state: {
+                                                    token: res.data.token
+                                                }
+                                            })
+                                        }
+                                    })
+                                        .catch(err => {
+                                            this.props.history.push("/")
+                                        })
+
                                 }
                             })
                     }, 5000);
@@ -166,7 +187,7 @@ class Register extends Component {
                 this.setState({ isConnecting: false })
 
             }).catch(error => {
-                if (error.data) {
+                if (error.response && error.response.data) {
                     if (error.response.data.result === "error") {
                         if (error.response.data.type === "internal-error") {
                             Swal.fire({
@@ -212,14 +233,11 @@ class Register extends Component {
     }
 
     handleResendEmail = event => {
-        const { lastname, firstname, email, password } = this.state
+        const { email } = this.state
         event.target.disabled = true
         axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/email/resend`,
             {
-                lastname: lastname,
-                firstname: firstname,
                 email: email,
-                password: password,
                 lang: i18n.language
             }
         )
@@ -312,7 +330,7 @@ class Register extends Component {
                         <h2>{t("auth.signup")}</h2>
                         <strong>{email}</strong>
                         <p className="confirmation-email-sent">
-                            {t("auth.please-confirm-your-email")}
+                            {t("auth.confirm-email-to-continue")}
                         </p>
                         <button className="resend-email" onClick={(event) => this.handleResendEmail(event)}>{t("auth.resend-email")}</button>
                     </form>

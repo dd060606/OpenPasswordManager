@@ -16,7 +16,8 @@
     "check-your-network-connection": "Please check your network connection and try again.",
     "account-confirmation-failed": "Error: Your confirmation link has expired or you are using an invalid account!",
     "account-not-exists": "Account not exists!",
-    "wrong-password": "Wrong password !"
+    "wrong-password": "Wrong password !",
+    "invalid-credentials": "Invalid credentials!"
   },
   "auth": {
     "new-on-opm": "New on OpenPasswordManager?",
@@ -31,10 +32,10 @@
     "forgot-password": "Forgot your password?",
     "already-have-account": "Already have an account? Sign in",
     "no-account": "You don't have an account? Sign up",
-    "please-confirm-your-email": "Please confirm your account with e-mail that was sent, after that you can close this page.",
     "resend-email": "Resend e-mail",
     "account-confirmation": "Account confirmation",
-    "account-successfully-activated": "Account successfully activated!"
+    "account-successfully-activated": "Account successfully activated!",
+    "confirm-email-to-continue": "To continue, you must confirm your account with e-mail that was sent."
   },
   "welcome-on": "Welcome on",
   "continue": "Continue"
