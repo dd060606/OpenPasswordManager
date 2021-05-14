@@ -11,6 +11,7 @@ import App from "./components/App"
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import Cookies from 'universal-cookie'
+import Dashboard from './components/dashboard/Dashboard';
 
 
 
@@ -28,6 +29,7 @@ ReactDOM.render(
         <Route path="/auth/signup" exact component={Register} />
         <Route path="/auth/email/confirmation" exact component={EmailConfirmed} />
         <Route path="/auth/email/confirmation/:token" exact component={EmailConfirmed} />
+        <Route path="/dashboard" exact component={Dashboard} />
         <Route path="/" component={Error404} />
       </Switch>
     </Router>

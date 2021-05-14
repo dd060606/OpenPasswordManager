@@ -1,0 +1,71 @@
+.dashboard-nav {
+    display: flex;
+    flex-direction: column;
+    font-family: "Open Sans", sans-serif;
+
+    width: 350px;
+    height: 100vh;
+    background-color: rgba(198,237,240,0.35);
+    position: fixed;
+    transition: width 0.5s ease-in-out;
+    
+}
+.nav-closed {
+    transition: width 0.5s ease-in-out;
+    width: 65px;
+
+}
+.dashboard-nav > .top-buttons {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+}
+.dashboard-nav > .top-buttons  >.open-nav-button, .dashboard-nav > .top-buttons  > .open-account-settings {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 30px;
+    font-weight: 400;
+    color: #1E1E1E;
+}
+
+.dashboard-nav >.open-nav-button:hover {
+    cursor: pointer;
+}
+.dashboard-nav > .nav-buttons  {
+    display: flex;
+    flex-direction: column;
+ 
+}
+.dashboard-nav > .nav-buttons > .nav-button {
+    width: 100%;
+    text-decoration: none;
+    color: #1E1E1E;
+    font-weight: 600;
+    font-size: 25px;
+    padding: 15px 0px 15px 0px;
+    transition: all 0.5s;
+}
+
+
+.dashboard-nav > .nav-buttons > .nav-button > .far {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.dashboard-nav > .nav-buttons > .nav-button:hover {
+    transition: all 0.5s;
+    background-color: rgba(177,177,177,0.2);
+}
+.dashboard-nav > .nav-buttons > .current-link {
+    background-color: rgba(177,177,177,0.2);
+    color: #54c2f0;
+}
+.dashboard-nav > .nav-buttons {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import axios from "axios"
-import { cookies } from "../../index"
+import { saveToken } from "../../utils/auth-utils"
 
 
 class Login extends Component {
@@ -85,7 +85,7 @@ class Login extends Component {
                 }
             ).then(res => {
                 if (res.data.result === "success") {
-                    cookies.set("token", res.data.token, { path: "/", maxAge: 60 * 60 * 3 })
+                    saveToken(res.data.token)
                     this.props.history.push({
                         pathname: "/", state: {
                             token: res.data.token

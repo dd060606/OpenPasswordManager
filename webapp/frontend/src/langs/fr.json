@@ -39,5 +39,8 @@
   },
 
   "welcome-on": "Bienvenue sur",
-  "continue": "Continuer"
+  "continue": "Continuer",
+  "my-passwords": "Mes mots de passe",
+  "settings": "Paramètres",
+  "generator": "Générateur"
 }

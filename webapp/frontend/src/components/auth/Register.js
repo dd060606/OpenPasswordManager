@@ -6,7 +6,7 @@ import axios from "axios"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import i18n from 'i18next'
-import { cookies } from "../../index"
+import { saveToken } from "../../utils/auth-utils"
 
 
 
@@ -166,7 +166,7 @@ class Register extends Component {
                                         }
                                     ).then(res => {
                                         if (res.data.result === "success") {
-                                            cookies.set("token", res.data.token, { path: "/", maxAge: 60 * 60 * 3 })
+                                            saveToken(res.data.token)
                                             this.props.history.push({
                                                 pathname: "/", state: {
                                                     token: res.data.token

@@ -2,33 +2,38 @@ import axios from "axios"
 import { Component } from "react"
 import { withTranslation } from 'react-i18next'
 import "../i18n"
-import { cookies } from "../index"
+import { readToken } from "../utils/auth-utils"
+import Loading from "./Loading"
+import { Redirect } from 'react-router-dom'
+
+import "./css/App.css"
 
 class App extends Component {
     state = {
-        token: ""
+        token: "",
+        isLoading: false
     }
 
     componentDidMount() {
-        const { token } = this.state
-        if (this.props.location.state && this.props.location.state.token && this.props.location.state.token !== "") {
-            this.setState({ token: this.props.location.state.token })
-        }
-        else if (cookies.get("token") !== undefined && cookies.get("token") !== "") {
-            this.setState({ token: cookies.get("token") })
+        if (readToken(this.props)) {
+            this.setState({ token: readToken(this.props) })
         }
         else {
             this.props.history.push("/auth/login")
             return
         }
-
-
-
-
     }
     render() {
-        const { token } = this.state
-        return <p>Connected : {token}</p>
+        const { token, isLoading } = this.state
+
+        return (
+
+            <>
+                { isLoading && <Loading />}
+                { !isLoading && <Redirect path="/" to="/dashboard" />}
+            </>
+
+        )
     }
 }
 

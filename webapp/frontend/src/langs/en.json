@@ -38,5 +38,8 @@
     "confirm-email-to-continue": "To continue, you must confirm your account with e-mail that was sent."
   },
   "welcome-on": "Welcome on",
-  "continue": "Continue"
+  "continue": "Continue",
+  "my-passwords": "My passwords",
+  "settings": "Settings",
+  "generator": "Generator"
 }

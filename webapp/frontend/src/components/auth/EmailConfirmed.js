@@ -52,6 +52,8 @@ class EmailConfirmed extends Component {
 
         }
     }
+    //Arrow fx for binding
+
     handleResendEmail = event => {
         const { email } = this.state
         event.target.disabled = true
