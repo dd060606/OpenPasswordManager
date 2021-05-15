@@ -14,6 +14,7 @@ module.exports = (req, res, next) => {
                 message: "Invalid Token!"
             })
         } else {
+            req.userId = userId
             next()
         }
     } catch {

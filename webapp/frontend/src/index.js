@@ -8,10 +8,11 @@ import Login from "./components/auth/Login"
 import Register from "./components/auth/Register"
 import EmailConfirmed from "./components/auth/EmailConfirmed"
 import App from "./components/App"
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 
 import Cookies from 'universal-cookie'
-import Dashboard from './components/dashboard/Dashboard';
+import PasswordsDashboard from './components/dashboard/PasswordsDashboard'
+import AccountDashboard from "./components/dashboard/AccountDashboard"
 
 
 
@@ -29,7 +30,9 @@ ReactDOM.render(
         <Route path="/auth/signup" exact component={Register} />
         <Route path="/auth/email/confirmation" exact component={EmailConfirmed} />
         <Route path="/auth/email/confirmation/:token" exact component={EmailConfirmed} />
-        <Route path="/dashboard" exact component={Dashboard} />
+        <Route path="/dashboard/passwords" exact component={PasswordsDashboard} />
+        <Route path="/dashboard/my-account" exact component={AccountDashboard} />
+
         <Route path="/" component={Error404} />
       </Switch>
     </Router>

@@ -1,4 +1,4 @@
-body > #root > .app-content > .loading-content {
+body > #root> .loading-content {
   height: 100vh;
 }
 .loading-content  {
@@ -39,7 +39,7 @@ body > #root > .app-content > .loading-content {
   border-radius: 50%;
   width: 200px;
   height: 200px;
-  animation: rotate 1s  infinite;
+  animation: rotate 0.5s linear infinite;
 }
 
 @-webkit-keyframes rotate {

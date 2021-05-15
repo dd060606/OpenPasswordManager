@@ -37,10 +37,15 @@
     "account-successfully-activated": "Votre compte a été activé avec succès !",
     "confirm-email-to-continue": "Pour continuer, vous devez confirmer votre compte avec l'e-mail qui vous a été envoyé."
   },
-
+  "account": {
+    "my-account": "Mon compte",
+    "change-password": "Changer de mot de passe"
+  },
   "welcome-on": "Bienvenue sur",
   "continue": "Continuer",
   "my-passwords": "Mes mots de passe",
   "settings": "Paramètres",
-  "generator": "Générateur"
+  "generator": "Générateur",
+  "information": "Informations",
+  "security": "Sécurité"
 }

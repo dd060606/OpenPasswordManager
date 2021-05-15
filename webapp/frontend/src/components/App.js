@@ -26,11 +26,12 @@ class App extends Component {
     render() {
         const { token, isLoading } = this.state
 
+
         return (
 
             <>
                 { isLoading && <Loading />}
-                { !isLoading && <Redirect path="/" to="/dashboard" />}
+                { !isLoading && <Redirect path="/" to={{ pathname: "/dashboard/passwords", state: { token: token } }} />}
             </>
 
         )

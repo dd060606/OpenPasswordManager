@@ -136,62 +136,6 @@ function signupAccount(req, res) {
 
 
 }
-exports.resendEmail = (req, res, next) => {
-    if (req.body.lang) {
-        fs.exists("emails/" + req.body.lang + "/account-confirmation-template.html", function (exists) {
-            if (exists) {
-                sendEmail(req.body.lang, req)
-            }
-            else {
-                sendEmail("en", req)
-
-            }
-        });
-    }
-    else {
-        sendEmail("en", req)
-    }
-}
-
-function sendEmail(lang, req) {
-    fs.readFile("emails/" + lang + "/account-confirmation-template.html", 'utf8', (err, data) => {
-        if (!err) {
-            authUtils.database.query("SELECT * FROM `" + process.env.DB_OPM_ACCOUNTS_TABLE + "` WHERE email = \"" + req.body.email + "\"", function (err, result) {
-                if (!err) {
-                    const transporter = nodemailer.createTransport({
-                        host: process.env.EMAIL_HOST,
-                        port: process.env.EMAIL_PORT,
-                        secure: true,
-                        auth: {
-                            user: process.env.EMAIL_USER,
-                            pass: process.env.EMAIL_PASSWORD
-                        }
-                    });
-                    const url = process.env.EMAIL_CONFIRMATION_URL.endsWith("/") ? process.env.EMAIL_CONFIRMATION_URL + jwt.sign({ userId: result[0].id }, process.env.AUTH_TOKEN_KEY, { expiresIn: "24h" }) : process.env.EMAIL_CONFIRMATION_URL + "/" + jwt.sign({ userId: result[0].id }, process.env.AUTH_TOKEN_KEY, { expiresIn: "24h" })
-                    let template = handlebars.compile(data)
-                    let replacements = {
-                        firstname: result[0].firstname,
-                        email: req.body.email,
-                        emailLink: url
-                    }
-                    let htmlToSend = template(replacements)
-                    const mailOptions = {
-                        from: "\"OpenPasswordManager\" <" + process.env.EMAIL_USER + ">",
-                        to: req.body.email,
-                        subject: "E-mail confirmation",
-                        html: htmlToSend
-                    }
-                    transporter.sendMail(mailOptions, function (err, info) {
-                        if (err) {
-                            console.log(err);
-                        }
-                    })
-                }
-            })
-
-        }
-    })
-}
 exports.login = (req, res, next) => {
 
     if (validateLogin(req)) {
@@ -250,6 +194,63 @@ exports.login = (req, res, next) => {
     }
 
 }
+exports.resendEmail = (req, res, next) => {
+    if (req.body.lang) {
+        fs.exists("emails/" + req.body.lang + "/account-confirmation-template.html", function (exists) {
+            if (exists) {
+                sendEmail(req.body.lang, req)
+            }
+            else {
+                sendEmail("en", req)
+
+            }
+        });
+    }
+    else {
+        sendEmail("en", req)
+    }
+}
+
+function sendEmail(lang, req) {
+    fs.readFile("emails/" + lang + "/account-confirmation-template.html", 'utf8', (err, data) => {
+        if (!err) {
+            authUtils.database.query("SELECT * FROM `" + process.env.DB_OPM_ACCOUNTS_TABLE + "` WHERE email = \"" + req.body.email + "\"", function (err, result) {
+                if (!err) {
+                    const transporter = nodemailer.createTransport({
+                        host: process.env.EMAIL_HOST,
+                        port: process.env.EMAIL_PORT,
+                        secure: true,
+                        auth: {
+                            user: process.env.EMAIL_USER,
+                            pass: process.env.EMAIL_PASSWORD
+                        }
+                    });
+                    const url = process.env.EMAIL_CONFIRMATION_URL.endsWith("/") ? process.env.EMAIL_CONFIRMATION_URL + jwt.sign({ userId: result[0].id }, process.env.AUTH_TOKEN_KEY, { expiresIn: "24h" }) : process.env.EMAIL_CONFIRMATION_URL + "/" + jwt.sign({ userId: result[0].id }, process.env.AUTH_TOKEN_KEY, { expiresIn: "24h" })
+                    let template = handlebars.compile(data)
+                    let replacements = {
+                        firstname: result[0].firstname,
+                        email: req.body.email,
+                        emailLink: url
+                    }
+                    let htmlToSend = template(replacements)
+                    const mailOptions = {
+                        from: "\"OpenPasswordManager\" <" + process.env.EMAIL_USER + ">",
+                        to: req.body.email,
+                        subject: "E-mail confirmation",
+                        html: htmlToSend
+                    }
+                    transporter.sendMail(mailOptions, function (err, info) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    })
+                }
+            })
+
+        }
+    })
+}
+
 exports.emailConfirmation = (req, res, next) => {
     try {
         if (!req.body.token) {
@@ -333,4 +334,33 @@ exports.isEmailConfirmed = (req, res, next) => {
         return res.status(400).json(getJsonForArgumentsError())
 
     }
+}
+
+exports.getInfo = (req, res, next) => {
+    authUtils.database.query("SELECT * FROM `" + process.env.DB_OPM_ACCOUNTS_TABLE + "` WHERE id = \"" + req.userId + "\"", function (err, result) {
+
+        if (err) {
+            return res.status(500).json(getJsonForInternalError())
+        }
+        if (result.length === 0) {
+            return res.status(400).json({
+                result: "error",
+                type: "account-not-exists",
+                message: "Account doesn't exists!"
+            })
+        }
+        else {
+            res.status(200).json({
+                result: "success",
+                firstname: result[0].firstname,
+                lastname: result[0].lastname,
+                id: result[0].id,
+                email: result[0].email,
+                isVerified: result[0].isVerified
+            })
+        }
+
+    })
+
+
 }

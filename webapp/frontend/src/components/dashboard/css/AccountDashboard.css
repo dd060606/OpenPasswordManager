@@ -1,0 +1,55 @@
+.my-account {
+    display: flex;
+    font-family: "Open Sans",sans-serif;
+    color: #1E1E1E;
+
+}
+.my-account-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    
+}
+.line {
+    background-color: rgba(0,0,0,0.1);
+    height: 1px;
+    width: 90%;
+}
+.my-account-content > h2 {
+    justify-self: center;
+}
+
+.my-account-content > section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    
+}
+.my-account-content > section > .change-password-button {
+    padding: 8px;
+    width: 200px;
+    border: none;
+    outline: none;
+    color: white;
+    background-color: #54c2f0;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: 0.5s background;
+}
+.my-account-content > section > .change-password-button:hover {
+    cursor: pointer;
+    background-color: #54AAF0;
+
+    transition: 0.5s background;
+
+}
+.my-account-content > section > * {
+    margin-left: 50px;
+    font-family: "Open Sans", sans-serif;
+
+}
+.my-account-content > section > h3 {
+}
