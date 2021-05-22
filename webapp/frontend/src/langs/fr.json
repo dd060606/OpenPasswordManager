@@ -39,13 +39,24 @@
   },
   "account": {
     "my-account": "Mon compte",
-    "change-password": "Changer de mot de passe"
+    "change-password": "Changer de mot de passe",
+    "logout": "Déconnexion",
+    "want-to-logout": "Voulez vous vraiment vous déconnecter ?"
+  },
+  "generator": {
+    "password-generator": "Générateur de mots de passe",
+    "generator": "Générateur",
+    "use-generator": "Utilisez le générateur de mots de passe pour générer un mot de passe aléatoirement et sécurisé.",
+    "generate": "Générer"
   },
   "welcome-on": "Bienvenue sur",
   "continue": "Continuer",
   "my-passwords": "Mes mots de passe",
   "settings": "Paramètres",
-  "generator": "Générateur",
   "information": "Informations",
-  "security": "Sécurité"
+  "security": "Sécurité",
+  "confirm": "Confirmer",
+  "cancel": "Annuler",
+  "copy": "Copier",
+  "copied": "Copié"
 }

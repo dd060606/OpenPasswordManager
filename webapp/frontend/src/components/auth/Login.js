@@ -38,7 +38,7 @@ class Login extends Component {
 
         this.setState({ isConnecting: true })
         const { isEmailValid, email, password, isPasswordValid } = this.state
-        if (email === "" || password === "") {
+        if (!email || !password) {
             Swal.fire({
                 title: t("errors.error"),
                 text: t("errors.complete-all-fields"),
@@ -190,8 +190,6 @@ class Login extends Component {
                         <i className={`fal ${showPassword ? "fa-eye" : "fa-eye-slash"} fa-lg show-password-btn`} onClick={this.handleShowPassword}></i>
 
                     </div>
-                    <a href="/" className="forgot-password">{t("auth.forgot-password")}</a>
-
                     <button className="login-btn" onClick={this.handleLogin} disabled={isConnecting}
                         style={{ width: isConnecting ? "50px" : "" }}>{isConnecting ? <i className="fad fa-spinner-third fa-spin"></i> : t("auth.login")}
                     </button>

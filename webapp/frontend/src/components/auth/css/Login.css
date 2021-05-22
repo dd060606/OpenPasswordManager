@@ -87,7 +87,7 @@
     background: transparent;
     text-align: center;
 }
-.login-form > .forgot-password, .login-form > .no-account {
+ .login-form > .no-account {
     color: black;
     text-decoration: none;
 }

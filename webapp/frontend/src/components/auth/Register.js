@@ -65,7 +65,7 @@ class Register extends Component {
 
         this.setState({ isConnecting: true })
         const { isFirstnameValid, isLastnameValid, isEmailValid, isPasswordValid, lastname, firstname, email, password, confirmPassword } = this.state
-        if (email === "" || password === "" || confirmPassword === "" || firstname === "" || lastname === "") {
+        if (email || password || confirmPassword || firstname || lastname) {
             Swal.fire({
                 title: t("errors.error"),
                 text: t("errors.complete-all-fields"),

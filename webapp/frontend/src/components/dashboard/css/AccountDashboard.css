@@ -27,23 +27,36 @@
     width: 100%;
     
 }
-.my-account-content > section > .change-password-button {
+.my-account-content > section > button{
     padding: 8px;
     width: 200px;
-    border: none;
     outline: none;
-    color: white;
-    background-color: #54c2f0;
     border-radius: 5px;
     font-size: 15px;
     font-weight: 600;
     transition: 0.5s background;
 }
-.my-account-content > section > .change-password-button:hover {
-    cursor: pointer;
-    background-color: #54AAF0;
-
+.my-account-content > section > .change-password-button {
+    outline: none;
+    border: none;
+    color: white;
+    background-color: #54c2f0;
+}
+.my-account-content > section > .logout-button {
+    background-color: white;
+    color: #1E1E1E;
+    border:#1E1E1E 1px solid
+}
+.my-account-content > section > button:hover {
     transition: 0.5s background;
+    cursor: pointer;
+}
+.my-account-content > section > .change-password-button:hover {
+    background-color: #54AAF0;
+}
+.my-account-content > section > .logout-button:hover {
+    background-color: #E9402C;
+    color:white;
 
 }
 .my-account-content > section > * {
@@ -51,5 +64,6 @@
     font-family: "Open Sans", sans-serif;
 
 }
-.my-account-content > section > h3 {
+@media all and (max-width: 1280px) {
+    
 }

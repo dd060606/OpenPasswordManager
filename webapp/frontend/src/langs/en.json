@@ -39,13 +39,24 @@
   },
   "account": {
     "my-account": "My account",
-    "change-password": "Change password"
+    "change-password": "Change password",
+    "logout": "Logout",
+    "want-to-logout": "Are you sure you want to logout?"
+  },
+  "generator": {
+    "password-generator": "Password generator",
+    "generator": "Generator",
+    "use-generator": "Use the password generator to generate a new password randomly and securely.",
+    "generate": "Generate"
   },
   "welcome-on": "Welcome on",
   "continue": "Continue",
   "my-passwords": "My passwords",
   "settings": "Settings",
-  "generator": "Generator",
   "information": "Information",
-  "security": "Security"
+  "security": "Security",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "copy": "Copy",
+  "copied": "Copied"
 }

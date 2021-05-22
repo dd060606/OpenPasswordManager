@@ -1,0 +1,76 @@
+.generator {
+    display: flex;
+    font-family: "Open Sans",sans-serif;
+    color: #1E1E1E;
+    
+
+}
+.generator-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    height: 100vh;
+    width: 100%;
+    
+}
+.generator-content > .generated-password-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    height: 80px;
+    -webkit-box-shadow: 1px 1px 8px -1px rgba(0,0,0,0.27); 
+    box-shadow: 1px 1px 8px -1px rgba(0,0,0,0.27);
+    border-radius: 5px;
+
+}
+ .generated-password-box > .password-field {
+    display: flex;
+    width: 85%;
+    height: 85%;
+
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+.generated-password-box > .password-field > input{
+    font-family: "Open Sans",sans-serif;
+    font-weight: 600;
+    font-size: 30px;
+    color: #1E1E1E;
+    width: 80%;
+    border:none;
+    outline: none;
+}
+.generated-password-box >.password-field > .buttons {
+    display: flex;
+    flex-direction: row;
+    width: 15%;
+    align-items: center;
+}
+.generated-password-box >.password-field > .buttons > .button {
+    font-size: 30px;
+    color: #757575;
+    margin-right: 20px;
+}
+.generated-password-box >.password-field > .buttons > .button:hover {
+    cursor: pointer;
+} 
+.use-generator-text {
+    font-size: 20px;
+    font-weight: 600;
+}
+.generated-password-box > .password-strength-bar {
+    width: 100%;
+    height: 15%;
+
+}
+.generated-password-box > .password-strength-bar > .progress-bar {
+    background-color: #0BF06B;
+    width: 100%;
+    height: 100%;
+    transition: width 0.5s;
+    border-radius: 3px;
+}

@@ -11,12 +11,19 @@ import "./css/App.css"
 class App extends Component {
     state = {
         token: "",
-        isLoading: false
+        isLoading: true
     }
 
     componentDidMount() {
         if (readToken(this.props)) {
             this.setState({ token: readToken(this.props) })
+            axios.get(`${process.env.REACT_APP_SERVER_URL}/api/auth/info`, { headers: { "Authorization": `Bearer ${readToken(this.props)}` } })
+                .then(result => {
+                    this.setState({ isLoading: false })
+                })
+                .catch(err => {
+                    this.props.history.push("/auth/login")
+                })
         }
         else {
             this.props.history.push("/auth/login")
