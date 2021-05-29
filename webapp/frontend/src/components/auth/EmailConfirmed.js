@@ -88,7 +88,11 @@ class EmailConfirmed extends Component {
                         </Link>
                     }
                     {!isRedirectedAfterLogin && confirmationFailed &&
-                        <Link className="login-btn" to="/auth/login">
+                        <Link className="login-btn" to={{
+                            pathname: "/", state: {
+                                token: this.props.match.params.token
+                            }
+                        }}>
                             {t("auth.login")}
                         </Link>
                     }

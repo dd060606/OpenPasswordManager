@@ -64,6 +64,6 @@
     font-family: "Open Sans", sans-serif;
 
 }
-@media all and (max-width: 1280px) {
-    
+#swal2-title {
+    font-family: "Open Sans",sans-serif;
 }

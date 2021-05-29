@@ -40,7 +40,7 @@ class Register extends Component {
         this.setState({ email: event.target.value, isEmailValid: event.target.value === "" ? true : emailRegex.test(event.target.value) })
     }
     handlePasswordChange = event => {
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*_?&]{8,}$/
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*#?&]{8,}$/
 
         this.setState({ password: event.target.value, isPasswordValid: event.target.value === "" ? true : passwordRegex.test(event.target.value) })
     }
@@ -65,7 +65,7 @@ class Register extends Component {
 
         this.setState({ isConnecting: true })
         const { isFirstnameValid, isLastnameValid, isEmailValid, isPasswordValid, lastname, firstname, email, password, confirmPassword } = this.state
-        if (email || password || confirmPassword || firstname || lastname) {
+        if (!email || !password || !confirmPassword || !firstname || !lastname) {
             Swal.fire({
                 title: t("errors.error"),
                 text: t("errors.complete-all-fields"),
@@ -275,7 +275,7 @@ class Register extends Component {
                             <input type="text" id="firstname-input" placeholder={t("auth.firstname")}
                                 onBlur={() => this.setState({ firstnameFieldFocused: false })}
                                 onFocus={() => this.setState({ firstnameFieldFocused: true })} value={firstname}
-                                onChange={event => this.handleFirstnameChange(event)} />
+                                onChange={event => this.handleFirstnameChange(event)} autoCorrect={false} />
 
                         </div>
                         <div className="name-field field" style={{ border: !isLastnameValid ? "1px #F42D0E solid" : lastnameFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
@@ -283,7 +283,7 @@ class Register extends Component {
                             <input type="text" id="lastname-input" placeholder={t("auth.lastname")}
                                 onBlur={() => this.setState({ lastnameFieldFocused: false })}
                                 onFocus={() => this.setState({ lastnameFieldFocused: true })} value={lastname}
-                                onChange={event => this.handleLastnameChange(event)} />
+                                onChange={event => this.handleLastnameChange(event)} autoCorrect={false} />
 
                         </div>
                     </div>
@@ -300,7 +300,7 @@ class Register extends Component {
                         <input type={showPassword ? "text" : "password"} id="password-input" placeholder={t("auth.password")}
                             onBlur={() => this.setState({ passwordFieldFocused: false })}
                             onFocus={() => this.setState({ passwordFieldFocused: true })} value={password}
-                            onChange={event => this.handlePasswordChange(event)} />
+                            onChange={event => this.handlePasswordChange(event)} autoCorrect={false} autoCapitalize={false} />
 
                         <i className={`fal ${showPassword ? "fa-eye" : "fa-eye-slash"} fa-lg show-password-btn`} onClick={this.handleShowPassword}></i>
 
@@ -310,7 +310,7 @@ class Register extends Component {
                         <input type={showPassword ? "text" : "password"} id="confirm-password-input" placeholder={t("auth.confirm-password")}
                             onBlur={() => this.setState({ confirmPasswordFieldFocused: false })}
                             onFocus={() => this.setState({ confirmPasswordFieldFocused: true })} value={confirmPassword}
-                            onChange={event => this.handleConfirmPasswordChange(event)} />
+                            onChange={event => this.handleConfirmPasswordChange(event)} autoCorrect={false} autoCapitalize={false} />
 
                         <i className={`fal ${showPassword ? "fa-eye" : "fa-eye-slash"} fa-lg show-password-btn`} onClick={this.handleShowPassword}></i>
 

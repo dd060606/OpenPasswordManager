@@ -29,7 +29,7 @@ class Login extends Component {
         this.setState({ email: event.target.value, isEmailValid: event.target.value === "" ? true : emailRegex.test(event.target.value) })
     }
     handlePasswordChange = event => {
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*_?&]{8,}$/
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*#?&]{8,}$/
         this.setState({ password: event.target.value, isPasswordValid: event.target.value === "" ? true : passwordRegex.test(event.target.value) })
     }
 
@@ -185,7 +185,7 @@ class Login extends Component {
                         <input type={showPassword ? "text" : "password"} id="password-input" placeholder={t("auth.password")}
                             onBlur={() => this.setState({ passwordFieldFocused: false })}
                             onFocus={() => this.setState({ passwordFieldFocused: true })} value={password}
-                            onChange={event => this.handlePasswordChange(event)} />
+                            onChange={event => this.handlePasswordChange(event)} autoCorrect={false} autoCapitalize={false} />
 
                         <i className={`fal ${showPassword ? "fa-eye" : "fa-eye-slash"} fa-lg show-password-btn`} onClick={this.handleShowPassword}></i>
 

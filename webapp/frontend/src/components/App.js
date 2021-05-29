@@ -2,7 +2,7 @@ import axios from "axios"
 import { Component } from "react"
 import { withTranslation } from 'react-i18next'
 import "../i18n"
-import { readToken } from "../utils/auth-utils"
+import { readToken, sendToAuthPage } from "../utils/auth-utils"
 import Loading from "./Loading"
 import { Redirect } from 'react-router-dom'
 
@@ -22,17 +22,16 @@ class App extends Component {
                     this.setState({ isLoading: false })
                 })
                 .catch(err => {
-                    this.props.history.push("/auth/login")
+                    sendToAuthPage(this.props)
                 })
         }
         else {
-            this.props.history.push("/auth/login")
+            sendToAuthPage(this.props)
             return
         }
     }
     render() {
         const { token, isLoading } = this.state
-
 
         return (
 

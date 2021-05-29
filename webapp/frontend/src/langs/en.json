@@ -41,13 +41,26 @@
     "my-account": "My account",
     "change-password": "Change password",
     "logout": "Logout",
-    "want-to-logout": "Are you sure you want to logout?"
+    "want-to-logout": "Are you sure you want to logout?",
+    "old-password": "Old password",
+    "new-password": "New password",
+    "confirm-new-password": "Confirm new password"
   },
   "generator": {
     "password-generator": "Password generator",
     "generator": "Generator",
     "use-generator": "Use the password generator to generate a new password randomly and securely.",
-    "generate": "Generate"
+    "generate": "Generate",
+    "configure-password": "Configure your password",
+    "password-length": "Password length",
+    "numbers": "Numbers",
+    "uppercases": "Uppercases",
+    "lowercases": "Lowercases",
+    "symbols": "Symbols"
+  },
+  "passwords": {
+    "add": "Add",
+    "no-passwords": "You don't have any saved passwords"
   },
   "welcome-on": "Welcome on",
   "continue": "Continue",
@@ -58,5 +71,6 @@
   "confirm": "Confirm",
   "cancel": "Cancel",
   "copy": "Copy",
-  "copied": "Copied"
+  "copied": "Copied",
+  "search": "Search"
 }

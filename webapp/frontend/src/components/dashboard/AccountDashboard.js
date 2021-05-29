@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import Loading from "../Loading"
 import axios from "axios"
-import { readToken } from "../../utils/auth-utils"
+import { isTokenSaved, logout, readToken, sendToAuthPage } from "../../utils/auth-utils"
 import Swal from "sweetalert2"
 import { cookies } from "../.."
 
@@ -29,7 +29,7 @@ class AccountDashboard extends Component {
                         this.setState({ isLoading: false, token: token, email: result.data.email })
                     })
                     .catch(err => {
-                        this.props.history.push("/auth/login")
+                        sendToAuthPage(this.props)
                     })
             }
             else {
@@ -47,20 +47,45 @@ class AccountDashboard extends Component {
         const { t } = this.props
         Swal.fire({
             text: t("account.want-to-logout"),
-            icon: 'warning',
+            icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: '#54c2f0',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: "#54c2f0",
+            cancelButtonColor: "#d33",
             confirmButtonText: t("confirm"),
             cancelButtonText: t("cancel")
         }).then((result) => {
             if (result.isConfirmed) {
-                if (cookies.get("token")) {
-                    cookies.remove('token', { path: '/' })
+                if (isTokenSaved()) {
+                    logout()
                 }
-                this.props.history.push("/auth/login")
+                sendToAuthPage(this.props)
             }
         })
+    }
+
+    handleChangePasswordClick = () => {
+        (async () => {
+            const { t } = this.props
+
+            const { value: passwords } = await Swal.fire({
+                title: t("account.change-password"),
+                html:
+                    `<input id="old-password" placeholder="${t("account.old-password")}" class="swal2-input">` +
+                    `<input id="new-password" placeholder="${t("account.new-password")}" class="swal2-input">`,
+                focusConfirm: false,
+                confirmButtonColor: "#54c2f0",
+                preConfirm: () => {
+                    return [
+                        document.getElementById("old-password").value,
+                        document.getElementById("new-password").value
+                    ]
+                }
+            })
+
+            if (passwords) {
+            }
+
+        })()
     }
 
     render() {
@@ -89,7 +114,7 @@ class AccountDashboard extends Component {
                                 <h3>{t("security")}</h3>
 
                                 <p></p>
-                                <button className="change-password-button">{t("account.change-password")}</button>
+                                <button className="change-password-button" onClick={this.handleChangePasswordClick}>{t("account.change-password")}</button>
                                 <br />
                                 <button className="logout-button" onClick={this.handleLogoutClick}>{t("account.logout")}</button>
 

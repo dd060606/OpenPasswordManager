@@ -1,9 +1,12 @@
 import { Component } from "react"
 import DashboardNav from "./DashboardNav"
 import "./css/GeneratorDashboard.css"
-import { withTranslation } from 'react-i18next'
+import { withTranslation } from "react-i18next"
 import "../../i18n"
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from "@material-ui/core/Tooltip"
+import Checkbox from "@material-ui/core/Checkbox"
+import Slider from "@material-ui/core/Slider"
+
 
 
 
@@ -15,7 +18,11 @@ class GeneratorDashboard extends Component {
         passwordStrengthValue: 100,
         generatedPassword: "",
         passwordLength: 16,
-        passwordCopied: false
+        passwordCopied: false,
+        numbersEnabled: true,
+        lowercasesEnabled: true,
+        uppercaseEnabled: true,
+        symbolsEnabled: true
     }
 
 
@@ -68,28 +75,38 @@ class GeneratorDashboard extends Component {
     }
 
     generatePassword = () => {
-        const { passwordLength } = this.state
+
+        const { passwordLength, numbersEnabled, lowercasesEnabled, uppercaseEnabled, symbolsEnabled } = this.state
         let generatedPassword = ""
-        const specialsChars = [..."@$!%*_?&"]
+        const specialsChars = [..."@$!%*#?&"]
         const letters = [..."abcdefghijklmnopqrstuvwxyz"]
         const numbers = [..."0123456789"]
 
         while (generatedPassword.length !== passwordLength) {
-            const randomResult = this.getRandomNumber(3)
+            const randomResult = this.getRandomNumber(4)
 
             if (randomResult === 0) {
-                generatedPassword += specialsChars[this.getRandomNumber(specialsChars.length)]
+                if (symbolsEnabled) {
+                    generatedPassword += specialsChars[this.getRandomNumber(specialsChars.length)]
+                }
             }
             else if (randomResult === 1) {
-                if (this.getRandomNumber(2) === 0) {
+                if (uppercaseEnabled) {
                     generatedPassword += letters[this.getRandomNumber(letters.length)].toUpperCase()
+
                 }
-                else {
+            }
+            else if (randomResult === 2) {
+                if (lowercasesEnabled) {
                     generatedPassword += letters[this.getRandomNumber(letters.length)]
+
                 }
             }
             else {
-                generatedPassword += numbers[this.getRandomNumber(numbers.length)]
+                if (numbersEnabled) {
+                    generatedPassword += numbers[this.getRandomNumber(numbers.length)]
+
+                }
 
             }
         }
@@ -112,9 +129,62 @@ class GeneratorDashboard extends Component {
 
     }
 
+    handlePasswordLengthSliderChange = (event, newValue) => {
+        const { passwordLength } = this.state
+        if (passwordLength !== newValue) {
+            setTimeout(() => {
+                this.generatePassword()
+            }, 1)
+        }
+        this.setState({ passwordLength: newValue })
+
+    }
+
+    handleUppercasesCheckboxClicked = () => {
+        const { uppercaseEnabled, lowercasesEnabled, numbersEnabled, symbolsEnabled } = this.state
+
+        if (lowercasesEnabled || numbersEnabled || symbolsEnabled) {
+            this.setState({ uppercaseEnabled: !uppercaseEnabled })
+            setTimeout(() => {
+                this.generatePassword()
+            }, 50)
+        }
+
+    }
+    handleNumbersCheckboxClicked = () => {
+        const { uppercaseEnabled, lowercasesEnabled, numbersEnabled, symbolsEnabled } = this.state
+        if (lowercasesEnabled || uppercaseEnabled || symbolsEnabled) {
+            this.setState({ numbersEnabled: !numbersEnabled })
+            setTimeout(() => {
+                this.generatePassword()
+            }, 1)
+        }
+
+    }
+    handleLowercasesCheckboxClicked = () => {
+        const { uppercaseEnabled, lowercasesEnabled, numbersEnabled, symbolsEnabled } = this.state
+        if (numbersEnabled || uppercaseEnabled || symbolsEnabled) {
+            this.setState({ lowercasesEnabled: !lowercasesEnabled })
+            setTimeout(() => {
+                this.generatePassword()
+            }, 1)
+        }
+    }
+    handleSymbolsCheckboxClicked = () => {
+        const { uppercaseEnabled, lowercasesEnabled, numbersEnabled, symbolsEnabled } = this.state
+        if (numbersEnabled || uppercaseEnabled || lowercasesEnabled) {
+            this.setState({ symbolsEnabled: !symbolsEnabled })
+            setTimeout(() => {
+                this.generatePassword()
+            }, 1)
+        }
+
+    }
+
+
     render() {
         const { t } = this.props
-        const { passwordStrengthValue, generatedPassword, passwordCopied } = this.state
+        const { passwordStrengthValue, generatedPassword, passwordCopied, passwordLength, numbersEnabled, lowercasesEnabled, uppercaseEnabled, symbolsEnabled } = this.state
         return (
 
 
@@ -124,7 +194,6 @@ class GeneratorDashboard extends Component {
                 <div className="generator-content">
                     <h1>{t("generator.password-generator")}</h1>
                     <p className="use-generator-text">{t("generator.use-generator")}</p>
-
                     <div className="generated-password-box">
                         <div className="password-field">
                             <input type="text" spellCheck={false} value={generatedPassword} onChange={event => this.handlePasswordChange(event.target.value)} />
@@ -142,7 +211,69 @@ class GeneratorDashboard extends Component {
                         </div>
 
                     </div>
+
+                    <div className="generator-config">
+                        <h2>{t("generator.configure-password")}</h2>
+
+                        <div className="configure-box">
+                            <div className="password-length-box">
+                                <p>{t("generator.password-length")}</p>
+                                <Slider valueLabelDisplay="auto" max={50} min={1} value={passwordLength} onChange={this.handlePasswordLengthSliderChange} />
+
+                            </div>
+                            <div className="password-attributes-box">
+                                <div className="box1">
+                                    <div className="attribute">
+
+                                        <Checkbox style={{
+                                            color: "#54c2f0",
+                                            transform: "scale(1.5)"
+                                        }} checked={uppercaseEnabled} onClick={this.handleUppercasesCheckboxClicked} />
+                                        <p onClick={this.handleUppercasesCheckboxClicked} >{t("generator.uppercases")}</p>
+
+                                    </div>
+
+                                    <div className="attribute">
+
+                                        <Checkbox style={{
+                                            color: "#54c2f0",
+                                            transform: "scale(1.5)"
+
+                                        }} checked={lowercasesEnabled} onClick={this.handleLowercasesCheckboxClicked} />
+                                        <p onClick={this.handleLowercasesCheckboxClicked} >{t("generator.lowercases")}</p>
+
+                                    </div>
+                                </div>
+
+                                <div className="box2">
+                                    <div className="attribute">
+
+                                        <Checkbox style={{
+                                            color: "#54c2f0",
+                                            transform: "scale(1.5)"
+                                        }} checked={numbersEnabled} onClick={this.handleNumbersCheckboxClicked} />
+                                        <p onClick={this.handleNumbersCheckboxClicked} >{t("generator.numbers")}</p>
+
+                                    </div>
+                                    <div className="attribute">
+
+                                        <Checkbox style={{
+                                            color: "#54c2f0",
+                                            transform: "scale(1.5)"
+                                        }} checked={symbolsEnabled} onClick={this.handleSymbolsCheckboxClicked} />
+                                        <p onClick={this.handleSymbolsCheckboxClicked} >{t("generator.symbols")}</p>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
+
 
             </div>
 
