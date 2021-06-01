@@ -136,6 +136,14 @@
       
 
 }
+@media all and (max-width: 350px) {
+    .responsive-nav-ul {
+        width: 100%;
+    }
+    .responsive-nav-ul > .nav-button{
+        margin-left: 20px;
+    }
+}
 .responsive-nav-ul {
     display: flex;
     font-family: "Open Sans", sans-serif;
