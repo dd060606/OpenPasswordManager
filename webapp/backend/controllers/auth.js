@@ -1,6 +1,6 @@
 const bcyrpt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const db = require("../utils/auth-utils").database
+const db = require("../utils/database").database
 const logger = require("../utils/logger")
 const fs = require("fs")
 const sendEmail = require("../controllers/emails").sendEmail
@@ -165,7 +165,7 @@ exports.login = (req, res, next) => {
                             return res.status(200).json({
                                 result: "success",
                                 token: jwt.sign({ userId: result[0].id },
-                                    process.env.AUTH_TOKEN_KEY, { expiresIn: "3h" }
+                                    process.env.AUTH_TOKEN_KEY, { expiresIn: "1h" }
                                 )
                             })
                         }

@@ -5,9 +5,8 @@ import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import Loading from "../Loading"
 import axios from "axios"
-import { isTokenSaved, logout, readToken, sendToAuthPage } from "../../utils/auth-utils"
+import { deleteEmailCookie, isEmailSaved, readToken, sendToAuthPage } from "../../utils/auth-utils"
 import Swal from "sweetalert2"
-import { cookies } from "../.."
 
 class AccountDashboard extends Component {
 
@@ -33,7 +32,7 @@ class AccountDashboard extends Component {
                     })
             }
             else {
-                this.props.history.push("/")
+                sendToAuthPage(this.props)
             }
 
         }
@@ -55,8 +54,8 @@ class AccountDashboard extends Component {
             cancelButtonText: t("cancel")
         }).then((result) => {
             if (result.isConfirmed) {
-                if (isTokenSaved()) {
-                    logout()
+                if (isEmailSaved()) {
+                    deleteEmailCookie()
                 }
                 sendToAuthPage(this.props)
             }

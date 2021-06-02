@@ -15,6 +15,7 @@ class App extends Component {
     }
 
     componentDidMount() {
+
         if (readToken(this.props)) {
             this.setState({ token: readToken(this.props) })
             axios.get(`${process.env.REACT_APP_SERVER_URL}/api/auth/info`, { headers: { "Authorization": `Bearer ${readToken(this.props)}` } })
@@ -29,6 +30,7 @@ class App extends Component {
             sendToAuthPage(this.props)
             return
         }
+
     }
     render() {
         const { token, isLoading } = this.state

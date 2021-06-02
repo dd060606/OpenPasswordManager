@@ -3,6 +3,7 @@ require('dotenv').config()
 
 
 module.exports = (req, res, next) => {
+
     try {
         const token = req.headers.authorization.split(' ')[1]
 
@@ -21,10 +22,10 @@ module.exports = (req, res, next) => {
             next()
         }
     } catch {
-        res.status(401).json({
+        return res.status(401).json({
             result: "error",
-            type: "invalid-request",
-            message: "Invalid Request!"
-        });
+            type: "invalid-token",
+            message: "Invalid Token!"
+        })
     }
-};
+}

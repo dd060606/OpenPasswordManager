@@ -35,7 +35,8 @@
     "resend-email": "Resend e-mail",
     "account-confirmation": "Account confirmation",
     "account-successfully-activated": "Account successfully activated!",
-    "confirm-email-to-continue": "To continue, you must confirm your account with e-mail that was sent."
+    "confirm-email-to-continue": "To continue, you must confirm your account with e-mail that was sent.",
+    "login-another-account": "Login with another account"
   },
   "account": {
     "my-account": "My account",
@@ -60,7 +61,9 @@
   },
   "passwords": {
     "add": "Add",
-    "no-passwords": "You don't have any saved passwords"
+    "no-passwords": "You don't have any saved passwords",
+    "edit": "Edit",
+    "browse-website": "Browse website"
   },
   "welcome-on": "Welcome on",
   "continue": "Continue",

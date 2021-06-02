@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import axios from "axios"
-import { saveToken } from "../../utils/auth-utils"
+import { deleteEmailCookie, getEmail, isEmailSaved, saveEmail } from "../../utils/auth-utils"
 
 
 class Login extends Component {
@@ -19,7 +19,13 @@ class Login extends Component {
         isConnecting: false,
         showPassword: false,
         isEmailValid: true,
-        isPasswordValid: true
+        isPasswordValid: true,
+        isEmailSaved: false
+    }
+
+    componentDidMount() {
+
+        this.setState({ isEmailSaved: isEmailSaved(), email: isEmailSaved() ? getEmail() : "" })
     }
 
     //Arrow fx for binding
@@ -85,7 +91,7 @@ class Login extends Component {
                 }
             ).then(res => {
                 if (res.data.result === "success") {
-                    saveToken(res.data.token)
+                    saveEmail(email)
                     this.props.history.push({
                         pathname: "/", state: {
                             token: res.data.token
@@ -150,12 +156,17 @@ class Login extends Component {
         }
     }
 
+    handleAuthToAnotherAccount = event => {
+        event.preventDefault()
+        deleteEmailCookie()
+        window.location.reload()
+    }
 
 
 
 
     render() {
-        const { password, email, emailFieldFocused, passwordFieldFocused, isConnecting, showPassword, isEmailValid, isPasswordValid } = this.state
+        const { password, email, emailFieldFocused, passwordFieldFocused, isConnecting, showPassword, isEmailValid, isPasswordValid, isEmailSaved } = this.state
         const { t } = this.props
         return (
 
@@ -164,37 +175,56 @@ class Login extends Component {
                 <div className="welcome-login">
                     <img src={`${process.env.PUBLIC_URL}/assets/images/icon.png`} alt="welcome-icon" className="icon" width={100} height={120} />
                     <h1 className="welcome">{t("welcome-on")} OpenPasswordManager</h1>
-                    <h3>{t("auth.new-on-opm")}</h3>
-                    <Link to="/auth/signup" className="signup-btn">{t("auth.signup")}</Link>
+                    {!isEmailSaved &&
+                        <>
+                            <h3>{t("auth.new-on-opm")}</h3>
+                            <Link to="/auth/signup" className="signup-btn">{t("auth.signup")}</Link>
+                        </>
+                    }
                 </div>
 
                 <form className="login-form">
                     <img src={`${process.env.PUBLIC_URL}/assets/images/logo.png`} alt="nav-logo-login-responsive" id="nav-logo-login-responsive" className="icon" width={120} height={110} />
 
                     <h2>{t("auth.login")}</h2>
-                    <div className="field" style={{ border: !isEmailValid ? "1px #F42D0E solid" : emailFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
-                        <i className="fal fa-envelope field-icon"></i>
-                        <input type="email" id="email-input" placeholder={t("auth.email")}
-                            onBlur={() => this.setState({ emailFieldFocused: false })}
-                            onFocus={() => this.setState({ emailFieldFocused: true })} value={email}
-                            onChange={event => this.handleEmailChange(event)} />
+                    {!isEmailSaved &&
+                        <div className="field" style={{ border: !isEmailValid ? "1px #F42D0E solid" : emailFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                            <i className="fal fa-envelope field-icon"></i>
+                            <input type="email" id="email-input" placeholder={t("auth.email")}
+                                onBlur={() => this.setState({ emailFieldFocused: false })}
+                                onFocus={() => this.setState({ emailFieldFocused: true })} value={email}
+                                onChange={event => this.handleEmailChange(event)} />
 
-                    </div>
+                        </div>
+                    }
+                    {isEmailSaved &&
+
+                        <p className="email-text"><strong>{email}</strong></p>
+
+                    }
+
                     <div className="field" style={{ border: !isPasswordValid ? "1px #F42D0E solid" : passwordFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
                         <i className="fal fa-key field-icon"></i>
                         <input type={showPassword ? "text" : "password"} id="password-input" placeholder={t("auth.password")}
                             onBlur={() => this.setState({ passwordFieldFocused: false })}
                             onFocus={() => this.setState({ passwordFieldFocused: true })} value={password}
-                            onChange={event => this.handlePasswordChange(event)} autoCorrect={false} autoCapitalize={false} />
+                            onChange={event => this.handlePasswordChange(event)} autoCorrect="off" autoCapitalize="off" />
 
                         <i className={`fal ${showPassword ? "fa-eye" : "fa-eye-slash"} fa-lg show-password-btn`} onClick={this.handleShowPassword}></i>
 
                     </div>
+                    {isEmailSaved &&
+
+                        <div className="login-another-account" onClick={this.handleAuthToAnotherAccount}>{t("auth.login-another-account")}</div>
+                    }
                     <button className="login-btn" onClick={this.handleLogin} disabled={isConnecting}
                         style={{ width: isConnecting ? "50px" : "" }}>{isConnecting ? <i className="fad fa-spinner-third fa-spin"></i> : t("auth.login")}
                     </button>
 
-                    <Link to="/auth/signup" className="no-account">{t("auth.no-account")}</Link>
+                    {!isEmailSaved &&
+                        <Link to="/auth/signup" className="no-account">{t("auth.no-account")}</Link>
+
+                    }
                 </form>
             </div>)
     }

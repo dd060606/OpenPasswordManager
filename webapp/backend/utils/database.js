@@ -23,12 +23,22 @@ module.exports.initDatabase = function () {
         console.log("Connected to database!");
     });
 
+
     database.query("CREATE TABLE IF NOT EXISTS `" + databaseName + "`.`" + process.env.DB_OPM_ACCOUNTS_TABLE + "` ( `id` INT NOT NULL AUTO_INCREMENT ,"
         + " `email` VARCHAR(255) NOT NULL ,"
         + " `password` TEXT NOT NULL ,"
         + " `lastname` VARCHAR(255) NOT NULL ,"
         + " `firstname` VARCHAR(255) NOT NULL ,"
         + " `isVerified` BOOLEAN NOT NULL DEFAULT FALSE ,"
+        + " PRIMARY KEY (`id`)) ENGINE = InnoDB;", function (err, result) {
+            if (err) throw err;
+        })
+    database.query("CREATE TABLE IF NOT EXISTS `" + databaseName + "`.`" + process.env.DB_OPM_CREDENTIALS_TABLE + "` ( `id` INT NOT NULL AUTO_INCREMENT ,"
+        + " `user_id` INT NOT NULL ,"
+        + " `name` TEXT NOT NULL ,"
+        + " `url` TEXT NOT NULL ,"
+        + " `username` TEXT NOT NULL ,"
+        + " `password` TEXT NOT NULL ,"
         + " PRIMARY KEY (`id`)) ENGINE = InnoDB;", function (err, result) {
             if (err) throw err;
         })

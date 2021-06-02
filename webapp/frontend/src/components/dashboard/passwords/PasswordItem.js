@@ -1,24 +1,25 @@
 import "../css/passwords/PasswordItem.css"
 import Tooltip from "@material-ui/core/Tooltip"
-
+import { useTranslation } from "react-i18next"
+import "../../../i18n"
 
 const PasswordItem = ({ name, url, imageUrl, index, onClick }) => {
 
-
+    const [t] = useTranslation()
     return (<div className="password-item-box">
         <div className="password-item">
             <div className="password-info">
-                <img src={imageUrl} alt="website-icon" className="website-icon" />
+                <img src={imageUrl} alt="icon" className="website-icon" />
                 <p className="password-name">{name}</p>
             </div>
 
 
             <div className="password-action">
-                <Tooltip title={"Test"} placement="top">
+                <Tooltip title={t("passwords.browse-website")} placement="top">
 
                     <a href={url} target="_blank" rel="noreferrer" className="browse-to-website-button"><i className="far fa-external-link" /></a>
                 </Tooltip>
-                <Tooltip title={"Test"} placement="top">
+                <Tooltip title={t("passwords.edit")} placement="top">
 
                     <button className="edit-password-button"><i className="far fa-edit" /></button>
                 </Tooltip>

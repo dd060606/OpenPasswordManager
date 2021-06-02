@@ -59,7 +59,7 @@
     display: none;
 }
 .login-form > h2 {
-    margin-bottom: 50px;
+    margin-bottom: 25px;
 }
 
 .login-form > .field {
@@ -90,12 +90,12 @@
  .login-form > .no-account {
     color: black;
     text-decoration: none;
-}
-.login-form > .no-account {
+    white-space: nowrap;
     display: none;
     margin-top: 15px;
+
 }
-.login-form > .forgot-password:hover, .login-form > .no-account:hover {
+ .login-form > .no-account:hover {
     text-decoration: underline black;
 }
 .login-form > .login-btn {
@@ -121,7 +121,18 @@
 .field-icon {
     margin-left: 10px;
 }
-
+.login-form > .login-another-account {
+    color: black;
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    outline: none;
+    white-space: nowrap;
+}
+.login-form > .login-another-account:hover {
+    text-decoration: underline black;
+    cursor: pointer;
+}
 body > #root > .auth-login > .welcome-login {
     height: 100vh;
   }
@@ -159,7 +170,9 @@ body > #root > .auth-login > .welcome-login {
         width: 275px;
 
     }
-    
+    .login-form > .email-text {
+        font-size: 14px;
+    }
     .login-form > .login-btn {
         width: 230px;
     }

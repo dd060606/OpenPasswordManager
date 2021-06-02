@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer")
 const fs = require("fs")
 const handlebars = require('handlebars')
-const db = require("../utils/auth-utils").database
+const db = require("../utils/database").database
 const logger = require("../utils/logger")
 
 const jwt = require("jsonwebtoken")

@@ -3,10 +3,9 @@
     flex-direction: column;
     font-family: "Open Sans", sans-serif;
 
-    width: 450Px;
+    width: 450px;
     height: 100vh;
-   background-color: rgba(198,237,240, 0.35);
-    
+    background-color: rgba(198,237,240, 0.35);
     transition: width 0.5s ease-in-out;
     
 }

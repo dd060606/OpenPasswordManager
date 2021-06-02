@@ -4,24 +4,23 @@ function readToken(props) {
     if (props.location.state && props.location.state.token && props.location.state.token !== "") {
         return props.location.state.token
     }
-    else if (cookies.get("token")) {
-        return cookies.get("token")
-    }
     else {
         return undefined
     }
 
 
 }
-
-function saveToken(token) {
-    cookies.set("token", token, { path: "/", secure: true, sameSite: "strict", maxAge: 3600 })
+function getEmail() {
+    return cookies.get("email")
 }
-function logout() {
-    cookies.remove("token", { path: "/" })
+function saveEmail(email) {
+    cookies.set("email", email, { path: "/" })
 }
-function isTokenSaved() {
-    if (cookies.get("token")) {
+function deleteEmailCookie() {
+    cookies.remove("email", { path: "/" })
+}
+function isEmailSaved() {
+    if (cookies.get("email")) {
         return true
     }
     else {
@@ -31,4 +30,4 @@ function isTokenSaved() {
 function sendToAuthPage(props) {
     props.history.push("/auth/login")
 }
-export { readToken, saveToken, logout, isTokenSaved, sendToAuthPage }
+export { readToken, saveEmail, deleteEmailCookie, isEmailSaved, sendToAuthPage, getEmail }

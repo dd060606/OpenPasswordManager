@@ -6,7 +6,7 @@ import axios from "axios"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import i18n from 'i18next'
-import { saveToken } from "../../utils/auth-utils"
+import { saveEmail, sendToAuthPage } from "../../utils/auth-utils"
 
 
 
@@ -166,7 +166,7 @@ class Register extends Component {
                                         }
                                     ).then(res => {
                                         if (res.data.result === "success") {
-                                            saveToken(res.data.token)
+                                            saveEmail(email)
                                             this.props.history.push({
                                                 pathname: "/", state: {
                                                     token: res.data.token
@@ -175,7 +175,7 @@ class Register extends Component {
                                         }
                                     })
                                         .catch(err => {
-                                            this.props.history.push("/")
+                                            sendToAuthPage()
                                         })
 
                                 }
@@ -275,7 +275,7 @@ class Register extends Component {
                             <input type="text" id="firstname-input" placeholder={t("auth.firstname")}
                                 onBlur={() => this.setState({ firstnameFieldFocused: false })}
                                 onFocus={() => this.setState({ firstnameFieldFocused: true })} value={firstname}
-                                onChange={event => this.handleFirstnameChange(event)} autoCorrect={false} />
+                                onChange={event => this.handleFirstnameChange(event)} autoCorrect="off" />
 
                         </div>
                         <div className="name-field field" style={{ border: !isLastnameValid ? "1px #F42D0E solid" : lastnameFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
@@ -283,7 +283,7 @@ class Register extends Component {
                             <input type="text" id="lastname-input" placeholder={t("auth.lastname")}
                                 onBlur={() => this.setState({ lastnameFieldFocused: false })}
                                 onFocus={() => this.setState({ lastnameFieldFocused: true })} value={lastname}
-                                onChange={event => this.handleLastnameChange(event)} autoCorrect={false} />
+                                onChange={event => this.handleLastnameChange(event)} autoCorrect="off" />
 
                         </div>
                     </div>
@@ -300,7 +300,7 @@ class Register extends Component {
                         <input type={showPassword ? "text" : "password"} id="password-input" placeholder={t("auth.password")}
                             onBlur={() => this.setState({ passwordFieldFocused: false })}
                             onFocus={() => this.setState({ passwordFieldFocused: true })} value={password}
-                            onChange={event => this.handlePasswordChange(event)} autoCorrect={false} autoCapitalize={false} />
+                            onChange={event => this.handlePasswordChange(event)} autoCorrect="off" autoCapitalize="off" />
 
                         <i className={`fal ${showPassword ? "fa-eye" : "fa-eye-slash"} fa-lg show-password-btn`} onClick={this.handleShowPassword}></i>
 
@@ -310,7 +310,7 @@ class Register extends Component {
                         <input type={showPassword ? "text" : "password"} id="confirm-password-input" placeholder={t("auth.confirm-password")}
                             onBlur={() => this.setState({ confirmPasswordFieldFocused: false })}
                             onFocus={() => this.setState({ confirmPasswordFieldFocused: true })} value={confirmPassword}
-                            onChange={event => this.handleConfirmPasswordChange(event)} autoCorrect={false} autoCapitalize={false} />
+                            onChange={event => this.handleConfirmPasswordChange(event)} autoCorrect="off" autoCapitalize="off" />
 
                         <i className={`fal ${showPassword ? "fa-eye" : "fa-eye-slash"} fa-lg show-password-btn`} onClick={this.handleShowPassword}></i>
 

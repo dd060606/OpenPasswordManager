@@ -4,7 +4,9 @@ const path = require("path")
 
 
 const authRoutes = require("./routes/auth")
-const authUtils = require("./utils/auth-utils")
+const credentialsRoutes = require("./routes/credentials")
+
+const authUtils = require("./utils/database")
 
 const app = express()
 
@@ -20,5 +22,7 @@ app.use((req, res, next) => {
 app.use(express.json())
 
 app.use("/api/auth", authRoutes)
+app.use("/api/credentials", credentialsRoutes)
+
 
 module.exports = app

@@ -9,11 +9,18 @@ import { useTranslation } from "react-i18next"
 
 
 import { NavLink } from "react-router-dom"
+import { readToken } from "../../utils/auth-utils"
 
 class DashboardNav extends Component {
 
     state = {
-        navOpened: true
+        navOpened: true,
+        token: ""
+    }
+
+
+    componentDidMount() {
+        this.setState({ token: readToken(this.props) })
     }
 
 
@@ -27,12 +34,16 @@ class DashboardNav extends Component {
     }
 
     handleMyAccountClicked = () => {
-
-        this.props.history.push("/dashboard/my-account")
+        const { token } = this.state
+        this.props.history.push({
+            pathname: "/dashboard/my-account/", state: {
+                token: token
+            }
+        })
     }
 
     render() {
-        const { navOpened } = this.state
+        const { navOpened, token } = this.state
         const { t } = this.props
         return (
             <>
@@ -44,9 +55,21 @@ class DashboardNav extends Component {
                     </div>
 
                     <div className="nav-buttons" >
-                        <NavLink to="/dashboard/passwords" className="nav-button" activeClassName="current-link"><i className="far fa-lock-alt" />{navOpened ? t("my-passwords") : ""}</NavLink>
-                        <NavLink to="/dashboard/generator" className="nav-button" activeClassName="current-link"><i className="far fa-bolt" />{navOpened ? t("generator.generator") : ""}</NavLink>
-                        <NavLink to="/dashboard/settings" className="nav-button" activeClassName="current-link"><i className="far fa-cog" />{navOpened ? t("settings") : ""}</NavLink>
+                        <NavLink to={{
+                            pathname: "/dashboard/passwords", state: {
+                                token: token
+                            }
+                        }} className="nav-button" activeClassName="current-link"><i className="far fa-lock-alt" />{navOpened ? t("my-passwords") : ""}</NavLink>
+                        <NavLink to={{
+                            pathname: "/dashboard/generator", state: {
+                                token: token
+                            }
+                        }} className="nav-button" activeClassName="current-link"><i className="far fa-bolt" />{navOpened ? t("generator.generator") : ""}</NavLink>
+                        <NavLink to={{
+                            pathname: "/dashboard/settings", state: {
+                                token: token
+                            }
+                        }} className="nav-button" activeClassName="current-link"><i className="far fa-cog" />{navOpened ? t("settings") : ""}</NavLink>
                     </div>
 
                 </div>

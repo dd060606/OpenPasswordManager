@@ -5,7 +5,9 @@ import Loading from "../Loading"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import PasswordItem from "./passwords/PasswordItem"
-
+import { readToken, sendToAuthPage } from "../../utils/auth-utils"
+import axios from "axios"
+import Swal from "sweetalert2"
 
 class PasswordsDashboard extends Component {
 
@@ -13,33 +15,85 @@ class PasswordsDashboard extends Component {
 
         isLoading: true,
         token: "",
-        passwords: [
-            {
-                url: "https://amazon.com",
-                imageUrl: "https://d2erpoudwvue5y.cloudfront.net/_46x30/amazon_com@2x.png",
-                name: "Amazon"
-            },
-            {
-                url: "https://ebay.com",
-                imageUrl: "https://d2erpoudwvue5y.cloudfront.net/_46x30/ebay_com@2x.png",
-                name: "E-Bay"
-            },
-            {
-                url: "https://nintendo.com",
-                imageUrl: "https://d2erpoudwvue5y.cloudfront.net/_46x30/nintendo_com@2x.png",
-                name: "Nintendo"
-            }
-        ],
+        passwords: [],
         search: ""
 
     }
 
     componentDidMount() {
         const { isLoading } = this.state
-
+        const { t } = this.props
+        this.setState({ token: readToken(this.props) })
         if (isLoading) {
-            this.setState({ isLoading: false })
+            axios.get(`${process.env.REACT_APP_SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${readToken(this.props)}` } })
+                .then(result => {
+                    let finalCredentials = []
+                    for (let i = 0; i < result.data.credentials.length; i++) {
+                        result.data.credentials[i].imageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${this.extractDomainFromURL(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+                        finalCredentials.push(result.data.credentials[i])
+                    }
+                    this.setState({ isLoading: false, passwords: result.data.credentials })
+                })
+                .catch(err => {
+                    if (err.response && err.response.data) {
+                        if (err.response.data.type === "internal-error") {
+                            Swal.fire({
+                                title: t("errors.error"),
+                                text: t("errors.internal-error"),
+                                icon: "error",
+                                confirmButtonColor: "#54c2f0"
+                            })
+                        } else if (err.response.data.type === "invalid-token") {
+                            sendToAuthPage(this.props)
+                        }
+                        else {
+                            Swal.fire({
+                                title: t("errors.error"),
+                                text: t("errors.unknown-error"),
+                                icon: "error",
+                                confirmButtonColor: "#54c2f0"
+                            })
+                        }
+                    }
+                    else {
+                        Swal.fire({
+                            title: t("errors.error"),
+                            text: t("errors.unknown-error"),
+                            icon: "error",
+                            confirmButtonColor: "#54c2f0"
+                        })
+                    }
+                })
         }
+    }
+
+    extractHostname(url) {
+        let hostname
+
+        if (url.indexOf("//") > -1) {
+            hostname = url.split('/')[2]
+        }
+        else {
+            hostname = url.split('/')[0]
+        }
+
+        hostname = hostname.split(':')[0]
+        hostname = hostname.split('?')[0]
+
+        return hostname
+    }
+    extractDomainFromURL(url) {
+        let domain = this.extractHostname(url),
+            splitArr = domain.split('.'),
+            arrLen = splitArr.length
+
+        if (arrLen > 2) {
+            domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1]
+            if (splitArr[arrLen - 2].length === 2 && splitArr[arrLen - 1].length === 2) {
+                domain = splitArr[arrLen - 3] + '.' + domain
+            }
+        }
+        return domain
     }
 
     //Arrow fx for binding
@@ -48,7 +102,7 @@ class PasswordsDashboard extends Component {
     }
 
     render() {
-        const { isLoading, passwords, search } = this.state
+        const { isLoading, passwords, search, token } = this.state
         const { t } = this.props
         return (
             <>
@@ -56,7 +110,7 @@ class PasswordsDashboard extends Component {
                 {
                     !isLoading &&
                     <div className="my-passwords">
-                        <DashboardNav />
+                        <DashboardNav token={token} />
 
                         <div className="passwords-content">
                             <nav>
@@ -79,7 +133,7 @@ class PasswordsDashboard extends Component {
 
                                     passwords.map((password, index) => {
                                         if (password.url.toLowerCase().includes(search.toLowerCase()) || password.name.toLowerCase().includes(search.toLowerCase())) {
-                                            return <PasswordItem url={password.url} index={index} key={index} onClick={this.handlePasswordClick} imageUrl={password.imageUrl} name={password.name} />
+                                            return <PasswordItem url={password.url} index={index} key={index} onClick={this.handlePasswordClick} imageUrl={password.imageURL} name={password.name} />
 
                                         }
                                         return <></>
