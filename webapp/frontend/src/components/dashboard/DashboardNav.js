@@ -73,7 +73,7 @@ class DashboardNav extends Component {
                     </div>
 
                 </div>
-                <ResponsiveButton />
+                <ResponsiveButton token={token} />
 
             </>
         )
@@ -83,7 +83,7 @@ class DashboardNav extends Component {
 
 let setMenuOpen;
 
-const ResponsiveButton = () => {
+const ResponsiveButton = ({ token }) => {
     const [open, setOpen] = useState(false)
     setMenuOpen = setOpen
     return (
@@ -93,20 +93,36 @@ const ResponsiveButton = () => {
                 <div style={{ backgroundColor: "#1E1E1E", transform: open ? 'translateX(100%)' : 'translateX(0)', opacity: open ? 0 : 1 }} />
                 <div style={{ backgroundColor: "#1E1E1E", transform: open ? 'rotate(-45deg)' : 'rotate(0)' }} />
             </div>
-            <ResponsiveNav open={open} />
+            <ResponsiveNav open={open} token={token} />
         </>
     )
 }
-const ResponsiveNav = ({ open }) => {
+const ResponsiveNav = ({ open, token }) => {
     const isResponsive = useMediaQuery('(max-width: 1280px)');
 
     const { t } = useTranslation()
     return (
         <ul className="responsive-nav-ul" open={open} style={{ transform: open ? 'translateX(0)' : 'translateX(100%)', display: isResponsive ? "flex" : "none" }}>
-            <NavLink to="/dashboard/passwords" onClick={() => setMenuOpen(false)} className="nav-button" activeClassName="current-link"><i className="far fa-lock-alt" />{t("my-passwords")}</NavLink>
-            <NavLink to="/dashboard/generator" onClick={() => setMenuOpen(false)} className="nav-button" activeClassName="current-link"><i className="far fa-bolt" />{t("generator.generator")}</NavLink>
-            <NavLink to="/dashboard/settings" onClick={() => setMenuOpen(false)} className="nav-button" activeClassName="current-link"><i className="far fa-cog" />{t("settings")}</NavLink>
-            <NavLink to="/dashboard/my-account" onClick={() => setMenuOpen(false)} className="nav-button" activeClassName="current-link"><i className="far fa-user" />{t("account.my-account")}</NavLink>
+            <NavLink to={{
+                pathname: "/dashboard/passwords", state: {
+                    token: token
+                }
+            }} onClick={() => setMenuOpen(false)} className="nav-button" activeClassName="current-link"><i className="far fa-lock-alt" />{t("my-passwords")}</NavLink>
+            <NavLink to={{
+                pathname: "/dashboard/generator", state: {
+                    token: token
+                }
+            }} onClick={() => setMenuOpen(false)} className="nav-button" activeClassName="current-link"><i className="far fa-bolt" />{t("generator.generator")}</NavLink>
+            <NavLink to={{
+                pathname: "/dashboard/settings", state: {
+                    token: token
+                }
+            }} onClick={() => setMenuOpen(false)} className="nav-button" activeClassName="current-link"><i className="far fa-cog" />{t("settings")}</NavLink>
+            <NavLink to={{
+                pathname: "/dashboard/my-account", state: {
+                    token: token
+                }
+            }} onClick={() => setMenuOpen(false)} className="nav-button" activeClassName="current-link"><i className="far fa-user" />{t("account.my-account")}</NavLink>
 
         </ul>
     )

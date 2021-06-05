@@ -146,15 +146,7 @@ class Login extends Component {
 
         }
     }
-    handleShowPassword = () => {
-        const { showPassword } = this.state
-        if (showPassword) {
-            this.setState({ showPassword: false })
-        }
-        else {
-            this.setState({ showPassword: true })
-        }
-    }
+
 
     handleAuthToAnotherAccount = event => {
         event.preventDefault()
@@ -210,12 +202,12 @@ class Login extends Component {
                             onFocus={() => this.setState({ passwordFieldFocused: true })} value={password}
                             onChange={event => this.handlePasswordChange(event)} autoCorrect="off" autoCapitalize="off" />
 
-                        <i className={`fal ${showPassword ? "fa-eye" : "fa-eye-slash"} fa-lg show-password-btn`} onClick={this.handleShowPassword}></i>
+                        <i className={`fal ${showPassword ? "fa-eye" : "fa-eye-slash"} fa-lg show-password-btn`} onClick={() => { this.setState({ showPassword: !showPassword }) }}></i>
 
                     </div>
                     {isEmailSaved &&
 
-                        <div className="login-another-account" onClick={this.handleAuthToAnotherAccount}>{t("auth.login-another-account")}</div>
+                        <p className="login-another-account" onClick={this.handleAuthToAnotherAccount}>{t("auth.login-another-account")}</p>
                     }
                     <button className="login-btn" onClick={this.handleLogin} disabled={isConnecting}
                         style={{ width: isConnecting ? "50px" : "" }}>{isConnecting ? <i className="fad fa-spinner-third fa-spin"></i> : t("auth.login")}

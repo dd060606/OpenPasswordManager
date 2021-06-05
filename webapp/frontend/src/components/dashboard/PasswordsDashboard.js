@@ -8,6 +8,7 @@ import PasswordItem from "./passwords/PasswordItem"
 import { readToken, sendToAuthPage } from "../../utils/auth-utils"
 import axios from "axios"
 import Swal from "sweetalert2"
+import AddPasswordBox from "./passwords/AddPasswordBox"
 
 class PasswordsDashboard extends Component {
 
@@ -16,7 +17,7 @@ class PasswordsDashboard extends Component {
         isLoading: true,
         token: "",
         passwords: [],
-        search: ""
+        search: "",
 
     }
 
@@ -29,7 +30,7 @@ class PasswordsDashboard extends Component {
                 .then(result => {
                     let finalCredentials = []
                     for (let i = 0; i < result.data.credentials.length; i++) {
-                        result.data.credentials[i].imageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${this.extractDomainFromURL(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+                        result.data.credentials[i].imageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
                         finalCredentials.push(result.data.credentials[i])
                     }
                     this.setState({ isLoading: false, passwords: result.data.credentials })
@@ -66,40 +67,43 @@ class PasswordsDashboard extends Component {
                 })
         }
     }
-
     extractHostname(url) {
-        let hostname
+        var hostname;
 
         if (url.indexOf("//") > -1) {
-            hostname = url.split('/')[2]
+            hostname = url.split('/')[2];
         }
         else {
-            hostname = url.split('/')[0]
+            hostname = url.split('/')[0];
         }
 
-        hostname = hostname.split(':')[0]
-        hostname = hostname.split('?')[0]
+        hostname = hostname.split(':')[0];
+        hostname = hostname.split('?')[0];
 
-        return hostname
+        return hostname;
     }
-    extractDomainFromURL(url) {
-        let domain = this.extractHostname(url),
-            splitArr = domain.split('.'),
-            arrLen = splitArr.length
 
+    extractRootDomain(url) {
+        var domain = this.extractHostname(url),
+            splitArr = domain.split('.'),
+            arrLen = splitArr.length;
         if (arrLen > 2) {
-            domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1]
+            domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
             if (splitArr[arrLen - 2].length === 2 && splitArr[arrLen - 1].length === 2) {
-                domain = splitArr[arrLen - 3] + '.' + domain
+                domain = splitArr[arrLen - 3] + '.' + domain;
             }
         }
-        return domain
+        return domain;
     }
 
     //Arrow fx for binding
-    handlePasswordClick = () => {
+    handleAddPassword = () => {
+        let addPasswordOverlay = document.querySelector(".add-password-overlay")
+        addPasswordOverlay.style.visibility = "visible"
+        addPasswordOverlay.style.opacity = 1
 
     }
+
 
     render() {
         const { isLoading, passwords, search, token } = this.state
@@ -114,7 +118,7 @@ class PasswordsDashboard extends Component {
 
                         <div className="passwords-content">
                             <nav>
-                                <button id="add-password-button"><i className="fas fa-plus" /> {t("passwords.add")}</button>
+                                <button id="add-password-button" onClick={this.handleAddPassword}><i className="fas fa-plus" /> {t("passwords.add")}</button>
                                 <div className="search-bar">
                                     <i className="fas fa-search" />
                                     <input type="text" placeholder={t("search")} value={search} onChange={event => this.setState({ search: event.target.value })} />
@@ -132,15 +136,16 @@ class PasswordsDashboard extends Component {
 
 
                                     passwords.map((password, index) => {
-                                        if (password.url.toLowerCase().includes(search.toLowerCase()) || password.name.toLowerCase().includes(search.toLowerCase())) {
-                                            return <PasswordItem url={password.url} index={index} key={index} onClick={this.handlePasswordClick} imageUrl={password.imageURL} name={password.name} />
+                                        if (password.url.toLowerCase().includes(search.toLowerCase()) || password.name.toLowerCase().includes(search.toLowerCase()) || password.username.toLowerCase().includes(search.toLowerCase())) {
+                                            return <PasswordItem url={password.url} username={password.username} index={index} key={index} onClick={this.handlePasswordClick} imageUrl={password.imageURL} name={password.name} />
 
                                         }
                                         return <></>
 
                                     })
-
                                 }
+                                < AddPasswordBox token={token} />
+
                             </div>
                         </div>
 

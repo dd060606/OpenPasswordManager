@@ -17,7 +17,8 @@
     "account-confirmation-failed": "Error: Your confirmation link has expired or you are using an invalid account!",
     "account-not-exists": "Account not exists!",
     "wrong-password": "Wrong password !",
-    "invalid-credentials": "Invalid credentials!"
+    "invalid-credentials": "Invalid credentials!",
+    "enter-website-name": "Please enter a website name!"
   },
   "auth": {
     "new-on-opm": "New on OpenPasswordManager?",
@@ -63,7 +64,12 @@
     "add": "Add",
     "no-passwords": "You don't have any saved passwords",
     "edit": "Edit",
-    "browse-website": "Browse website"
+    "browse-website": "Browse website",
+    "add-password": "Add password",
+    "website": "Website",
+    "website-name": "Website name",
+    "username": "Username",
+    "add-url": "Add an URL"
   },
   "welcome-on": "Welcome on",
   "continue": "Continue",

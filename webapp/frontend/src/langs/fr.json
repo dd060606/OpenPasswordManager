@@ -17,7 +17,8 @@
     "account-confirmation-failed": "Erreur: Le lien de confirmation a expiré ou vous utilisez un compte invalide !",
     "account-not-exists": "Ce compte n'existe pas !",
     "wrong-password": "Mauvais mot de passe !",
-    "invalid-credentials": "Mauvais identifiants !"
+    "invalid-credentials": "Mauvais identifiants !",
+    "enter-website-name": "Veuillez entrer le nom du site !"
   },
   "auth": {
     "new-on-opm": "Nouveau sur OpenPasswordManager ?",
@@ -63,7 +64,12 @@
     "add": "Ajouter",
     "no-passwords": "Vous n'avez pas de mots de passe enregistrés",
     "edit": "Modifier",
-    "browse-website": "Accéder au site"
+    "browse-website": "Accéder au site",
+    "add-password": "Ajouter un mot de passe",
+    "website": "Site Web",
+    "website-name": "Nom du site",
+    "username": "Identifiant",
+    "add-url": "Ajouter une URL"
   },
   "welcome-on": "Bienvenue sur",
   "continue": "Continuer",

@@ -41,5 +41,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+    "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dd060606/OpenPasswordManager.git"
   }
 }

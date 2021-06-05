@@ -123,10 +123,7 @@
 }
 .login-form > .login-another-account {
     color: black;
-    background-color: transparent;
-    border: none;
     font-size: 14px;
-    outline: none;
     white-space: nowrap;
 }
 .login-form > .login-another-account:hover {

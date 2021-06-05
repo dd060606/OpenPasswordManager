@@ -3,14 +3,18 @@ import Tooltip from "@material-ui/core/Tooltip"
 import { useTranslation } from "react-i18next"
 import "../../../i18n"
 
-const PasswordItem = ({ name, url, imageUrl, index, onClick }) => {
+const PasswordItem = ({ name, url, imageUrl, username, index, onClick }) => {
 
     const [t] = useTranslation()
     return (<div className="password-item-box">
         <div className="password-item">
             <div className="password-info">
-                <img src={imageUrl} alt="icon" className="website-icon" />
-                <p className="password-name">{name}</p>
+                <img src={imageUrl} className="website-icon" />
+                <div>
+                    <p className="password-name">{name}</p>
+                    <p className="username-text">{username}</p>
+                </div>
+
             </div>
 
 
