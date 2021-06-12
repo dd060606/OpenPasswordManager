@@ -9,6 +9,9 @@ import { readToken, sendToAuthPage } from "../../utils/auth-utils"
 import axios from "axios"
 import Swal from "sweetalert2"
 import AddPasswordBox from "./passwords/AddPasswordBox"
+import EnterPasswordBox from "./passwords/EnterPasswordBox"
+import { isElementOfType } from "react-dom/test-utils"
+
 
 class PasswordsDashboard extends Component {
 
@@ -18,6 +21,8 @@ class PasswordsDashboard extends Component {
         token: "",
         passwords: [],
         search: "",
+        password: "",
+        enterPasswordType: "new-password"
 
     }
 
@@ -98,15 +103,28 @@ class PasswordsDashboard extends Component {
 
     //Arrow fx for binding
     handleAddPassword = () => {
-        let addPasswordOverlay = document.querySelector(".add-password-overlay")
-        addPasswordOverlay.style.visibility = "visible"
-        addPasswordOverlay.style.opacity = 1
+        const { password } = this.state
+        if (password) {
+            let addPasswordOverlay = document.querySelector(".add-password-overlay")
+            addPasswordOverlay.style.visibility = "visible"
+            addPasswordOverlay.style.opacity = 1
+        }
+        else {
+            let enterPasswordOverlay = document.querySelector(".enter-password-overlay")
+            enterPasswordOverlay.style.visibility = "visible"
+            enterPasswordOverlay.style.opacity = 1
+            this.setState({ enterPasswordType: "new-password" })
+        }
 
     }
 
 
+
+
+
+
     render() {
-        const { isLoading, passwords, search, token } = this.state
+        const { isLoading, passwords, search, token, password, enterPasswordType } = this.state
         const { t } = this.props
         return (
             <>
@@ -144,7 +162,8 @@ class PasswordsDashboard extends Component {
 
                                     })
                                 }
-                                < AddPasswordBox token={token} />
+                                <EnterPasswordBox token={token} type={enterPasswordType} setPassword={password => this.setState({ password: password })} />
+                                <AddPasswordBox token={token} password={password} />
 
                             </div>
                         </div>

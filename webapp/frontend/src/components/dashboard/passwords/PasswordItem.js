@@ -9,7 +9,7 @@ const PasswordItem = ({ name, url, imageUrl, username, index, onClick }) => {
     return (<div className="password-item-box">
         <div className="password-item">
             <div className="password-info">
-                <img src={imageUrl} className="website-icon" />
+                <img src={imageUrl} alt="" className="website-icon" />
                 <div>
                     <p className="password-name">{name}</p>
                     <p className="username-text">{username}</p>

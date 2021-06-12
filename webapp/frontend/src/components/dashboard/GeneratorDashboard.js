@@ -39,6 +39,8 @@ class GeneratorDashboard extends Component {
         const containUpper = /^(?=.*[A-Z])[a-zA-Z\d@$!%*_?&]{8,}$/
         const containLower = /^(?=.*[a-z])[a-zA-Z\d@$!%*_?&]{8,}$/
         const containNumber = /^(?=.*\d)[a-zA-Z\d@$!%*_?&]{8,}$/
+        const containSpecialChar = /^(?=.*[@$!%*_?&])[a-zA-Z\d@$!%*_?&]{8,}$/
+
         if (password.length < 8) {
             this.setState({ passwordStrengthValue: 15 })
         }
@@ -46,7 +48,7 @@ class GeneratorDashboard extends Component {
             if (containUpper.test(password) && containLower.test(password) && !containNumber.test(password)) {
                 this.setState({ passwordStrengthValue: 50 })
             }
-            else if (containUpper.test(password) && containLower.test(password) && containNumber.test(password)) {
+            else if (containUpper.test(password) && containLower.test(password) && containNumber.test(password) && containSpecialChar.test(password)) {
                 this.setState({ passwordStrengthValue: 70 })
             }
             else {
@@ -54,7 +56,7 @@ class GeneratorDashboard extends Component {
             }
         }
         else if (password.length < 14) {
-            if (containUpper.test(password) && containLower.test(password) && containNumber.test(password)) {
+            if (containUpper.test(password) && containLower.test(password) && containNumber.test(password) && containSpecialChar.test(password)) {
                 this.setState({ passwordStrengthValue: 70 })
             }
             else {
@@ -62,7 +64,7 @@ class GeneratorDashboard extends Component {
             }
         }
         else {
-            if (containUpper.test(password) && containLower.test(password) && containNumber.test(password)) {
+            if (containUpper.test(password) && containLower.test(password) && containNumber.test(password) && containSpecialChar.test(password)) {
                 this.setState({ passwordStrengthValue: 100 })
             }
             else {

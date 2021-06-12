@@ -7,7 +7,7 @@ import Swal from "sweetalert2"
 import axios from "axios"
 import { sendToAuthPage } from "../../../utils/auth-utils"
 import { withRouter } from "react-router-dom"
-
+import CryptoJS from "crypto-js"
 
 class AddPasswordBox extends Component {
 
@@ -66,9 +66,10 @@ class AddPasswordBox extends Component {
             })
         }
         this.setState({ isLoading: true })
+        let encryptedPassword = CryptoJS.AES.encrypt(password, this.props.password).toString()
         axios.post(`${process.env.REACT_APP_SERVER_URL}/api/credentials/add/`, {
             username: username,
-            password: password,
+            password: encryptedPassword,
             name: websiteName,
             url: url.startsWith("http://") || url.startsWith("https://") ? url : `http://${url}`
         }, { headers: { "Authorization": `Bearer ${this.props.token}` } })
@@ -164,7 +165,7 @@ class AddPasswordBox extends Component {
                         <div className="fields">
                             <p className="field-name">{t("auth.password")}</p>
                             <div className="field" style={{ border: passwordFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
-                                <input type={showPassword ? "text" : "password"} id="password-input" placeholder={t("auth.password")}
+                                <input type={showPassword ? "text" : "password"} placeholder={t("auth.password")}
                                     onBlur={() => this.setState({ passwordFieldFocused: false })}
                                     onFocus={() => this.setState({ passwordFieldFocused: true })} value={password}
                                     onChange={event => this.setState({ password: event.target.value })} autoCorrect="off" autoCapitalize="off" />

@@ -69,7 +69,8 @@
     "website": "Website",
     "website-name": "Website name",
     "username": "Username",
-    "add-url": "Add an URL"
+    "add-url": "Add an URL",
+    "enter-account-password": "Please enter your account password"
   },
   "welcome-on": "Welcome on",
   "continue": "Continue",
