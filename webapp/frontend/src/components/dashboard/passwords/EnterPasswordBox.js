@@ -92,10 +92,16 @@ class EnterPasswordBox extends Component {
                                 let enterPasswordOverlay = document.querySelector(".enter-password-overlay")
                                 enterPasswordOverlay.style.visibility = "hidden"
                                 enterPasswordOverlay.style.opacity = 0
-                                if (this.props.type === "new-password") {
+                                if (this.props.type === "new") {
                                     let addPasswordOverlay = document.querySelector(".add-password-overlay")
                                     addPasswordOverlay.style.visibility = "visible"
                                     addPasswordOverlay.style.opacity = 1
+                                    this.props.setPassword(password)
+                                }
+                                else if (this.props.type === "edit") {
+                                    let editPasswordOverlay = document.querySelector(".edit-password-overlay")
+                                    editPasswordOverlay.style.visibility = "visible"
+                                    editPasswordOverlay.style.opacity = 1
                                     this.props.setPassword(password)
                                 }
                             }
@@ -162,7 +168,7 @@ class EnterPasswordBox extends Component {
                 <div className="enter-password-box">
                     <button className="close">&times;</button>
 
-                    <h2>{t("passwords.enter-account-password")}</h2>
+                    <h2>{t("passwords.confirm-password")}</h2>
 
                     <div className="content">
                         <div className="fields">

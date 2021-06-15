@@ -70,7 +70,7 @@
     "website-name": "Website name",
     "username": "Username",
     "add-url": "Add an URL",
-    "enter-account-password": "Please enter your account password"
+    "confirm-password": "Confirm password"
   },
   "welcome-on": "Welcome on",
   "continue": "Continue",

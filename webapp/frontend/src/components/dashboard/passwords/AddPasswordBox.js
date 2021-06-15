@@ -54,7 +54,7 @@ class AddPasswordBox extends Component {
     }
 
     handleAddPassword = () => {
-        const { websiteName, password, username, url, isLoading } = this.state
+        const { websiteName, password, username, url } = this.state
         const { t } = this.props
 
         if (!websiteName) {

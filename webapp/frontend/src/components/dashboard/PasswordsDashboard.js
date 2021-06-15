@@ -10,7 +10,7 @@ import axios from "axios"
 import Swal from "sweetalert2"
 import AddPasswordBox from "./passwords/AddPasswordBox"
 import EnterPasswordBox from "./passwords/EnterPasswordBox"
-import { isElementOfType } from "react-dom/test-utils"
+import EditPasswordBox from "./passwords/EditPasswordBox"
 
 
 class PasswordsDashboard extends Component {
@@ -19,10 +19,11 @@ class PasswordsDashboard extends Component {
 
         isLoading: true,
         token: "",
-        passwords: [],
+        credentials: [],
         search: "",
         password: "",
-        enterPasswordType: "new-password"
+        enterPasswordType: "new",
+        currentCredential: {},
 
     }
 
@@ -38,7 +39,7 @@ class PasswordsDashboard extends Component {
                         result.data.credentials[i].imageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
                         finalCredentials.push(result.data.credentials[i])
                     }
-                    this.setState({ isLoading: false, passwords: result.data.credentials })
+                    this.setState({ isLoading: false, credentials: result.data.credentials })
                 })
                 .catch(err => {
                     if (err.response && err.response.data) {
@@ -113,7 +114,24 @@ class PasswordsDashboard extends Component {
             let enterPasswordOverlay = document.querySelector(".enter-password-overlay")
             enterPasswordOverlay.style.visibility = "visible"
             enterPasswordOverlay.style.opacity = 1
-            this.setState({ enterPasswordType: "new-password" })
+            this.setState({ enterPasswordType: "new" })
+        }
+
+    }
+
+    handleEditPassword = credential => {
+        const { password } = this.state
+        this.setState({ currentCredential: credential })
+        if (password) {
+            let editPasswordOverlay = document.querySelector(".edit-password-overlay")
+            editPasswordOverlay.style.visibility = "visible"
+            editPasswordOverlay.style.opacity = 1
+        }
+        else {
+            let enterPasswordOverlay = document.querySelector(".enter-password-overlay")
+            enterPasswordOverlay.style.visibility = "visible"
+            enterPasswordOverlay.style.opacity = 1
+            this.setState({ enterPasswordType: "edit" })
         }
 
     }
@@ -123,8 +141,9 @@ class PasswordsDashboard extends Component {
 
 
 
+
     render() {
-        const { isLoading, passwords, search, token, password, enterPasswordType } = this.state
+        const { isLoading, credentials, search, token, password, enterPasswordType, currentCredential } = this.state
         const { t } = this.props
         return (
             <>
@@ -143,19 +162,19 @@ class PasswordsDashboard extends Component {
                                 </div>
                             </nav>
 
-                            <div className="password-list" style={{ justifyContent: passwords.length === 0 ? "center" : "" }}>
-                                {passwords.length === 0 &&
+                            <div className="password-list" style={{ justifyContent: credentials.length === 0 ? "center" : "" }}>
+                                {credentials.length === 0 &&
                                     <div className="no-passwords">
                                         <i className="fal fa-lock-alt" />
                                         <h3>{t("passwords.no-passwords")}</h3>
                                     </div>
                                 }
-                                {passwords.length !== 0 &&
+                                {credentials.length !== 0 &&
 
 
-                                    passwords.map((password, index) => {
-                                        if (password.url.toLowerCase().includes(search.toLowerCase()) || password.name.toLowerCase().includes(search.toLowerCase()) || password.username.toLowerCase().includes(search.toLowerCase())) {
-                                            return <PasswordItem url={password.url} username={password.username} index={index} key={index} onClick={this.handlePasswordClick} imageUrl={password.imageURL} name={password.name} />
+                                    credentials.map((credential, index) => {
+                                        if (credential.url.toLowerCase().includes(search.toLowerCase()) || credential.name.toLowerCase().includes(search.toLowerCase()) || credential.username.toLowerCase().includes(search.toLowerCase())) {
+                                            return <PasswordItem credential={credential} index={index} key={index} onClick={currentCredential => this.handleEditPassword(currentCredential)} />
 
                                         }
                                         return <></>
@@ -164,7 +183,7 @@ class PasswordsDashboard extends Component {
                                 }
                                 <EnterPasswordBox token={token} type={enterPasswordType} setPassword={password => this.setState({ password: password })} />
                                 <AddPasswordBox token={token} password={password} />
-
+                                <EditPasswordBox token={token} password={password} credential={currentCredential} />
                             </div>
                         </div>
 
