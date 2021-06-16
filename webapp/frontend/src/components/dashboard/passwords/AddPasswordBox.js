@@ -50,7 +50,7 @@ class AddPasswordBox extends Component {
         }
         addPasswordOverlay.style.visibility = "hidden"
         addPasswordOverlay.style.opacity = 0
-        this.setState(this.baseState)
+        setTimeout(() => this.setState(this.baseState), 500)
     }
 
     handleAddPassword = () => {

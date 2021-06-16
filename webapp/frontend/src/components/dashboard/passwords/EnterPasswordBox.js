@@ -44,7 +44,7 @@ class EnterPasswordBox extends Component {
         }
         enterPasswordOverlay.style.visibility = "hidden"
         enterPasswordOverlay.style.opacity = 0
-        this.setState(this.baseState)
+        setTimeout(() => this.setState(this.baseState), 500)
     }
 
     handleLogin = () => {

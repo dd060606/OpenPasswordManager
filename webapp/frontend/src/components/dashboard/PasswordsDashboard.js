@@ -1,4 +1,5 @@
 import { Component } from "react"
+import React from "react"
 import "./css/PasswordsDashboard.css"
 import DashboardNav from "./DashboardNav"
 import Loading from "../Loading"
@@ -32,11 +33,14 @@ class PasswordsDashboard extends Component {
         const { t } = this.props
         this.setState({ token: readToken(this.props) })
         if (isLoading) {
+
             axios.get(`${process.env.REACT_APP_SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${readToken(this.props)}` } })
                 .then(result => {
                     let finalCredentials = []
                     for (let i = 0; i < result.data.credentials.length; i++) {
-                        result.data.credentials[i].imageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+                        result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+                        result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+
                         finalCredentials.push(result.data.credentials[i])
                     }
                     this.setState({ isLoading: false, credentials: result.data.credentials })
@@ -126,6 +130,8 @@ class PasswordsDashboard extends Component {
             let editPasswordOverlay = document.querySelector(".edit-password-overlay")
             editPasswordOverlay.style.visibility = "visible"
             editPasswordOverlay.style.opacity = 1
+
+
         }
         else {
             let enterPasswordOverlay = document.querySelector(".enter-password-overlay")
@@ -147,7 +153,7 @@ class PasswordsDashboard extends Component {
         const { t } = this.props
         return (
             <>
-                { isLoading && <Loading />}
+                {isLoading && <Loading />}
                 {
                     !isLoading &&
                     <div className="my-passwords">

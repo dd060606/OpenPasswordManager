@@ -13,7 +13,7 @@ const PasswordItem = ({ credential, index, onClick }) => {
             }
         }}>
             <div className="password-info">
-                <img src={credential.imageURL} alt="" className="website-icon" />
+                <img src={credential.smallImageURL} alt="" className="website-icon" />
                 <div>
                     <p className="password-name">{credential.name}</p>
                     <p className="username-text">{credential.username}</p>

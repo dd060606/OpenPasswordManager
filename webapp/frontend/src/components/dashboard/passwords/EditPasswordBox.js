@@ -4,6 +4,11 @@ import { withTranslation } from "react-i18next"
 import "../../../i18n"
 import { Component } from "react"
 import { withRouter } from "react-router-dom"
+import CryptoJS from "crypto-js"
+import Swal from "sweetalert2"
+import axios from "axios"
+import { sendToAuthPage } from "../../../utils/auth-utils"
+
 
 class EditPasswordBox extends Component {
 
@@ -24,9 +29,23 @@ class EditPasswordBox extends Component {
     constructor(props) {
         super(props)
         this.baseState = this.state
+
     }
 
+    componentDidMount() {
+        let editPasswordOverlay = document.querySelector(".edit-password-overlay")
+        let overlayStyleObserver = new MutationObserver(mutations => {
+            mutations.forEach(mutationRecord => {
+                if (mutationRecord.target === editPasswordOverlay) {
+                    if (editPasswordOverlay.style.visibility === "visible") {
+                        this.setState({ websiteName: this.props.credential.name, url: this.props.credential.url, username: this.props.credential.username, password: CryptoJS.AES.decrypt(this.props.credential.password, this.props.password).toString(CryptoJS.enc.Utf8) })
+                    }
+                }
+            });
+        })
+        overlayStyleObserver.observe(editPasswordOverlay, { attributes: true, attributeFilter: ['style'] });
 
+    }
     //Arrow fx for binding
     handleEditPasswordBoxClosed = event => {
 
@@ -46,10 +65,74 @@ class EditPasswordBox extends Component {
         }
         editPasswordOverlay.style.visibility = "hidden"
         editPasswordOverlay.style.opacity = 0
-        this.setState(this.baseState)
+        setTimeout(() => this.setState(this.baseState), 500)
+
     }
 
+    handleSave = () => {
+        const { websiteName, password, username, url } = this.state
+        const { t } = this.props
 
+        if (!websiteName) {
+            return Swal.fire({
+                title: t("errors.error"),
+                text: t("errors.enter-website-name"),
+                icon: "error",
+                confirmButtonColor: "#54c2f0"
+            })
+        }
+        this.setState({ isLoading: true })
+        let encryptedPassword = CryptoJS.AES.encrypt(password, this.props.password).toString()
+        axios.put(`${process.env.REACT_APP_SERVER_URL}/api/credentials/edit/${this.props.credential.id}`, {
+            username: username,
+            password: encryptedPassword,
+            name: websiteName,
+            url: url.startsWith("http://") || url.startsWith("https://") ? url : `http://${url}`
+        }, { headers: { "Authorization": `Bearer ${this.props.token}` } })
+            .then(result => {
+                this.setState({ isLoading: false })
+
+                this.props.history.push({
+                    pathname: "/",
+                    state: {
+                        token: this.props.token
+                    }
+                })
+
+            })
+            .catch(err => {
+                if (err.response && err.response.data) {
+                    if (err.response.data.type === "internal-error") {
+                        Swal.fire({
+                            title: t("errors.error"),
+                            text: t("errors.internal-error"),
+                            icon: "error",
+                            confirmButtonColor: "#54c2f0"
+                        })
+                    } else if (err.response.data.type === "invalid-token") {
+                        sendToAuthPage(this.props)
+                    }
+                    else {
+                        Swal.fire({
+                            title: t("errors.error"),
+                            text: t("errors.unknown-error"),
+                            icon: "error",
+                            confirmButtonColor: "#54c2f0"
+                        })
+                    }
+                }
+                else {
+                    Swal.fire({
+                        title: t("errors.error"),
+                        text: t("errors.unknown-error"),
+                        icon: "error",
+                        confirmButtonColor: "#54c2f0"
+                    })
+                }
+                this.setState({ isLoading: false })
+
+            })
+    }
 
     render() {
         const { showPassword, password, isLoading, url, websiteName, username, passwordFieldFocused, websiteFieldFocused, websiteNameFieldFocused, usernameFieldFocused } = this.state
@@ -61,6 +144,8 @@ class EditPasswordBox extends Component {
 
 
                     <div className="content">
+                        <img src={this.props.credential.largeImageURL} alt="" className="website-icon" />
+
                         <div className="fields">
                             <p className="field-name">{t("passwords.website-name")}</p>
                             <div className="field" style={{ border: websiteNameFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
@@ -107,8 +192,9 @@ class EditPasswordBox extends Component {
                             </div>
                         </div>
                         <div className="buttons">
-                            <button className="add-password-button" disabled={isLoading} >{isLoading ? <i className="fad fa-spinner-third fa-spin" /> : t("passwords.add")}</button>
+                            <button className="save-password-button" disabled={isLoading} onClick={this.handleSave} >{isLoading ? <i className="fad fa-spinner-third fa-spin" /> : t("save")}</button>
                             <button className="cancel-button">{t("cancel")}</button>
+                            <button className="delete-button"><i className="far fa-trash-alt" /></button>
 
                         </div>
                     </div>

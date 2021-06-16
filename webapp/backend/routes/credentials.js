@@ -6,5 +6,7 @@ const auth = require("../middleware/auth")
 
 router.get("/", auth, credentialsCtrl.getCredentials)
 router.post("/add", auth, credentialsCtrl.add)
+router.put("/edit/:id", auth, credentialsCtrl.edit)
+
 
 module.exports = router
