@@ -49,24 +49,28 @@ class EditPasswordBox extends Component {
     //Arrow fx for binding
     handleEditPasswordBoxClosed = event => {
 
-        let editPasswordOverlay = document.querySelector(".edit-password-overlay")
 
         let editPasswordBox = document.querySelector(".edit-password-overlay")
         let closePasswordBoxButton = document.querySelector(".edit-password-box > .close")
         let cancelButton = document.querySelector(".edit-password-box .cancel-button")
 
         if (event.target === closePasswordBoxButton || event.target === cancelButton) {
-            editPasswordOverlay.style.visibility = "hidden"
-            editPasswordOverlay.style.opacity = 0
+            this.closeBox()
+
         }
 
         else if (event.target !== editPasswordBox) {
             return
         }
+        this.closeBox()
+
+    }
+
+    closeBox() {
+        let editPasswordOverlay = document.querySelector(".edit-password-overlay")
         editPasswordOverlay.style.visibility = "hidden"
         editPasswordOverlay.style.opacity = 0
-        setTimeout(() => this.setState(this.baseState), 500)
-
+        setTimeout(() => this.setState(this.baseState), 100)
     }
 
     handleSave = () => {
@@ -91,13 +95,8 @@ class EditPasswordBox extends Component {
         }, { headers: { "Authorization": `Bearer ${this.props.token}` } })
             .then(result => {
                 this.setState({ isLoading: false })
-
-                this.props.history.push({
-                    pathname: "/",
-                    state: {
-                        token: this.props.token
-                    }
-                })
+                this.closeBox()
+                this.props.reloadCredentials()
 
             })
             .catch(err => {
@@ -132,6 +131,62 @@ class EditPasswordBox extends Component {
                 this.setState({ isLoading: false })
 
             })
+    }
+    handleDelete = () => {
+        const { t } = this.props
+        Swal.fire({
+            title: t("passwords.delete-password"),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: "#54c2f0",
+            cancelButtonColor: '#d33',
+            confirmButtonText: t("confirm"),
+            cancelButtonText: t("cancel")
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.setState({ isLoading: true })
+                axios.delete(`${process.env.REACT_APP_SERVER_URL}/api/credentials/delete/${this.props.credential.id}`, { headers: { "Authorization": `Bearer ${this.props.token}` } })
+                    .then(result => {
+                        this.setState({ isLoading: false })
+                        this.closeBox()
+                        this.props.reloadCredentials()
+
+                    })
+                    .catch(err => {
+                        if (err.response && err.response.data) {
+                            if (err.response.data.type === "internal-error") {
+                                Swal.fire({
+                                    title: t("errors.error"),
+                                    text: t("errors.internal-error"),
+                                    icon: "error",
+                                    confirmButtonColor: "#54c2f0"
+                                })
+                            } else if (err.response.data.type === "invalid-token") {
+                                sendToAuthPage(this.props)
+                            }
+                            else {
+                                Swal.fire({
+                                    title: t("errors.error"),
+                                    text: t("errors.unknown-error"),
+                                    icon: "error",
+                                    confirmButtonColor: "#54c2f0"
+                                })
+                            }
+                        }
+                        else {
+                            Swal.fire({
+                                title: t("errors.error"),
+                                text: t("errors.unknown-error"),
+                                icon: "error",
+                                confirmButtonColor: "#54c2f0"
+                            })
+                        }
+                        this.setState({ isLoading: false })
+
+                    })
+            }
+        })
+
     }
 
     render() {
@@ -193,8 +248,11 @@ class EditPasswordBox extends Component {
                         </div>
                         <div className="buttons">
                             <button className="save-password-button" disabled={isLoading} onClick={this.handleSave} >{isLoading ? <i className="fad fa-spinner-third fa-spin" /> : t("save")}</button>
-                            <button className="cancel-button">{t("cancel")}</button>
-                            <button className="delete-button"><i className="far fa-trash-alt" /></button>
+                            <div>
+                                <button className="cancel-button">{t("cancel")}</button>
+                                <button className="delete-button" onClick={this.handleDelete}><i className="far fa-trash-alt" /></button>
+                            </div>
+
 
                         </div>
                     </div>

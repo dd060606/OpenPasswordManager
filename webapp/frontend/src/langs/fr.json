@@ -46,7 +46,10 @@
     "want-to-logout": "Voulez vous vraiment vous déconnecter ?",
     "old-password": "Ancien mot de passe",
     "new-password": "Nouveau mot de passe",
-    "confirm-new-password": "Confirmez le nouveau mot de passe"
+    "confirm-new-password": "Confirmez le nouveau mot de passe",
+    "username": "Identifiant",
+    "firstname": "Prénom",
+    "lastname": "Nom"
   },
   "generator": {
     "password-generator": "Générateur de mots de passe",
@@ -70,7 +73,8 @@
     "website-name": "Nom du site",
     "username": "Identifiant",
     "add-url": "Ajouter une URL",
-    "confirm-password": "Confirmer le mot de passe"
+    "confirm-password": "Confirmer le mot de passe",
+    "delete-password": "Supprimer le mot de passe ?"
   },
   "welcome-on": "Bienvenue sur",
   "continue": "Continuer",

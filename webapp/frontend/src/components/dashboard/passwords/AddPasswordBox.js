@@ -33,24 +33,26 @@ class AddPasswordBox extends Component {
 
     //Arrow fx for binding
     handleAddPasswordBoxClosed = event => {
-
-        let addPasswordOverlay = document.querySelector(".add-password-overlay")
-
         let addPasswordBox = document.querySelector(".add-password-overlay")
         let closePasswordBoxButton = document.querySelector(".add-password-box > .close")
         let cancelButton = document.querySelector(".add-password-box .cancel-button")
 
         if (event.target === closePasswordBoxButton || event.target === cancelButton) {
-            addPasswordOverlay.style.visibility = "hidden"
-            addPasswordOverlay.style.opacity = 0
+            this.closeBox()
+
         }
 
         else if (event.target !== addPasswordBox) {
             return
         }
+        this.closeBox()
+    }
+
+    closeBox() {
+        let addPasswordOverlay = document.querySelector(".add-password-overlay")
         addPasswordOverlay.style.visibility = "hidden"
         addPasswordOverlay.style.opacity = 0
-        setTimeout(() => this.setState(this.baseState), 500)
+        setTimeout(() => this.setState(this.baseState), 100)
     }
 
     handleAddPassword = () => {
@@ -71,17 +73,12 @@ class AddPasswordBox extends Component {
             username: username,
             password: encryptedPassword,
             name: websiteName,
-            url: url.startsWith("http://") || url.startsWith("https://") ? url : `http://${url}`
+            url: url ? url.startsWith("http://") || url.startsWith("https://") ? url : `http://${url}` : ""
         }, { headers: { "Authorization": `Bearer ${this.props.token}` } })
             .then(result => {
                 this.setState({ isLoading: false })
-
-                this.props.history.push({
-                    pathname: "/",
-                    state: {
-                        token: this.props.token
-                    }
-                })
+                this.closeBox()
+                this.props.reloadCredentials()
 
             })
             .catch(err => {
@@ -112,6 +109,7 @@ class AddPasswordBox extends Component {
                         icon: "error",
                         confirmButtonColor: "#54c2f0"
                     })
+                    console.log(err)
                 }
                 this.setState({ isLoading: false })
 

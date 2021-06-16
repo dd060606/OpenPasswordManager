@@ -24,28 +24,33 @@ class EnterPasswordBox extends Component {
         this.baseState = this.state
     }
 
-
+    closeBox() {
+        let enterPasswordOverlay = document.querySelector(".enter-password-overlay")
+        enterPasswordOverlay.style.visibility = "hidden"
+        enterPasswordOverlay.style.opacity = 0
+        setTimeout(() => this.setState(this.baseState), 100)
+    }
     //Arrow fx for binding
     handleAddPasswordBoxClosed = event => {
 
-        let enterPasswordOverlay = document.querySelector(".enter-password-overlay")
 
         let enterPasswordBox = document.querySelector(".enter-password-overlay")
         let closePasswordBoxButton = document.querySelector(".enter-password-box > .close")
         let cancelButton = document.querySelector(".enter-password-box .cancel-button")
 
         if (event.target === closePasswordBoxButton || event.target === cancelButton) {
-            enterPasswordOverlay.style.visibility = "hidden"
-            enterPasswordOverlay.style.opacity = 0
+            this.closeBox()
         }
 
         else if (event.target !== enterPasswordBox) {
             return
         }
-        enterPasswordOverlay.style.visibility = "hidden"
-        enterPasswordOverlay.style.opacity = 0
-        setTimeout(() => this.setState(this.baseState), 500)
+        this.closeBox()
+
+
     }
+
+
 
     handleLogin = () => {
         const { isLoading, password } = this.state
@@ -89,9 +94,8 @@ class EnterPasswordBox extends Component {
                         ).then(res => {
                             if (res.data.result === "success") {
                                 this.setState({ isLoading: false })
-                                let enterPasswordOverlay = document.querySelector(".enter-password-overlay")
-                                enterPasswordOverlay.style.visibility = "hidden"
-                                enterPasswordOverlay.style.opacity = 0
+                                this.closeBox()
+
                                 if (this.props.type === "new") {
                                     let addPasswordOverlay = document.querySelector(".add-password-overlay")
                                     addPasswordOverlay.style.visibility = "visible"

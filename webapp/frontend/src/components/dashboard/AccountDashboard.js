@@ -13,6 +13,8 @@ class AccountDashboard extends Component {
     state = {
 
         email: "email",
+        lastname: "",
+        firstname: "",
         isLoading: true,
         token: ""
     }
@@ -25,7 +27,7 @@ class AccountDashboard extends Component {
             if (token) {
                 axios.get(`${process.env.REACT_APP_SERVER_URL}/api/auth/info`, { headers: { "Authorization": `Bearer ${token}` } })
                     .then(result => {
-                        this.setState({ isLoading: false, token: token, email: result.data.email })
+                        this.setState({ isLoading: false, token: token, email: result.data.email, lastname: result.data.lastname, firstname: result.data.firstname })
                     })
                     .catch(err => {
                         sendToAuthPage(this.props)
@@ -63,37 +65,16 @@ class AccountDashboard extends Component {
     }
 
     handleChangePasswordClick = () => {
-        (async () => {
-            const { t } = this.props
 
-            const { value: passwords } = await Swal.fire({
-                title: t("account.change-password"),
-                html:
-                    `<input id="old-password" placeholder="${t("account.old-password")}" class="swal2-input">` +
-                    `<input id="new-password" placeholder="${t("account.new-password")}" class="swal2-input">`,
-                focusConfirm: false,
-                confirmButtonColor: "#54c2f0",
-                preConfirm: () => {
-                    return [
-                        document.getElementById("old-password").value,
-                        document.getElementById("new-password").value
-                    ]
-                }
-            })
-
-            if (passwords) {
-            }
-
-        })()
     }
 
     render() {
         const { t } = this.props
-        const { email, isLoading } = this.state
+        const { email, isLoading, lastname, firstname } = this.state
         return (
 
             <>
-                { isLoading && <Loading />}
+                {isLoading && <Loading />}
                 {
                     !isLoading &&
                     <div className="my-account">
@@ -105,7 +86,10 @@ class AccountDashboard extends Component {
 
                             <section>
                                 <h3>{t("information")}</h3>
-                                <p><strong>Identifiant:</strong> {email}</p>
+                                <p><strong>{t("account.username")} : </strong> {email}</p>
+                                <p><strong>{t("account.firstname")} : </strong> {firstname}</p>
+                                <p><strong>{t("account.lastname")} : </strong> {lastname}</p>
+
                             </section>
                             <span className="line" />
 

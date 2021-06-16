@@ -38,8 +38,8 @@ class App extends Component {
         return (
 
             <>
-                { isLoading && <Loading />}
-                { !isLoading && <Redirect path="/" to={{ pathname: "/dashboard/passwords", state: { token: token } }} />}
+                {isLoading && <Loading />}
+                {!isLoading && <Redirect path="/" to={{ pathname: "/dashboard/passwords", state: { token: token } }} />}
             </>
 
         )

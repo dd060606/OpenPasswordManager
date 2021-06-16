@@ -29,7 +29,7 @@ const PasswordItem = ({ credential, index, onClick }) => {
                 </Tooltip>
                 <Tooltip title={t("passwords.edit")} placement="top">
 
-                    <button className="edit-password-button" onClick={onClick}><i className="far fa-edit" /></button>
+                    <button className="edit-password-button" onClick={() => onClick(credential)}><i className="far fa-edit" /></button>
                 </Tooltip>
 
             </div>

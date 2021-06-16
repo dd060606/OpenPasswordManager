@@ -24,6 +24,10 @@
     width: 100%;
     
 }
+.my-account-content > section > p{
+    margin-bottom: 0px;
+}
+
 .my-account-content > section > button{
     padding: 8px;
     width: 200px;
