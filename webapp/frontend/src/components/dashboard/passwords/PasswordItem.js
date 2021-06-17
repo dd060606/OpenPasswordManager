@@ -2,6 +2,7 @@ import "../css/passwords/PasswordItem.css"
 import Tooltip from "@material-ui/core/Tooltip"
 import { useTranslation } from "react-i18next"
 import "../../../i18n"
+import React from "react"
 
 const PasswordItem = ({ credential, index, onClick }) => {
 
@@ -13,7 +14,7 @@ const PasswordItem = ({ credential, index, onClick }) => {
             }
         }}>
             <div className="password-info">
-                <img src={credential.smallImageURL} alt="" className="website-icon" />
+                <span style={{ backgroundImage: `url(${credential.smallImageURL})` }} alt="" className="website-icon" />
                 <div>
                     <p className="password-name">{credential.name}</p>
                     <p className="username-text">{credential.username}</p>
