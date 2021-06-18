@@ -87,7 +87,7 @@
 .responsive-btn {
     width: 2rem;
     height: 2rem;
-    top: 35px;
+    top: 25px;
     right: 65px;
     z-index: 20;
     display: none;
@@ -108,7 +108,7 @@
   
     .responsive-btn {
         right: 20px;
-        top: 20Px;
+        top: 30Px;
         display: flex;
         justify-content: space-around;
         flex-flow: column nowrap;

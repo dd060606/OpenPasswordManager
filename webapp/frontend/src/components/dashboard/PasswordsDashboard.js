@@ -29,10 +29,6 @@ class PasswordsDashboard extends Component {
     }
 
     componentDidMount() {
-        this.init()
-
-    }
-    init = () => {
         const { isLoading } = this.state
         const { t } = this.props
         this.setState({ token: readToken(this.props) })
@@ -81,6 +77,7 @@ class PasswordsDashboard extends Component {
                 })
         }
     }
+
     extractHostname(url) {
         var hostname;
 
@@ -192,14 +189,8 @@ class PasswordsDashboard extends Component {
                                     })
                                 }
                                 <EnterPasswordBox token={token} type={enterPasswordType} setPassword={password => this.setState({ password: password })} />
-                                <AddPasswordBox token={token} password={password} reloadCredentials={() => {
-                                    this.setState({ isLoading: true })
-                                    this.init()
-                                }} />
-                                <EditPasswordBox token={token} password={password} credential={currentCredential} reloadCredentials={() => {
-                                    this.setState({ isLoading: true })
-                                    this.init()
-                                }} />
+                                <AddPasswordBox token={token} password={password} reloadCredentials={credentials => this.setState({ credentials: credentials })} />
+                                <EditPasswordBox token={token} password={password} credential={currentCredential} reloadCredentials={credentials => this.setState({ credentials: credentials })} />
                             </div>
                         </div>
 

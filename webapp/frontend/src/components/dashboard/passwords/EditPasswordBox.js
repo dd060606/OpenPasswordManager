@@ -81,6 +81,80 @@ class EditPasswordBox extends Component {
         setTimeout(() => this.setState(this.baseState), 100)
     }
 
+    reloadCredentials() {
+        const { t } = this.props
+        this.setState({ isLoading: true })
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${this.props.token}` } })
+            .then(result => {
+                let finalCredentials = []
+                for (let i = 0; i < result.data.credentials.length; i++) {
+                    result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+                    result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+
+                    finalCredentials.push(result.data.credentials[i])
+                }
+                this.props.reloadCredentials(result.data.credentials)
+                this.setState({ isLoading: false })
+            })
+            .catch(err => {
+                if (err.response && err.response.data) {
+                    if (err.response.data.type === "internal-error") {
+                        Swal.fire({
+                            title: t("errors.error"),
+                            text: t("errors.internal-error"),
+                            icon: "error",
+                            confirmButtonColor: "#54c2f0"
+                        })
+                    }
+                    else {
+                        Swal.fire({
+                            title: t("errors.error"),
+                            text: t("errors.unknown-error"),
+                            icon: "error",
+                            confirmButtonColor: "#54c2f0"
+                        })
+                    }
+                }
+                else {
+                    Swal.fire({
+                        title: t("errors.error"),
+                        text: t("errors.unknown-error"),
+                        icon: "error",
+                        confirmButtonColor: "#54c2f0"
+                    })
+                }
+                this.setState({ isLoading: false })
+            })
+    }
+    extractHostname(url) {
+        var hostname;
+
+        if (url.indexOf("//") > -1) {
+            hostname = url.split('/')[2];
+        }
+        else {
+            hostname = url.split('/')[0];
+        }
+
+        hostname = hostname.split(':')[0];
+        hostname = hostname.split('?')[0];
+
+        return hostname;
+    }
+
+    extractRootDomain(url) {
+        var domain = this.extractHostname(url),
+            splitArr = domain.split('.'),
+            arrLen = splitArr.length;
+        if (arrLen > 2) {
+            domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
+            if (splitArr[arrLen - 2].length === 2 && splitArr[arrLen - 1].length === 2) {
+                domain = splitArr[arrLen - 3] + '.' + domain;
+            }
+        }
+        return domain;
+    }
+
     handleSave = () => {
         const { websiteName, password, username, url } = this.state
         const { t } = this.props
@@ -104,7 +178,8 @@ class EditPasswordBox extends Component {
             .then(result => {
                 this.setState({ isLoading: false })
                 this.closeBox()
-                this.props.reloadCredentials()
+                this.reloadCredentials()
+
 
             })
             .catch(err => {
@@ -157,7 +232,7 @@ class EditPasswordBox extends Component {
                     .then(result => {
                         this.setState({ isLoading: false })
                         this.closeBox()
-                        this.props.reloadCredentials()
+                        this.reloadCredentials()
 
                     })
                     .catch(err => {
