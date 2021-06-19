@@ -14,6 +14,7 @@ import Cookies from 'universal-cookie'
 import PasswordsDashboard from './components/dashboard/PasswordsDashboard'
 import AccountDashboard from "./components/dashboard/AccountDashboard"
 import GeneratorDashboard from './components/dashboard/GeneratorDashboard';
+import SettingsDashboard from './components/dashboard/SettingsDashboard';
 
 
 
@@ -34,6 +35,7 @@ ReactDOM.render(
         <Route path="/dashboard/passwords" exact component={PasswordsDashboard} />
         <Route path="/dashboard/my-account" exact component={AccountDashboard} />
         <Route path="/dashboard/generator" exact component={GeneratorDashboard} />
+        <Route path="/dashboard/settings" exact component={SettingsDashboard} />
 
         <Route path="/" component={Error404} />
       </Switch>

@@ -1,0 +1,53 @@
+.settings {
+    display: flex;
+    font-family: "Open Sans",sans-serif;
+
+}
+.settings-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    
+}
+.line {
+    background-color: white;
+    height: 1px;
+    width: 90%;
+}
+.settings-content > section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    
+}
+.settings-content > section > p{
+    margin-bottom: 0px;
+}
+.settings-content > section > * {
+    margin-left: 50px;
+
+}
+.settings-content .appearance {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.settings-content .appearance p{
+    margin-left: 20px;
+}
+.settings-content .appearance .appearance-select {
+
+    width: 150px;
+    margin-left: 20px;
+    
+}
+.settings-content .appearance .appearance-select  .radio-button{
+    color: #54c2f0;
+}
+@media all and (max-width: 310px) {
+    .settings-content > section > * {
+        margin-left: 10px;
+    }
+}

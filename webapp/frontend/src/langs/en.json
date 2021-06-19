@@ -63,6 +63,17 @@
     "lowercases": "Lowercases",
     "symbols": "Symbols"
   },
+  "settings": {
+    "settings": "Settings",
+    "general": "General",
+    "appearance": {
+      "appearance": "Appearance",
+      "theme": "Theme",
+      "dark": "Dark",
+      "light": "Light"
+    },
+    "database": "Database"
+  },
   "passwords": {
     "add": "Add",
     "no-passwords": "You don't have any saved passwords",
@@ -79,7 +90,6 @@
   "welcome-on": "Welcome on",
   "continue": "Continue",
   "my-passwords": "My passwords",
-  "settings": "Settings",
   "information": "Information",
   "security": "Security",
   "confirm": "Confirm",

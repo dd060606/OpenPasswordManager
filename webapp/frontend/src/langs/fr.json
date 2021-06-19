@@ -63,6 +63,17 @@
     "lowercases": "Minuscules",
     "symbols": "Symboles"
   },
+  "settings": {
+    "settings": "Paramètres",
+    "general": "Général",
+    "appearance": {
+      "appearance": "Apparence",
+      "theme": "Thème",
+      "dark": "Sombre",
+      "light": "Clair"
+    },
+    "database": "Base de données"
+  },
   "passwords": {
     "add": "Ajouter",
     "no-passwords": "Vous n'avez pas de mots de passe enregistrés",
@@ -79,7 +90,6 @@
   "welcome-on": "Bienvenue sur",
   "continue": "Continuer",
   "my-passwords": "Mes mots de passe",
-  "settings": "Paramètres",
   "information": "Informations",
   "security": "Sécurité",
   "confirm": "Confirmer",

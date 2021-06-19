@@ -12,6 +12,7 @@ import Swal from "sweetalert2"
 import AddPasswordBox from "./passwords/AddPasswordBox"
 import EnterPasswordBox from "./passwords/EnterPasswordBox"
 import EditPasswordBox from "./passwords/EditPasswordBox"
+import { getSavedTheme, isDarkTheme } from "../../utils/themes-utils"
 
 
 class PasswordsDashboard extends Component {
@@ -25,6 +26,7 @@ class PasswordsDashboard extends Component {
         password: "",
         enterPasswordType: "new",
         currentCredential: {},
+        currentTheme: getSavedTheme()
 
     }
 
@@ -157,7 +159,7 @@ class PasswordsDashboard extends Component {
                 {isLoading && <Loading />}
                 {
                     !isLoading &&
-                    <div className="my-passwords">
+                    <div className="my-passwords" style={{ color: isDarkTheme() ? "white" : "#121212", backgroundColor: isDarkTheme() ? "#121212" : "white" }}>
                         <DashboardNav token={token} />
 
                         <div className="passwords-content">
@@ -165,7 +167,7 @@ class PasswordsDashboard extends Component {
                                 <button id="add-password-button" onClick={this.handleAddPassword}><i className="fas fa-plus" /> {t("passwords.add")}</button>
                                 <div className="search-bar">
                                     <i className="fas fa-search" />
-                                    <input type="text" placeholder={t("search")} value={search} onChange={event => this.setState({ search: event.target.value })} />
+                                    <input type="text" placeholder={t("search")} style={{ color: isDarkTheme() ? "white" : "#121212" }} value={search} onChange={event => this.setState({ search: event.target.value })} />
                                 </div>
                             </nav>
 

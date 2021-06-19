@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next"
 
 import { NavLink } from "react-router-dom"
 import { readToken } from "../../utils/auth-utils"
+import { isDarkTheme } from "../../utils/themes-utils"
 
 class DashboardNav extends Component {
 
@@ -47,29 +48,29 @@ class DashboardNav extends Component {
         const { t } = this.props
         return (
             <>
-                <div className={`dashboard-nav ${!navOpened ? "nav-closed" : ""}`}>
-                    <div className="top-buttons" style={{ flexDirection: navOpened ? "row" : "column" }}>
+                <div className={`dashboard-nav ${!navOpened ? "nav-closed" : ""}`} style={{ backgroundColor: isDarkTheme() ? "#333" : "rgba(198,237,240, 0.35)" }}>
+                    <div className="top-buttons" style={{ flexDirection: navOpened ? "row" : "column", color: isDarkTheme() ? "white" : "#121212" }}>
                         <i className="fas fa-bars open-nav-button top-button" onClick={this.handleNavOpened} />
                         <i className="fas fa-user-circle open-account-settings top-button" title={t("account.my-account")} onClick={this.handleMyAccountClicked} />
 
                     </div>
 
-                    <div className="nav-buttons" >
+                    <div className="nav-buttons"  >
                         <NavLink to={{
                             pathname: "/dashboard/passwords", state: {
                                 token: token
                             }
-                        }} className="nav-button" activeClassName="current-link"><i className="far fa-lock-alt" />{navOpened ? t("my-passwords") : ""}</NavLink>
+                        }} className="nav-button" style={{ color: isDarkTheme() ? "white" : "#121212" }} activeClassName="current-link"><i className="far fa-lock-alt" />{navOpened ? t("my-passwords") : ""}</NavLink>
                         <NavLink to={{
                             pathname: "/dashboard/generator", state: {
                                 token: token
                             }
-                        }} className="nav-button" activeClassName="current-link"><i className="far fa-bolt" />{navOpened ? t("generator.generator") : ""}</NavLink>
+                        }} className="nav-button" style={{ color: isDarkTheme() ? "white" : "#121212" }} activeClassName="current-link"><i className="far fa-bolt" />{navOpened ? t("generator.generator") : ""}</NavLink>
                         <NavLink to={{
                             pathname: "/dashboard/settings", state: {
                                 token: token
                             }
-                        }} className="nav-button" activeClassName="current-link"><i className="far fa-cog" />{navOpened ? t("settings") : ""}</NavLink>
+                        }} className="nav-button" style={{ color: isDarkTheme() ? "white" : "#121212" }} activeClassName="current-link"><i className="far fa-cog" />{navOpened ? t("settings.settings") : ""}</NavLink>
                     </div>
 
                 </div>
@@ -89,40 +90,40 @@ const ResponsiveButton = ({ token }) => {
     return (
         <>
             <div className="responsive-btn" style={{ position: open ? "fixed" : "absolute" }} open={open} onClick={() => setOpen(!open)}>
-                <div style={{ backgroundColor: "#1E1E1E", transform: open ? 'rotate(45deg)' : 'rotate(0)' }} />
-                <div style={{ backgroundColor: "#1E1E1E", transform: open ? 'translateX(100%)' : 'translateX(0)', opacity: open ? 0 : 1 }} />
-                <div style={{ backgroundColor: "#1E1E1E", transform: open ? 'rotate(-45deg)' : 'rotate(0)' }} />
+                <div style={{ backgroundColor: isDarkTheme() ? "white" : "#121212", transform: open ? 'rotate(45deg)' : 'rotate(0)' }} />
+                <div style={{ backgroundColor: isDarkTheme() ? "white" : "#121212", transform: open ? 'translateX(100%)' : 'translateX(0)', opacity: open ? 0 : 1 }} />
+                <div style={{ backgroundColor: isDarkTheme() ? "white" : "#121212", transform: open ? 'rotate(-45deg)' : 'rotate(0)' }} />
             </div>
             <ResponsiveNav open={open} token={token} />
         </>
     )
 }
 const ResponsiveNav = ({ open, token }) => {
-    const isResponsive = useMediaQuery('(max-width: 1280px)');
+    const isResponsive = useMediaQuery('(max-width: 1280px)')
 
     const { t } = useTranslation()
     return (
-        <ul className="responsive-nav-ul" open={open} style={{ transform: open ? 'translateX(0)' : 'translateX(100%)', display: isResponsive ? "flex" : "none" }}>
+        <ul className="responsive-nav-ul" open={open} style={{ transform: open ? 'translateX(0)' : 'translateX(100%)', display: isResponsive ? "flex" : "none", backgroundColor: isDarkTheme() ? "#333" : "rgb(198,237,240)" }}>
             <NavLink to={{
                 pathname: "/dashboard/passwords", state: {
                     token: token
                 }
-            }} onClick={() => setMenuOpen(false)} className="nav-button" activeClassName="current-link"><i className="far fa-lock-alt" />{t("my-passwords")}</NavLink>
+            }} onClick={() => setMenuOpen(false)} style={{ color: isDarkTheme() ? "white" : "#121212" }} className="nav-button" activeClassName="current-link"><i className="far fa-lock-alt" />{t("my-passwords")}</NavLink>
             <NavLink to={{
                 pathname: "/dashboard/generator", state: {
                     token: token
                 }
-            }} onClick={() => setMenuOpen(false)} className="nav-button" activeClassName="current-link"><i className="far fa-bolt" />{t("generator.generator")}</NavLink>
+            }} onClick={() => setMenuOpen(false)} style={{ color: isDarkTheme() ? "white" : "#121212" }} className="nav-button" activeClassName="current-link"><i className="far fa-bolt" />{t("generator.generator")}</NavLink>
             <NavLink to={{
                 pathname: "/dashboard/settings", state: {
                     token: token
                 }
-            }} onClick={() => setMenuOpen(false)} className="nav-button" activeClassName="current-link"><i className="far fa-cog" />{t("settings")}</NavLink>
+            }} onClick={() => setMenuOpen(false)} style={{ color: isDarkTheme() ? "white" : "#121212" }} className="nav-button" activeClassName="current-link"><i className="far fa-cog" />{t("settings.settings")}</NavLink>
             <NavLink to={{
                 pathname: "/dashboard/my-account", state: {
                     token: token
                 }
-            }} onClick={() => setMenuOpen(false)} className="nav-button" activeClassName="current-link"><i className="far fa-user" />{t("account.my-account")}</NavLink>
+            }} onClick={() => setMenuOpen(false)} style={{ color: isDarkTheme() ? "white" : "#121212" }} className="nav-button" activeClassName="current-link"><i className="far fa-user" />{t("account.my-account")}</NavLink>
 
         </ul>
     )
