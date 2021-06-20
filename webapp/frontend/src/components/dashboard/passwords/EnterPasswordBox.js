@@ -7,6 +7,7 @@ import Swal from "sweetalert2"
 import axios from "axios"
 import { readToken, sendToAuthPage } from "../../../utils/auth-utils"
 import { withRouter } from "react-router-dom"
+import { isDarkTheme } from "../../../utils/themes-utils"
 
 
 class EnterPasswordBox extends Component {
@@ -23,9 +24,15 @@ class EnterPasswordBox extends Component {
         super(props)
         this.baseState = this.state
     }
+    componentDidMount() {
+        const enterPassword = document.querySelector(".enter-password-box")
+        enterPassword.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+        enterPassword.style.setProperty("--bg-theme", isDarkTheme() ? "#333" : "white")
+        enterPassword.style.setProperty("--field-bg-theme", isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)")
+    }
 
     closeBox() {
-        let enterPasswordOverlay = document.querySelector(".enter-password-overlay")
+        const enterPasswordOverlay = document.querySelector(".enter-password-overlay")
         enterPasswordOverlay.style.visibility = "hidden"
         enterPasswordOverlay.style.opacity = 0
         setTimeout(() => this.setState(this.baseState), 100)
@@ -34,9 +41,9 @@ class EnterPasswordBox extends Component {
     handleAddPasswordBoxClosed = event => {
 
 
-        let enterPasswordBox = document.querySelector(".enter-password-overlay")
-        let closePasswordBoxButton = document.querySelector(".enter-password-box > .close")
-        let cancelButton = document.querySelector(".enter-password-box .cancel-button")
+        const enterPasswordBox = document.querySelector(".enter-password-overlay")
+        const closePasswordBoxButton = document.querySelector(".enter-password-box > .close")
+        const cancelButton = document.querySelector(".enter-password-box .cancel-button")
 
         if (event.target === closePasswordBoxButton || event.target === cancelButton) {
             this.closeBox()
@@ -58,34 +65,51 @@ class EnterPasswordBox extends Component {
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*#?&]{8,}$/
         if (!isLoading) {
             this.setState({ isLoading: true })
+
             if (!password) {
-                return Swal.fire({
+                Swal.fire({
                     title: t("errors.error"),
                     text: t("errors.complete-all-fields"),
                     icon: "error",
-                    confirmButtonColor: "#54c2f0"
+                    confirmButtonColor: "#54c2f0",
+                    background: isDarkTheme() ? " #333" : "white"
+
                 }
                 ).then(() => {
                     this.setState({ isLoading: false })
                 })
+                const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+                swal2.forEach(element => {
+                    element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                })
+                return
+
             }
             if (!passwordRegex.test(password)) {
-                return Swal.fire({
+                Swal.fire({
                     title: t("errors.error"),
                     text: t("errors.wrong-password"),
                     icon: "error",
-                    confirmButtonColor: "#54c2f0"
+                    confirmButtonColor: "#54c2f0",
+                    background: isDarkTheme() ? " #333" : "white"
+
                 }
                 ).then(() => {
                     this.setState({ isLoading: false })
 
                 })
+                const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+                swal2.forEach(element => {
+                    element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                })
+                return
             }
+
             const token = readToken(this.props)
             if (token) {
                 axios.get(`${process.env.REACT_APP_SERVER_URL}/api/auth/info`, { headers: { "Authorization": `Bearer ${token}` } })
                     .then(result => {
-                        let email = result.data.email
+                        const email = result.data.email
                         axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/login`,
                             {
                                 email: email,
@@ -97,13 +121,13 @@ class EnterPasswordBox extends Component {
                                 this.closeBox()
 
                                 if (this.props.type === "new") {
-                                    let addPasswordOverlay = document.querySelector(".add-password-overlay")
+                                    const addPasswordOverlay = document.querySelector(".add-password-overlay")
                                     addPasswordOverlay.style.visibility = "visible"
                                     addPasswordOverlay.style.opacity = 1
                                     this.props.setPassword(password)
                                 }
                                 else if (this.props.type === "edit") {
-                                    let editPasswordOverlay = document.querySelector(".edit-password-overlay")
+                                    const editPasswordOverlay = document.querySelector(".edit-password-overlay")
                                     editPasswordOverlay.style.visibility = "visible"
                                     editPasswordOverlay.style.opacity = 1
                                     this.props.setPassword(password)
@@ -111,42 +135,28 @@ class EnterPasswordBox extends Component {
                             }
                         })
                             .catch(err => {
+                                let errorMessage = t("errors.unknown-error")
                                 if (err.response && err.response.data) {
                                     if (err.response.data.type === "internal-error") {
-                                        Swal.fire({
-                                            title: t("errors.error"),
-                                            text: t("errors.internal-error"),
-                                            icon: "error",
-                                            confirmButtonColor: "#54c2f0"
-                                        })
+                                        errorMessage = t("errors.internal-error")
                                     } else if (err.response.data.type === "invalid-credentials") {
-                                        Swal.fire({
-                                            title: t("errors.error"),
-                                            text: t("errors.invalid-credentials"),
-                                            icon: "error",
-                                            confirmButtonColor: "#54c2f0"
-                                        })
-                                    }
-                                    else {
-                                        Swal.fire({
-                                            title: t("errors.error"),
-                                            text: t("errors.unknown-error"),
-                                            icon: "error",
-                                            confirmButtonColor: "#54c2f0"
-                                        })
+                                        errorMessage = t("errors.invalid-credentials")
                                     }
                                 }
-                                else {
-                                    Swal.fire({
-                                        title: t("errors.error"),
-                                        text: t("errors.unknown-error"),
-                                        icon: "error",
-                                        confirmButtonColor: "#54c2f0"
-                                    })
+                                Swal.fire({
+                                    title: t("errors.error"),
+                                    text: errorMessage,
+                                    icon: "error",
+                                    confirmButtonColor: "#54c2f0",
+                                    background: isDarkTheme() ? " #333" : "white"
                                 }
-
-                                this.setState({ isLoading: false })
-
+                                ).then(() => {
+                                    this.setState({ isLoading: false })
+                                })
+                                const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+                                swal2.forEach(element => {
+                                    element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                                })
                             })
 
 

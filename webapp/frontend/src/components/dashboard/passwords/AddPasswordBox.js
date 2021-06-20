@@ -10,6 +10,7 @@ import { withRouter } from "react-router-dom"
 import CryptoJS from "crypto-js"
 import Checkbox from "@material-ui/core/Checkbox"
 import Slider from "@material-ui/core/Slider"
+import { isDarkTheme } from "../../../utils/themes-utils"
 
 class AddPasswordBox extends Component {
 
@@ -39,12 +40,18 @@ class AddPasswordBox extends Component {
         this.baseState = this.state
     }
 
-
+    componentDidMount() {
+        const addPassword = document.querySelector(".add-password-box")
+        addPassword.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+        addPassword.style.setProperty("--bg-theme", isDarkTheme() ? "#333" : "white")
+        addPassword.style.setProperty("--field-bg-theme", isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)")
+        addPassword.style.setProperty("--bg-dropdown-theme", isDarkTheme() ? "#212121" : "white")
+    }
     //Arrow fx for binding
     handleAddPasswordBoxClosed = event => {
-        let addPasswordBox = document.querySelector(".add-password-overlay")
-        let closePasswordBoxButton = document.querySelector(".add-password-box > .close")
-        let cancelButton = document.querySelector(".add-password-box .cancel-button")
+        const addPasswordBox = document.querySelector(".add-password-overlay")
+        const closePasswordBoxButton = document.querySelector(".add-password-box > .close")
+        const cancelButton = document.querySelector(".add-password-box .cancel-button")
 
         if (event.target === closePasswordBoxButton || event.target === cancelButton) {
             this.closeBox()
@@ -58,7 +65,7 @@ class AddPasswordBox extends Component {
     }
 
     closeBox() {
-        let addPasswordOverlay = document.querySelector(".add-password-overlay")
+        const addPasswordOverlay = document.querySelector(".add-password-overlay")
         addPasswordOverlay.style.visibility = "hidden"
         addPasswordOverlay.style.opacity = 0
         setTimeout(() => this.setState(this.baseState), 100)
@@ -80,33 +87,26 @@ class AddPasswordBox extends Component {
                 this.setState({ isLoading: false })
             })
             .catch(err => {
+                let errorMessage = t("errors.unknown-error")
                 if (err.response && err.response.data) {
                     if (err.response.data.type === "internal-error") {
-                        Swal.fire({
-                            title: t("errors.error"),
-                            text: t("errors.internal-error"),
-                            icon: "error",
-                            confirmButtonColor: "#54c2f0"
-                        })
-                    }
-                    else {
-                        Swal.fire({
-                            title: t("errors.error"),
-                            text: t("errors.unknown-error"),
-                            icon: "error",
-                            confirmButtonColor: "#54c2f0"
-                        })
+                        errorMessage = t("errors.internal-error")
                     }
                 }
-                else {
-                    Swal.fire({
-                        title: t("errors.error"),
-                        text: t("errors.unknown-error"),
-                        icon: "error",
-                        confirmButtonColor: "#54c2f0"
-                    })
+                Swal.fire({
+                    title: t("errors.error"),
+                    text: errorMessage,
+                    icon: "error",
+                    confirmButtonColor: "#54c2f0",
+                    background: isDarkTheme() ? " #333" : "white"
                 }
-                this.setState({ isLoading: false })
+                ).then(() => {
+                    this.setState({ isLoading: false })
+                })
+                const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+                swal2.forEach(element => {
+                    element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                })
             })
     }
     extractHostname(url) {
@@ -143,12 +143,19 @@ class AddPasswordBox extends Component {
         const { t } = this.props
 
         if (!websiteName) {
-            return Swal.fire({
+            Swal.fire({
                 title: t("errors.error"),
                 text: t("errors.enter-website-name"),
                 icon: "error",
-                confirmButtonColor: "#54c2f0"
+                confirmButtonColor: "#54c2f0",
+                background: isDarkTheme() ? " #333" : "white"
+            }
+            )
+            const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+            swal2.forEach(element => {
+                element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
             })
+            return
         }
         this.setState({ isLoading: true })
         let encryptedPassword = CryptoJS.AES.encrypt(password, this.props.password).toString()
@@ -165,36 +172,28 @@ class AddPasswordBox extends Component {
 
             })
             .catch(err => {
+                let errorMessage = t("errors.unknown-error")
                 if (err.response && err.response.data) {
                     if (err.response.data.type === "internal-error") {
-                        Swal.fire({
-                            title: t("errors.error"),
-                            text: t("errors.internal-error"),
-                            icon: "error",
-                            confirmButtonColor: "#54c2f0"
-                        })
+                        errorMessage = t("errors.internal-error")
                     } else if (err.response.data.type === "invalid-token") {
                         sendToAuthPage(this.props)
                     }
-                    else {
-                        Swal.fire({
-                            title: t("errors.error"),
-                            text: t("errors.unknown-error"),
-                            icon: "error",
-                            confirmButtonColor: "#54c2f0"
-                        })
-                    }
                 }
-                else {
-                    Swal.fire({
-                        title: t("errors.error"),
-                        text: t("errors.unknown-error"),
-                        icon: "error",
-                        confirmButtonColor: "#54c2f0"
-                    })
-                    console.log(err)
+                Swal.fire({
+                    title: t("errors.error"),
+                    text: errorMessage,
+                    icon: "error",
+                    confirmButtonColor: "#54c2f0",
+                    background: isDarkTheme() ? " #333" : "white"
                 }
-                this.setState({ isLoading: false })
+                ).then(() => {
+                    this.setState({ isLoading: false })
+                })
+                const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+                swal2.forEach(element => {
+                    element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                })
 
             })
     }
@@ -280,7 +279,7 @@ class AddPasswordBox extends Component {
     }
 
     handleCloseGeneratePasswordBox = event => {
-        let content = document.querySelector(".edit-password-box > .content")
+        const content = document.querySelector(".edit-password-box > .content")
         if (event.target !== content) {
             return
         }

@@ -7,6 +7,7 @@ import Loading from "../Loading"
 import axios from "axios"
 import { deleteEmailCookie, isEmailSaved, readToken, sendToAuthPage } from "../../utils/auth-utils"
 import Swal from "sweetalert2"
+import { isDarkTheme } from "../../utils/themes-utils"
 
 class AccountDashboard extends Component {
 
@@ -22,15 +23,23 @@ class AccountDashboard extends Component {
     componentDidMount() {
         const { isLoading } = this.state
 
+
         if (isLoading) {
             const token = readToken(this.props)
             if (token) {
                 axios.get(`${process.env.REACT_APP_SERVER_URL}/api/auth/info`, { headers: { "Authorization": `Bearer ${token}` } })
                     .then(result => {
                         this.setState({ isLoading: false, token: token, email: result.data.email, lastname: result.data.lastname, firstname: result.data.firstname })
+                        const myAccount = document.querySelector(".my-account")
+                        myAccount.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                        myAccount.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
+                        myAccount.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
+
+
                     })
                     .catch(err => {
                         sendToAuthPage(this.props)
+                        console.log(err)
                     })
             }
             else {
@@ -53,7 +62,9 @@ class AccountDashboard extends Component {
             confirmButtonColor: "#54c2f0",
             cancelButtonColor: "#d33",
             confirmButtonText: t("confirm"),
-            cancelButtonText: t("cancel")
+            cancelButtonText: t("cancel"),
+            background: isDarkTheme() ? " #333" : "white",
+            iconColor: "#54c2f0"
         }).then((result) => {
             if (result.isConfirmed) {
                 if (isEmailSaved()) {
@@ -62,6 +73,8 @@ class AccountDashboard extends Component {
                 sendToAuthPage(this.props)
             }
         })
+        const swal2 = document.querySelector("#swal2-content")
+        swal2.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
     }
 
     handleChangePasswordClick = () => {

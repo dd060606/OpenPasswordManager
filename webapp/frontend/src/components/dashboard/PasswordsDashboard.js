@@ -34,6 +34,9 @@ class PasswordsDashboard extends Component {
         const { isLoading } = this.state
         const { t } = this.props
         this.setState({ token: readToken(this.props) })
+
+
+
         if (isLoading) {
 
             axios.get(`${process.env.REACT_APP_SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${readToken(this.props)}` } })
@@ -45,39 +48,45 @@ class PasswordsDashboard extends Component {
 
                         finalCredentials.push(result.data.credentials[i])
                     }
+
                     this.setState({ isLoading: false, credentials: result.data.credentials })
+                    const myPasswords = document.querySelector(".my-passwords")
+                    myPasswords.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                    myPasswords.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
+                    myPasswords.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
                 })
                 .catch(err => {
+                    let errorMessage = t("errors.unknown-error")
                     if (err.response && err.response.data) {
+
                         if (err.response.data.type === "internal-error") {
-                            Swal.fire({
-                                title: t("errors.error"),
-                                text: t("errors.internal-error"),
-                                icon: "error",
-                                confirmButtonColor: "#54c2f0"
-                            })
+                            errorMessage = t("errors.internal-error")
                         } else if (err.response.data.type === "invalid-token") {
                             sendToAuthPage(this.props)
                         }
-                        else {
-                            Swal.fire({
-                                title: t("errors.error"),
-                                text: t("errors.unknown-error"),
-                                icon: "error",
-                                confirmButtonColor: "#54c2f0"
-                            })
-                        }
                     }
-                    else {
-                        Swal.fire({
-                            title: t("errors.error"),
-                            text: t("errors.unknown-error"),
-                            icon: "error",
-                            confirmButtonColor: "#54c2f0"
-                        })
-                    }
+                    Swal.fire({
+                        title: t("errors.error"),
+                        text: errorMessage,
+                        icon: "error",
+                        confirmButtonColor: "#54c2f0",
+                        background: isDarkTheme() ? " #333" : "white",
+                    })
+                    this.setState({ isLoading: false })
+
+                    const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+                    swal2.forEach(element => {
+                        element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                    })
+                    const myPasswords = document.querySelector(".my-passwords")
+                    myPasswords.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                    myPasswords.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
+                    myPasswords.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
+
                 })
+
         }
+
     }
 
     extractHostname(url) {
@@ -113,12 +122,12 @@ class PasswordsDashboard extends Component {
     handleAddPassword = () => {
         const { password } = this.state
         if (password) {
-            let addPasswordOverlay = document.querySelector(".add-password-overlay")
+            const addPasswordOverlay = document.querySelector(".add-password-overlay")
             addPasswordOverlay.style.visibility = "visible"
             addPasswordOverlay.style.opacity = 1
         }
         else {
-            let enterPasswordOverlay = document.querySelector(".enter-password-overlay")
+            const enterPasswordOverlay = document.querySelector(".enter-password-overlay")
             enterPasswordOverlay.style.visibility = "visible"
             enterPasswordOverlay.style.opacity = 1
             this.setState({ enterPasswordType: "new" })
@@ -130,18 +139,19 @@ class PasswordsDashboard extends Component {
         const { password } = this.state
         this.setState({ currentCredential: credential })
         if (password) {
-            let editPasswordOverlay = document.querySelector(".edit-password-overlay")
+            const editPasswordOverlay = document.querySelector(".edit-password-overlay")
             editPasswordOverlay.style.visibility = "visible"
             editPasswordOverlay.style.opacity = 1
 
 
         }
         else {
-            let enterPasswordOverlay = document.querySelector(".enter-password-overlay")
+            const enterPasswordOverlay = document.querySelector(".enter-password-overlay")
             enterPasswordOverlay.style.visibility = "visible"
             enterPasswordOverlay.style.opacity = 1
             this.setState({ enterPasswordType: "edit" })
         }
+
 
     }
 
@@ -154,12 +164,13 @@ class PasswordsDashboard extends Component {
     render() {
         const { isLoading, credentials, search, token, password, enterPasswordType, currentCredential } = this.state
         const { t } = this.props
+
         return (
             <>
                 {isLoading && <Loading />}
                 {
                     !isLoading &&
-                    <div className="my-passwords" style={{ color: isDarkTheme() ? "white" : "#121212", backgroundColor: isDarkTheme() ? "#121212" : "white" }}>
+                    <div className="my-passwords" >
                         <DashboardNav token={token} />
 
                         <div className="passwords-content">

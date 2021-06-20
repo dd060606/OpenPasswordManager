@@ -10,10 +10,6 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-#swal2-title {
+#swal2-title,#swal2-content {
   font-family: "Open Sans",sans-serif;
-}
-#swal2-content {
-  font-family: "Open Sans",sans-serif;
-
 }

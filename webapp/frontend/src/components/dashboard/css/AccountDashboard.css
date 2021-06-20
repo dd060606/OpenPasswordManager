@@ -1,8 +1,12 @@
 .my-account {
     display: flex;
     font-family: "Open Sans",sans-serif;
-    color: #1E1E1E;
+    color: var(--text-theme);
+    background-color: var(--bg-theme);
 
+}
+#swal2-title,#swal2-content {
+    color: var(--text-theme);
 }
 .my-account-content {
     display: flex;
@@ -13,7 +17,7 @@
     
 }
 .line {
-    background-color: rgba(0,0,0,0.1);
+    background-color: var(--line-theme);
     height: 1px;
     width: 90%;
 }
@@ -23,9 +27,6 @@
     flex-direction: column;
     width: 100%;
     
-}
-.my-account-content > section > p{
-    margin-bottom: 0px;
 }
 
 .my-account-content > section > button{
@@ -44,9 +45,9 @@
     background-color: #54c2f0;
 }
 .my-account-content > section > .logout-button {
-    background-color: white;
-    color: #1E1E1E;
-    border:#1E1E1E 1px solid
+    background-color: var(--bg-theme);
+    color: var(--text-theme);
+    border:var(--text-theme) 1px solid
 }
 .my-account-content > section > button:hover {
     transition: 0.5s background;

@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     font-family: "Open Sans", sans-serif;
-
+    background-color: var(--bg-nav-theme);
     width: 450px;
     height: 100vh;
     transition: width 0.5s ease-in-out;
@@ -17,6 +17,7 @@
 
 .dashboard-nav > .top-buttons {
     display: flex;
+    color: var(--text-theme);
     justify-content: space-between;
     
 }
@@ -51,6 +52,7 @@
     padding: 15px 0px 15px 0px;
     transition: all 0.5s;
     overflow: hidden;
+    color: var(--text-theme);
 }
 
 
@@ -68,7 +70,7 @@
 }
 .dashboard-nav > .nav-buttons > .current-link {
     background-color: rgba(177,177,177,0.2);
-    color: #555555;
+    color: var(--current-nav-theme);
 }
 .dashboard-nav > .nav-buttons {
     margin-top: 50px;
@@ -96,6 +98,7 @@
     border-radius: 10px;
     transform-origin: 1px;
     transition: all 0.3s linear;
+    background-color: var(--text-theme);
   }
 
 @media all and (max-width: 1280px) {
@@ -116,7 +119,6 @@
         text-align: center;
     }
     .responsive-nav-ul {
-  
         flex-flow: column nowrap;
         margin-top: 0;
         position: fixed;

@@ -152,7 +152,7 @@ class Register extends Component {
             ).then(res => {
                 if (res.data.result === "success") {
                     this.setState({ emailConfirmationEnabled: true })
-                    let interval = setInterval(() => {
+                    const interval = setInterval(() => {
                         axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/email/validated`, { email: email })
                             .then(res => {
                                 if (res.data.value === true) {

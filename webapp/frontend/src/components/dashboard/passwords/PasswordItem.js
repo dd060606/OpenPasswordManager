@@ -2,12 +2,20 @@ import "../css/passwords/PasswordItem.css"
 import Tooltip from "@material-ui/core/Tooltip"
 import { useTranslation } from "react-i18next"
 import "../../../i18n"
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { isDarkTheme } from "../../../utils/themes-utils"
+
 
 const PasswordItem = ({ credential, index, onClick }) => {
 
     const [t] = useTranslation()
+
+    useEffect(() => {
+        const passwordItemBox = document.querySelector(".password-item-box")
+        passwordItemBox.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+        passwordItemBox.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
+
+    })
     return (<div className="password-item-box" >
         <div className="password-item" onClick={event => {
             if (event.currentTarget === event.target) {
@@ -27,20 +35,18 @@ const PasswordItem = ({ credential, index, onClick }) => {
             <div className="password-action">
                 <Tooltip title={t("passwords.browse-website")} placement="top">
 
-                    <a href={credential.url} target="_blank" rel="noreferrer" className="browse-to-website-button"><i className="far fa-external-link" style={{ color: isDarkTheme() ? "white" : "#121212" }} /></a>
+                    <a href={credential.url} target="_blank" rel="noreferrer" className="browse-to-website-button"><i className="far fa-external-link" /></a>
                 </Tooltip>
                 <Tooltip title={t("passwords.edit")} placement="top">
 
-                    <button className="edit-password-button" onClick={() => onClick(credential)}><i className="far fa-edit" style={{ color: isDarkTheme() ? "white" : "#121212" }} /></button>
+                    <button className="edit-password-button" onClick={() => onClick(credential)}><i className="far fa-edit" /></button>
                 </Tooltip>
 
             </div>
 
 
         </div>
-        <div className="password-item-line" style={{
-            backgroundColor: isDarkTheme() ? "white" : "rgba(0,0,0,0.1)"
-        }} />
+        <div className="password-item-line" />
     </div >
 
 

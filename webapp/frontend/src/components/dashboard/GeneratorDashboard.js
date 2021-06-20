@@ -6,6 +6,7 @@ import "../../i18n"
 import Tooltip from "@material-ui/core/Tooltip"
 import Checkbox from "@material-ui/core/Checkbox"
 import Slider from "@material-ui/core/Slider"
+import { isDarkTheme } from "../../utils/themes-utils"
 
 
 
@@ -28,6 +29,11 @@ class GeneratorDashboard extends Component {
 
     componentDidMount() {
         this.generatePassword()
+        const generator = document.querySelector(".generator")
+        generator.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+        generator.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
+        generator.style.setProperty("--bg-box-theme", isDarkTheme() ? "#333" : "white")
+
     }
 
     getRandomNumber(max) {

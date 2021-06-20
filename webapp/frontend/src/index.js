@@ -21,10 +21,10 @@ import SettingsDashboard from './components/dashboard/SettingsDashboard';
 const cookies = new Cookies()
 
 
-
 ReactDOM.render(
 
   <React.StrictMode>
+
     <Router>
       <Switch>
         <Route path="/" exact component={App} />

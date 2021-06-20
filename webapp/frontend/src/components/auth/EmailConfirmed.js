@@ -22,7 +22,7 @@ class EmailConfirmed extends Component {
 
         if (this.props.location.state && this.props.location.state.redirectedAfterLogin) {
             this.setState({ isRedirectedAfterLogin: true, email: this.props.location.state.email })
-            let interval = setInterval(() => {
+            const interval = setInterval(() => {
                 axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/email/validated`, { email: this.props.location.state.email })
                     .then(res => {
                         if (res.data.value === true) {

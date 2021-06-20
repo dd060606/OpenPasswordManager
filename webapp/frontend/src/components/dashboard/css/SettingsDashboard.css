@@ -1,7 +1,8 @@
 .settings {
     display: flex;
     font-family: "Open Sans",sans-serif;
-
+    color: var(--text-theme);
+    background-color: var(--bg-theme);
 }
 .settings-content {
     display: flex;
@@ -12,7 +13,7 @@
     
 }
 .line {
-    background-color: white;
+    background-color: var(--line-theme);
     height: 1px;
     width: 90%;
 }
