@@ -1,13 +1,20 @@
+body > #root> .auth-login {
+    height: 100vh;
+  }
 #nav-logo-login {
     position: absolute;
     left: 15px;
     user-select: none;
     -webkit-user-drag: none;
 }
+#swal2-title,#swal2-content {
+    color: var(--text-theme);
+} 
 .auth-login {
     display: flex;
     flex-direction: row-reverse;
     font-family:  "Open Sans", sans-serif;
+    background-color: var(--bg-theme);
 }
 .welcome-login {
     display: flex;
@@ -15,8 +22,11 @@
     align-items: center;
     flex-direction: column;
     text-align: center;
-    background-color: rgba(198,237,240,0.35);
+    background-color: var(--blue-bg-theme);
     width: 55%;
+}
+.welcome-login > h1, .welcome-login > h3  {
+    color: var(--text-theme)
 }
 .icon {
     user-select: none;
@@ -29,21 +39,20 @@
         cursor: pointer;
         border: 2px #54c2f0 solid;
         border-radius: 5px;
-        background-color: white;
+        background-color: var(--bg-2-theme);
         color:#54c2f0;
         font-family: "Open sans",sans-serif;
         font-size: 20px;
         font-weight: 600;
         padding: 10px ;
-        transition: background 0.5s;
-        transition: color 0.5s;
+        transition: background-color 0.5s, color 0.5s;
+
         width: 250px;
         text-decoration: none;
 }
 .welcome-login > .signup-btn:hover {
-    background-color: rgba(223,223,223,0.5);
-    transition: background 0.5s;
-    transition: color 0.5s;
+    background-color: rgba(223,223,223,0.2);
+    transition: background-color 0.5s, color 0.5s;
 }
 .login-form {
     
@@ -60,6 +69,7 @@
 }
 .login-form > h2 {
     margin-bottom: 25px;
+    color: var(--text-theme)
 }
 
 .login-form > .field {
@@ -71,9 +81,13 @@
 
     width: 350px;
     height: 35px;
-    background-color: rgba(236, 236, 236, 0.8);
+    background-color: var(--field-bg-theme);
     border-radius: 5px;
     
+}
+.login-form > .field > i{
+    color: var(--text-theme)
+
 }
 .login-form > .field > #email-input {
     margin-right: 25px;
@@ -86,9 +100,23 @@
     font-size: 17px;
     background: transparent;
     text-align: center;
+    color: var(--text-theme);
+}
+.login-form > .field > input:-webkit-autofill {
+    border: none;
+    border-radius: .3rem;
+    color: var(--text-theme);
+    background: var(--field-bg-theme);
+    caret-color: var(--text-theme);
+    -webkit-text-fill-color: var(--text-theme);
+    background-clip: text; 
+    box-shadow: 0 0 0 50px var(--field-bg-theme) inset; 
+
+
+    border-radius: 0px;
 }
  .login-form > .no-account {
-    color: black;
+    color: var(--text-theme);
     text-decoration: none;
     white-space: nowrap;
     display: none;
@@ -96,7 +124,7 @@
 
 }
  .login-form > .no-account:hover {
-    text-decoration: underline black;
+    text-decoration: underline var(--text-theme);
 }
 .login-form > .login-btn {
     cursor: pointer;
@@ -107,7 +135,6 @@
     border-radius: 5px;
     background-color: #54c2f0;
     color:white;
-    font-family: "Open sans",sans-serif;
     font-size: 20px;
     font-weight: 600;
     padding: 10px ;
@@ -122,12 +149,12 @@
     margin-left: 10px;
 }
 .login-form > .login-another-account {
-    color: black;
+    color: var(--text-theme);
     font-size: 14px;
     white-space: nowrap;
 }
 .login-form > .login-another-account:hover {
-    text-decoration: underline black;
+    text-decoration: underline var(--text-theme);
     cursor: pointer;
 }
 body > #root > .auth-login > .welcome-login {

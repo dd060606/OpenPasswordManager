@@ -6,6 +6,7 @@ import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import axios from "axios"
 import { deleteEmailCookie, getEmail, isEmailSaved, saveEmail } from "../../utils/auth-utils"
+import { isDarkTheme } from "../../utils/themes-utils"
 
 
 class Login extends Component {
@@ -25,7 +26,15 @@ class Login extends Component {
 
     componentDidMount() {
 
+
         this.setState({ isEmailSaved: isEmailSaved(), email: isEmailSaved() ? getEmail() : "" })
+        const authLogin = document.querySelector(".auth-login")
+        authLogin.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+        authLogin.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
+        authLogin.style.setProperty("--bg-2-theme", isDarkTheme() ? "#333" : "white")
+        authLogin.style.setProperty("--field-bg-theme", isDarkTheme() ? "#333" : "rgba(236, 236, 236, 0.8)")
+        authLogin.style.setProperty("--blue-bg-theme", isDarkTheme() ? "#333" : "rgba(198,237,240,0.35)")
+
     }
 
     //Arrow fx for binding
@@ -49,24 +58,35 @@ class Login extends Component {
                 title: t("errors.error"),
                 text: t("errors.complete-all-fields"),
                 icon: "error",
-                confirmButtonColor: "#54c2f0"
+                confirmButtonColor: "#54c2f0",
+                background: isDarkTheme() ? " #333" : "white"
             }
             ).then(() => {
                 this.setState({ isConnecting: false })
                 return
-            })
 
+            })
+            const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+            swal2.forEach(element => {
+                element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+            })
         }
         else if (!isEmailValid) {
             Swal.fire({
                 title: t("errors.error"),
                 text: t("errors.invalid-email"),
                 icon: "error",
-                confirmButtonColor: "#54c2f0"
+                confirmButtonColor: "#54c2f0",
+                background: isDarkTheme() ? " #333" : "white"
             }
             ).then(() => {
                 this.setState({ isConnecting: false })
                 return
+
+            })
+            const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+            swal2.forEach(element => {
+                element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
             })
 
         }
@@ -75,11 +95,17 @@ class Login extends Component {
                 title: t("errors.error"),
                 text: t("errors.wrong-password"),
                 icon: "error",
-                confirmButtonColor: "#54c2f0"
+                confirmButtonColor: "#54c2f0",
+                background: isDarkTheme() ? " #333" : "white"
             }
             ).then(() => {
                 this.setState({ isConnecting: false })
                 return
+
+            })
+            const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+            swal2.forEach(element => {
+                element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
             })
         }
         else {
@@ -100,21 +126,13 @@ class Login extends Component {
                 }
             })
                 .catch(err => {
+                    let errorMessage = t("errors.unknown-error")
+
                     if (err.response && err.response.data) {
                         if (err.response.data.type === "internal-error") {
-                            Swal.fire({
-                                title: t("errors.error"),
-                                text: t("errors.internal-error"),
-                                icon: "error",
-                                confirmButtonColor: "#54c2f0"
-                            })
+                            errorMessage = t("errors.internal-error")
                         } else if (err.response.data.type === "invalid-credentials") {
-                            Swal.fire({
-                                title: t("errors.error"),
-                                text: t("errors.invalid-credentials"),
-                                icon: "error",
-                                confirmButtonColor: "#54c2f0"
-                            })
+                            errorMessage = t("errors.invalid-credentials")
                         }
                         else if (err.response.data.type === "email-not-verified") {
                             this.props.history.push({
@@ -122,26 +140,21 @@ class Login extends Component {
                                 state: { redirectedAfterLogin: true, email: email }
                             })
                         }
-                        else {
-                            Swal.fire({
-                                title: t("errors.error"),
-                                text: t("errors.unknown-error"),
-                                icon: "error",
-                                confirmButtonColor: "#54c2f0"
-                            })
-                        }
                     }
-                    else {
-                        Swal.fire({
-                            title: t("errors.error"),
-                            text: t("errors.unknown-error"),
-                            icon: "error",
-                            confirmButtonColor: "#54c2f0"
-                        })
+                    Swal.fire({
+                        title: t("errors.error"),
+                        text: errorMessage,
+                        icon: "error",
+                        confirmButtonColor: "#54c2f0",
+                        background: isDarkTheme() ? " #333" : "white"
                     }
-
-                    this.setState({ isConnecting: false })
-
+                    ).then(() => {
+                        this.setState({ isConnecting: false })
+                    })
+                    const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+                    swal2.forEach(element => {
+                        element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                    })
                 })
 
         }
@@ -180,7 +193,7 @@ class Login extends Component {
 
                     <h2>{t("auth.login")}</h2>
                     {!isEmailSaved &&
-                        <div className="field" style={{ border: !isEmailValid ? "1px #F42D0E solid" : emailFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                        <div className="field" style={{ border: !isEmailValid ? "1px #F42D0E solid" : emailFieldFocused ? "1px #54c2f0 solid" : `1px ${isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)"} solid` }}>
                             <i className="fal fa-envelope field-icon"></i>
                             <input type="email" id="email-input" placeholder={t("auth.email")}
                                 onBlur={() => this.setState({ emailFieldFocused: false })}
@@ -195,7 +208,7 @@ class Login extends Component {
 
                     }
 
-                    <div className="field" style={{ border: !isPasswordValid ? "1px #F42D0E solid" : passwordFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                    <div className="field" style={{ border: !isPasswordValid ? "1px #F42D0E solid" : passwordFieldFocused ? "1px #54c2f0 solid" : `1px ${isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)"} solid` }}>
                         <i className="fal fa-key field-icon"></i>
                         <input type={showPassword ? "text" : "password"} id="password-input" placeholder={t("auth.password")}
                             onBlur={() => this.setState({ passwordFieldFocused: false })}

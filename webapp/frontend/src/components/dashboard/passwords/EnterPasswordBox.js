@@ -186,7 +186,7 @@ class EnterPasswordBox extends Component {
 
                     <div className="content">
                         <div className="fields">
-                            <div className="field" style={{ border: passwordFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                            <div className="field" style={{ border: passwordFieldFocused ? "1px #54c2f0 solid" : `1px ${isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)"} solid` }}>
                                 <input type={showPassword ? "text" : "password"} placeholder={t("auth.password")}
                                     onBlur={() => this.setState({ passwordFieldFocused: false })}
                                     onFocus={() => this.setState({ passwordFieldFocused: true })} value={password}

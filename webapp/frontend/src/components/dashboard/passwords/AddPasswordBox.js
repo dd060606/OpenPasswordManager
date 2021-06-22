@@ -200,9 +200,8 @@ class AddPasswordBox extends Component {
     handlePasswordLengthSliderChange = (event, newValue) => {
         const { passwordLength } = this.state
         if (passwordLength !== newValue) {
-
+            this.setState({ passwordLength: newValue })
         }
-        this.setState({ passwordLength: newValue })
 
     }
 
@@ -279,12 +278,14 @@ class AddPasswordBox extends Component {
     }
 
     handleCloseGeneratePasswordBox = event => {
-        const content = document.querySelector(".edit-password-box > .content")
+        const content = document.querySelector(".add-password-box > .content")
         if (event.target !== content) {
             return
         }
         this.setState({ generatePasswordBoxOpened: false })
     }
+
+
     render() {
         const { showPassword, password, isLoading, url, websiteName, username, passwordFieldFocused, websiteFieldFocused, websiteNameFieldFocused, usernameFieldFocused,
             passwordLength, numbersEnabled, lowercasesEnabled, uppercaseEnabled, symbolsEnabled, generatePasswordBoxOpened } = this.state
@@ -296,10 +297,10 @@ class AddPasswordBox extends Component {
 
                     <h2>{t("passwords.add-password")}</h2>
 
-                    <div className="content">
+                    <div className="content" onClick={event => this.handleCloseGeneratePasswordBox(event)}>
                         <div className="fields">
                             <p className="field-name">{t("passwords.website-name")}</p>
-                            <div className="field" style={{ border: websiteNameFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                            <div className="field" style={{ border: websiteNameFieldFocused ? "1px #54c2f0 solid" : `1px ${isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)"} solid` }}>
                                 <input type="text" placeholder={t("passwords.website-name")}
                                     onBlur={() => this.setState({ websiteNameFieldFocused: false })}
                                     onFocus={() => this.setState({ websiteNameFieldFocused: true })} value={websiteName}
@@ -310,7 +311,7 @@ class AddPasswordBox extends Component {
                         </div>
                         <div className="fields">
                             <p className="field-name">{t("passwords.website")}</p>
-                            <div className="field" style={{ border: websiteFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                            <div className="field" style={{ border: websiteFieldFocused ? "1px #54c2f0 solid" : `1px ${isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)"} solid` }}>
                                 <input type="text" placeholder={t("passwords.add-url")}
                                     onBlur={() => this.setState({ websiteFieldFocused: false })}
                                     onFocus={() => this.setState({ websiteFieldFocused: true })} value={url}
@@ -321,7 +322,7 @@ class AddPasswordBox extends Component {
                         </div>
                         <div className="fields">
                             <p className="field-name">{t("passwords.username")}</p>
-                            <div className="field" style={{ border: usernameFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                            <div className="field" style={{ border: usernameFieldFocused ? "1px #54c2f0 solid" : `1px ${isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)"} solid` }}>
                                 <input type="text" placeholder={t("passwords.username")}
                                     onBlur={() => this.setState({ usernameFieldFocused: false })}
                                     onFocus={() => this.setState({ usernameFieldFocused: true })} value={username}
@@ -332,7 +333,7 @@ class AddPasswordBox extends Component {
                         </div>
                         <div className="fields">
                             <p className="field-name">{t("auth.password")}</p>
-                            <div className="field" style={{ border: passwordFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                            <div className="field" style={{ border: passwordFieldFocused ? "1px #54c2f0 solid" : `1px ${isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)"} solid` }}>
 
 
                                 <div className="dropdown">
