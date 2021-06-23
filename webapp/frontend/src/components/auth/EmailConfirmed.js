@@ -6,6 +6,7 @@ import i18n from 'i18next'
 
 import { Link } from "react-router-dom"
 import axios from "axios"
+import { isDarkTheme } from "../../utils/themes-utils"
 
 
 
@@ -19,6 +20,11 @@ class EmailConfirmed extends Component {
 
     componentDidMount() {
         const token = this.props.match.params.token
+
+        const emailConfirmed = document.querySelector(".email-confirmed")
+        emailConfirmed.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+        emailConfirmed.style.setProperty("--bg-theme", isDarkTheme() ? "#333" : "white")
+        emailConfirmed.style.setProperty("--blue-bg-theme", isDarkTheme() ? "#212121" : "rgba(198,237,240,0.35)")
 
         if (this.props.location.state && this.props.location.state.redirectedAfterLogin) {
             this.setState({ isRedirectedAfterLogin: true, email: this.props.location.state.email })

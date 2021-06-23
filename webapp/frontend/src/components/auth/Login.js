@@ -48,65 +48,36 @@ class Login extends Component {
         this.setState({ password: event.target.value, isPasswordValid: event.target.value === "" ? true : passwordRegex.test(event.target.value) })
     }
 
+    openErrorBox(message) {
+        const { t } = this.props
+        Swal.fire({
+            title: t("errors.error"),
+            text: message,
+            icon: "error",
+            confirmButtonColor: "#54c2f0",
+            background: isDarkTheme() ? " #333" : "white"
+        }
+        ).then(() => {
+            this.setState({ isConnecting: false })
+        })
+        const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+        swal2.forEach(element => {
+            element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+        })
+    }
     handleLogin = () => {
         const { t } = this.props
 
         this.setState({ isConnecting: true })
         const { isEmailValid, email, password, isPasswordValid } = this.state
         if (!email || !password) {
-            Swal.fire({
-                title: t("errors.error"),
-                text: t("errors.complete-all-fields"),
-                icon: "error",
-                confirmButtonColor: "#54c2f0",
-                background: isDarkTheme() ? " #333" : "white"
-            }
-            ).then(() => {
-                this.setState({ isConnecting: false })
-                return
-
-            })
-            const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
-            swal2.forEach(element => {
-                element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-            })
+            this.openErrorBox(t("errors.complete-all-fields"))
         }
         else if (!isEmailValid) {
-            Swal.fire({
-                title: t("errors.error"),
-                text: t("errors.invalid-email"),
-                icon: "error",
-                confirmButtonColor: "#54c2f0",
-                background: isDarkTheme() ? " #333" : "white"
-            }
-            ).then(() => {
-                this.setState({ isConnecting: false })
-                return
-
-            })
-            const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
-            swal2.forEach(element => {
-                element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-            })
-
+            this.openErrorBox(t("errors.invalid-email"))
         }
         else if (!isPasswordValid) {
-            Swal.fire({
-                title: t("errors.error"),
-                text: t("errors.wrong-password"),
-                icon: "error",
-                confirmButtonColor: "#54c2f0",
-                background: isDarkTheme() ? " #333" : "white"
-            }
-            ).then(() => {
-                this.setState({ isConnecting: false })
-                return
-
-            })
-            const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
-            swal2.forEach(element => {
-                element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-            })
+            this.openErrorBox(t("errors.wrong-password"))
         }
         else {
 
@@ -126,13 +97,12 @@ class Login extends Component {
                 }
             })
                 .catch(err => {
-                    let errorMessage = t("errors.unknown-error")
-
                     if (err.response && err.response.data) {
                         if (err.response.data.type === "internal-error") {
-                            errorMessage = t("errors.internal-error")
+                            this.openErrorBox(t("errors.internal-error"))
                         } else if (err.response.data.type === "invalid-credentials") {
-                            errorMessage = t("errors.invalid-credentials")
+                            this.openErrorBox(t("errors.invalid-credentials"))
+
                         }
                         else if (err.response.data.type === "email-not-verified") {
                             this.props.history.push({
@@ -140,21 +110,13 @@ class Login extends Component {
                                 state: { redirectedAfterLogin: true, email: email }
                             })
                         }
+                        else {
+                            this.openErrorBox(t("errors.unknown-error"))
+                        }
                     }
-                    Swal.fire({
-                        title: t("errors.error"),
-                        text: errorMessage,
-                        icon: "error",
-                        confirmButtonColor: "#54c2f0",
-                        background: isDarkTheme() ? " #333" : "white"
+                    else {
+                        this.openErrorBox(t("errors.unknown-error"))
                     }
-                    ).then(() => {
-                        this.setState({ isConnecting: false })
-                    })
-                    const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
-                    swal2.forEach(element => {
-                        element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-                    })
                 })
 
         }
@@ -166,9 +128,6 @@ class Login extends Component {
         deleteEmailCookie()
         window.location.reload()
     }
-
-
-
 
     render() {
         const { password, email, emailFieldFocused, passwordFieldFocused, isConnecting, showPassword, isEmailValid, isPasswordValid, isEmailSaved } = this.state

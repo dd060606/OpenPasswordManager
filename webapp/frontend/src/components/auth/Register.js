@@ -7,6 +7,7 @@ import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import i18n from 'i18next'
 import { saveEmail, sendToAuthPage } from "../../utils/auth-utils"
+import { isDarkTheme } from "../../utils/themes-utils"
 
 
 
@@ -31,6 +32,19 @@ class Register extends Component {
         isFirstnameValid: true,
         isLastnameValid: true,
         emailConfirmationEnabled: false
+    }
+
+
+    componentDidMount() {
+
+
+        const authRegister = document.querySelector(".auth-register")
+        authRegister.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+        authRegister.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
+        authRegister.style.setProperty("--bg-2-theme", isDarkTheme() ? "#333" : "white")
+        authRegister.style.setProperty("--field-bg-theme", isDarkTheme() ? "#333" : "rgba(236, 236, 236, 0.8)")
+        authRegister.style.setProperty("--blue-bg-theme", isDarkTheme() ? "#333" : "rgba(198,237,240,0.35)")
+
     }
 
     //Arrow fx for binding
@@ -59,86 +73,61 @@ class Register extends Component {
         this.setState({ confirmPassword: event.target.value })
     }
 
+    openErrorBox(message, isHTMLText = false) {
+        const { t } = this.props
+        if (isHTMLText) {
+            Swal.fire({
+                title: t("errors.error"),
+                html: message,
+                icon: "error",
+                confirmButtonColor: "#54c2f0",
+                background: isDarkTheme() ? " #333" : "white"
+            }
+            ).then(() => {
+                this.setState({ isConnecting: false })
+            })
+        } else {
+            Swal.fire({
+                title: t("errors.error"),
+                text: message,
+                icon: "error",
+                confirmButtonColor: "#54c2f0",
+                background: isDarkTheme() ? " #333" : "white"
+            }
+            ).then(() => {
+                this.setState({ isConnecting: false })
+            })
+        }
 
+        const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+        swal2.forEach(element => {
+            element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+        })
+    }
     handleRegister = () => {
         const { t } = this.props
 
         this.setState({ isConnecting: true })
         const { isFirstnameValid, isLastnameValid, isEmailValid, isPasswordValid, lastname, firstname, email, password, confirmPassword } = this.state
         if (!email || !password || !confirmPassword || !firstname || !lastname) {
-            Swal.fire({
-                title: t("errors.error"),
-                text: t("errors.complete-all-fields"),
-                icon: "error",
-                confirmButtonColor: "#54c2f0"
-            }
-            ).then(() => {
-                this.setState({ isConnecting: false })
-                return
-            })
+            this.openErrorBox(t("errors.complete-all-fields"))
 
         }
         else if (!isEmailValid) {
-            Swal.fire({
-                title: t("errors.error"),
-                text: t("errors.invalid-email"),
-                icon: "error",
-                confirmButtonColor: "#54c2f0"
-            }
-            ).then(() => {
-                this.setState({ isConnecting: false })
-                return
-            })
-
+            this.openErrorBox(t("errors.invalid-email"))
         }
         else if (!isPasswordValid) {
-            Swal.fire({
-                title: t("errors.error"),
-                // eslint-disable-next-line
-                html: '<p>' + t("errors.password-require") + "<br/>" + t("errors.available-password-chars") + "@ $ ! % * _ ? &" + '</p>',
-                icon: "error",
-                confirmButtonColor: "#54c2f0"
-            }
-            ).then(() => {
-                this.setState({ isConnecting: false })
-                return
-            })
+            this.openErrorBox(`<p>${t("errors.password-require")}<br/>${t("errors.available-password-chars")} @ $ ! % * _ ? &" </p>`, true)
+
         }
         else if (!isLastnameValid) {
-            Swal.fire({
-                title: t("errors.error"),
-                text: t("errors.invalid-lastname"),
-                icon: "error",
-                confirmButtonColor: "#54c2f0"
-            }
-            ).then(() => {
-                this.setState({ isConnecting: false })
-                return
-            })
+            this.openErrorBox(t("errors.invalid-lastname"))
         }
         else if (!isFirstnameValid) {
-            Swal.fire({
-                title: t("errors.error"),
-                text: t("errors.invalid-firstname"),
-                icon: "error",
-                confirmButtonColor: "#54c2f0"
-            }
-            ).then(() => {
-                this.setState({ isConnecting: false })
-                return
-            })
+            this.openErrorBox(t("errors.invalid-firstname"))
         }
         else if (password !== confirmPassword) {
-            Swal.fire({
-                title: t("errors.error"),
-                text: t("errors.password-confirmation-not-match"),
-                icon: "error",
-                confirmButtonColor: "#54c2f0"
-            }
-            ).then(() => {
-                this.setState({ isConnecting: false })
-                return
-            })
+            this.openErrorBox(t("errors.password-confirmation-not-match"))
         }
         else {
             axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/signup`,
@@ -190,33 +179,18 @@ class Register extends Component {
                 if (error.response && error.response.data) {
                     if (error.response.data.result === "error") {
                         if (error.response.data.type === "internal-error") {
-                            Swal.fire({
-                                title: t("errors.error"),
-                                text: t("errors.internal-error"),
-                                icon: "error",
-                                confirmButtonColor: "#54c2f0"
-                            }
-                            )
+                            this.openErrorBox(t("errors.internal-error"))
                         }
                         else if (error.response.data.type === "email-already-exists") {
-                            Swal.fire({
-                                title: t("errors.error"),
-                                text: t("errors.email-already-exists"),
-                                icon: "error",
-                                confirmButtonColor: "#54c2f0"
-                            }
-                            )
+                            this.openErrorBox(t("errors.email-already-exists"))
+                        }
+                        else {
+                            this.openErrorBox(t("errors.unknown-error"))
                         }
                     }
                 }
                 else {
-                    Swal.fire({
-                        title: t("errors.error"),
-                        text: t("errors.unknown-error"),
-                        icon: "error",
-                        confirmButtonColor: "#54c2f0"
-                    }
-                    )
+                    this.openErrorBox(t("errors.unknown-error"))
                 }
                 this.setState({ isConnecting: false })
             })
@@ -270,7 +244,7 @@ class Register extends Component {
                     <h2>{t("auth.signup")}</h2>
 
                     <div className="name-fields">
-                        <div className="name-field field" style={{ border: !isFirstnameValid ? "1px #F42D0E solid" : firstnameFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                        <div className="name-field field" style={{ border: !isFirstnameValid ? "1px #F42D0E solid" : firstnameFieldFocused ? "1px #54c2f0 solid" : `1px ${isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)"} solid` }}>
                             <i className="fal fa-id-card-alt field-icon"></i>
                             <input type="text" id="firstname-input" placeholder={t("auth.firstname")}
                                 onBlur={() => this.setState({ firstnameFieldFocused: false })}
@@ -278,7 +252,7 @@ class Register extends Component {
                                 onChange={event => this.handleFirstnameChange(event)} autoCorrect="off" />
 
                         </div>
-                        <div className="name-field field" style={{ border: !isLastnameValid ? "1px #F42D0E solid" : lastnameFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                        <div className="name-field field" style={{ border: !isLastnameValid ? "1px #F42D0E solid" : lastnameFieldFocused ? "1px #54c2f0 solid" : `1px ${isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)"} solid` }}>
                             <i className="fal fa-id-card-alt field-icon"></i>
                             <input type="text" id="lastname-input" placeholder={t("auth.lastname")}
                                 onBlur={() => this.setState({ lastnameFieldFocused: false })}
@@ -287,7 +261,7 @@ class Register extends Component {
 
                         </div>
                     </div>
-                    <div className="field" style={{ border: !isEmailValid ? "1px #F42D0E solid" : emailFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                    <div className="field" style={{ border: !isEmailValid ? "1px #F42D0E solid" : emailFieldFocused ? "1px #54c2f0 solid" : `1px ${isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)"} solid` }}>
                         <i className="fal fa-envelope field-icon"></i>
                         <input type="email" id="email-input" placeholder={t("auth.email")}
                             onBlur={() => this.setState({ emailFieldFocused: false })}
@@ -295,7 +269,7 @@ class Register extends Component {
                             onChange={event => this.handleEmailChange(event)} />
 
                     </div>
-                    <div className="field" style={{ border: !isPasswordValid ? "1px #F42D0E solid" : passwordFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                    <div className="field" style={{ border: !isPasswordValid ? "1px #F42D0E solid" : passwordFieldFocused ? "1px #54c2f0 solid" : `1px ${isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)"} solid` }}>
                         <i className="fal fa-key field-icon"></i>
                         <input type={showPassword ? "text" : "password"} id="password-input" placeholder={t("auth.password")}
                             onBlur={() => this.setState({ passwordFieldFocused: false })}
@@ -305,7 +279,7 @@ class Register extends Component {
                         <i className={`fal ${showPassword ? "fa-eye" : "fa-eye-slash"} fa-lg show-password-btn`} onClick={this.handleShowPassword}></i>
 
                     </div>
-                    <div className="field" style={{ border: confirmPasswordFieldFocused ? "1px #54c2f0 solid" : "1px rgba(236, 236, 236, 0.8) solid" }}>
+                    <div className="field" style={{ border: confirmPasswordFieldFocused ? "1px #54c2f0 solid" : `1px ${isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)"} solid` }}>
                         <i className="fal fa-key field-icon"></i>
                         <input type={showPassword ? "text" : "password"} id="confirm-password-input" placeholder={t("auth.confirm-password")}
                             onBlur={() => this.setState({ confirmPasswordFieldFocused: false })}
@@ -328,7 +302,7 @@ class Register extends Component {
                     <form className="register-form">
                         <img src={`${process.env.PUBLIC_URL}/assets/images/logo.png`} alt="nav-logo-reg-responsive" id="nav-logo-reg-responsive" className="icon" width={120} height={110} />
                         <h2>{t("auth.signup")}</h2>
-                        <strong>{email}</strong>
+                        <p className="email"><strong>{email}</strong></p>
                         <p className="confirmation-email-sent">
                             {t("auth.confirm-email-to-continue")}
                         </p>

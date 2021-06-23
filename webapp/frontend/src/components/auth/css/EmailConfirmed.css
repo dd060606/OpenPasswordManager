@@ -1,3 +1,8 @@
+body > #root > .email-confirmed {
+    height: 100vh;
+    background-color: var(--blue-bg-theme);
+}
+
 .email-confirmed {
     display: flex;
     justify-content: center;
@@ -7,7 +12,7 @@
 }
 .email-confirmed > .box {
     display: flex;
-    background-color: white;
+    background-color: var(--bg-theme);
     border-radius: 15px;
     justify-content: center;
     flex-direction: column;
@@ -19,29 +24,35 @@
     box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.2);
     
 }
-.email-confirmed > .box> .resend-email {
+.email-confirmed  h2, .email-confirmed p {
+    color: var(--text-theme)
+}
+.email-confirmed  .resend-email {
     border: none;
     background: transparent;
     outline: none;
     color: #045CF0;
     font-size: 15px;
 }
-.email-confirmed > .box> .resend-email:hover {
+.email-confirmed .resend-email:hover {
     cursor: pointer;
 }
-.email-confirmed > .box> .resend-email:disabled {
+.email-confirmed .resend-email:disabled {
     color: #B3B3B3;
 }
-.email-confirmed > .box > .icon { 
+.email-confirmed  .resend-email:disabled:hover  {
+    cursor: not-allowed;
+}
+.email-confirmed  .icon { 
     user-select: none;
     -webkit-user-drag: none;
 }
 
-.email-confirmed > .box > .continue-btn,.email-confirmed > .box >.login-btn {
+.email-confirmed  .continue-btn,.email-confirmed .login-btn {
     cursor: pointer;
     border: 2px #54c2f0 solid;
     border-radius: 5px;
-    background-color: white;
+    background-color: var(--bg-theme);
     color:#54c2f0;
     font-size: 20px;
     font-weight: 600;
@@ -55,13 +66,9 @@
 }
 
 
-.email-confirmed > .box > .continue-btn:hover,.email-confirmed > .box >.login-btn:hover { 
-    background-color: rgba(223,223,223,0.5);
+.email-confirmed .continue-btn:hover,.email-confirmed .login-btn:hover { 
+    background-color: rgba(223,223,223,0.2);
     transition: background-color 0.2s;
-}
-body > #root > .email-confirmed {
-    height: 100vh;
-    background-color: rgba(198,237,240,0.35);
 }
 
 @media all and (max-width: 519px) {
@@ -74,7 +81,7 @@ body > #root > .email-confirmed {
     .email-confirmed > .box > p{
         font-size: 14px;
     }
-    .email-confirmed > .box > .continue-btn,.email-confirmed > .box >.login-btn {
+    .email-confirmed .continue-btn,.email-confirmed .login-btn {
         width: 60%;
     }
 }

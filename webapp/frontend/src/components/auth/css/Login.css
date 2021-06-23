@@ -111,7 +111,7 @@ body > #root> .auth-login {
     -webkit-text-fill-color: var(--text-theme);
     background-clip: text; 
     box-shadow: 0 0 0 50px var(--field-bg-theme) inset; 
-
+    max-height: 33px;
 
     border-radius: 0px;
 }
@@ -157,10 +157,10 @@ body > #root> .auth-login {
     text-decoration: underline var(--text-theme);
     cursor: pointer;
 }
-body > #root > .auth-login > .welcome-login {
-    height: 100vh;
-  }
 
+  .login-form > .email-text {
+    color: var(--text-theme)
+  }
   @media all and (max-width: 1080px) {
     .welcome-login {
         display: none;
