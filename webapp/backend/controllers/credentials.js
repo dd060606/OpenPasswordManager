@@ -1,5 +1,6 @@
 require('dotenv').config()
 const db = require("../utils/database").database
+const logger = require("../utils/logger")
 
 
 exports.add = (req, res, next) => {
@@ -12,6 +13,7 @@ exports.add = (req, res, next) => {
             if (err) {
                 return res.status(500).json(getJsonForInternalError())
             }
+            logger.info(`${req.headers['x-forwarded-for'] || req.connection.remoteAddress} created new credentials : ${req.body.name} (${req.userId})`)
             return res.status(201).json({
                 result: "success",
                 type: "credentials-successfully-created",
@@ -33,6 +35,8 @@ exports.edit = (req, res, next) => {
             if (err) {
                 return res.status(500).json(getJsonForInternalError())
             }
+            logger.info(`${req.headers['x-forwarded-for'] || req.connection.remoteAddress} modified credentials : ${req.body.name} (${req.userId})`)
+
             return res.status(200).json({
                 result: "success",
                 type: "credentials-successfully-modified",
@@ -53,6 +57,8 @@ exports.delete = (req, res, next) => {
             if (err) {
                 return res.status(500).json(getJsonForInternalError())
             }
+            logger.info(`${req.headers['x-forwarded-for'] || req.connection.remoteAddress} deleted credentials : ${req.body.name} (${req.userId})`)
+
             return res.status(200).json({
                 result: "success",
                 type: "credentials-successfully-deleted",

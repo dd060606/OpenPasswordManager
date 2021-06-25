@@ -86,7 +86,7 @@ class AccountDashboard extends Component {
 
     render() {
         const { t } = this.props
-        const { email, isLoading, lastname, firstname } = this.state
+        const { email, isLoading, lastname, firstname, token } = this.state
         return (
 
             <>
@@ -120,7 +120,7 @@ class AccountDashboard extends Component {
 
                             </section>
                         </div>
-                        <ChangePasswordBox />
+                        <ChangePasswordBox token={token} />
 
                     </div>
 

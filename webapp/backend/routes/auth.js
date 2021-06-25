@@ -7,6 +7,7 @@ const auth = require("../middleware/auth")
 
 router.post("/signup", authCtrl.signup)
 router.post("/login", authCtrl.login)
+router.post("/change-password/", auth, authCtrl.changePassword)
 router.post("/email/resend", emailCtrl.resendEmail)
 router.put("/email/confirmation/", emailCtrl.emailConfirmation)
 router.post("/email/validated/", emailCtrl.isEmailConfirmed)
