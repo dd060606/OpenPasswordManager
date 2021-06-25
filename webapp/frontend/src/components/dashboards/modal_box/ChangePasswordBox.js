@@ -5,6 +5,7 @@ import "../../../i18n"
 import { Component } from "react"
 import { withRouter } from "react-router-dom"
 import { isDarkTheme } from "../../../utils/themes-utils"
+import Swal from "sweetalert2"
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*#?&_]{8,}$/
 
@@ -39,12 +40,46 @@ class EnterPasswordBox extends Component {
         changePassword.style.setProperty("--field-bg-theme", isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)")
     }
 
+
+
     closeBox() {
         const changePasswordOverlay = document.querySelector(".change-password-overlay")
         changePasswordOverlay.style.visibility = "hidden"
         changePasswordOverlay.style.opacity = 0
         setTimeout(() => this.setState(this.baseState), 100)
     }
+    openErrorBox(message, isHTMLText = false) {
+        const { t } = this.props
+        if (isHTMLText) {
+            Swal.fire({
+                title: t("errors.error"),
+                html: message,
+                icon: "error",
+                confirmButtonColor: "#54c2f0",
+                background: isDarkTheme() ? " #333" : "white"
+            }
+            ).then(() => {
+                this.setState({ isLoading: false })
+            })
+        } else {
+            Swal.fire({
+                title: t("errors.error"),
+                text: message,
+                icon: "error",
+                confirmButtonColor: "#54c2f0",
+                background: isDarkTheme() ? " #333" : "white"
+            }
+            ).then(() => {
+                this.setState({ isLoading: false })
+            })
+        }
+
+        const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+        swal2.forEach(element => {
+            element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+        })
+    }
+
     //Arrow fx for binding
     handleAddPasswordBoxClosed = event => {
         const changePasswordBox = document.querySelector(".change-password-overlay")
@@ -62,7 +97,21 @@ class EnterPasswordBox extends Component {
 
 
     handleChangePassword = () => {
+        const { newPassword, currentPassword, confirmNewPassword } = this.state
+        const { t } = this.props
         this.setState({ isLoading: true })
+
+        if (!newPassword || !currentPassword || !confirmNewPassword) {
+            this.openErrorBox(t("errors.complete-all-fields"))
+        }
+        else if (!passwordRegex.test(newPassword) || !passwordRegex.test(currentPassword) || !passwordRegex.test(confirmNewPassword)) {
+            this.openErrorBox(`<p>${t("errors.password-require")}<br/>${t("errors.available-password-chars")} @ $ ! % * _ ? &" </p>`, true)
+        }
+        else if (newPassword !== confirmNewPassword) {
+            this.openErrorBox(t("errors.new-password-confirmation-not-match"))
+        }
+
+
     }
     handleCurrentPasswordChange = event => {
         this.setState({ currentPassword: event.target.value, isPasswordValid: event.target.value === "" ? true : passwordRegex.test(event.target.value) })

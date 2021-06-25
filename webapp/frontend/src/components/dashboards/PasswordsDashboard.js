@@ -10,7 +10,7 @@ import { readToken, sendToAuthPage } from "../../utils/auth-utils"
 import axios from "axios"
 import Swal from "sweetalert2"
 import AddPasswordBox from "./modal_box/AddPasswordBox"
-import EnterPasswordBox from "./modal_box/EnterPasswordBox"
+import EnterPasswordBox from "./modal_box/ConfirmPasswordBox"
 import EditPasswordBox from "./modal_box/EditPasswordBox"
 import { getSavedTheme, isDarkTheme } from "../../utils/themes-utils"
 
@@ -128,9 +128,9 @@ class PasswordsDashboard extends Component {
             addPasswordOverlay.style.opacity = 1
         }
         else {
-            const enterPasswordOverlay = document.querySelector(".enter-password-overlay")
-            enterPasswordOverlay.style.visibility = "visible"
-            enterPasswordOverlay.style.opacity = 1
+            const confirmPasswordOverlay = document.querySelector(".confirm-password-overlay")
+            confirmPasswordOverlay.style.visibility = "visible"
+            confirmPasswordOverlay.style.opacity = 1
             this.setState({ enterPasswordType: "new" })
         }
 
@@ -145,20 +145,14 @@ class PasswordsDashboard extends Component {
             editPasswordOverlay.style.opacity = 1
         }
         else {
-            const enterPasswordOverlay = document.querySelector(".enter-password-overlay")
-            enterPasswordOverlay.style.visibility = "visible"
-            enterPasswordOverlay.style.opacity = 1
+            const confirmPasswordOverlay = document.querySelector(".confirm-password-overlay")
+            confirmPasswordOverlay.style.visibility = "visible"
+            confirmPasswordOverlay.style.opacity = 1
             this.setState({ enterPasswordType: "edit" })
         }
 
 
     }
-
-
-
-
-
-
 
     render() {
         const { isLoading, credentials, search, token, password, enterPasswordType, currentCredential } = this.state

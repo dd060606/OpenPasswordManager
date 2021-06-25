@@ -1,5 +1,5 @@
 
-import "../../css/dashboards/modal_box/EnterPasswordBox.css"
+import "../../css/dashboards/modal_box/ConfirmPasswordBox.css"
 import { withTranslation } from "react-i18next"
 import "../../../i18n"
 import { Component } from "react"
@@ -25,31 +25,47 @@ class EnterPasswordBox extends Component {
         this.baseState = this.state
     }
     componentDidMount() {
-        const enterPassword = document.querySelector(".enter-password-box")
-        enterPassword.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-        enterPassword.style.setProperty("--bg-theme", isDarkTheme() ? "#333" : "white")
-        enterPassword.style.setProperty("--field-bg-theme", isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)")
+        const confirmPassword = document.querySelector(".confirm-password-box")
+        confirmPassword.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+        confirmPassword.style.setProperty("--bg-theme", isDarkTheme() ? "#333" : "white")
+        confirmPassword.style.setProperty("--field-bg-theme", isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)")
     }
-
+    openErrorBox(message) {
+        const { t } = this.props
+        Swal.fire({
+            title: t("errors.error"),
+            text: message,
+            icon: "error",
+            confirmButtonColor: "#54c2f0",
+            background: isDarkTheme() ? " #333" : "white"
+        }
+        ).then(() => {
+            this.setState({ isLoading: false })
+        })
+        const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+        swal2.forEach(element => {
+            element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+        })
+    }
     closeBox() {
-        const enterPasswordOverlay = document.querySelector(".enter-password-overlay")
-        enterPasswordOverlay.style.visibility = "hidden"
-        enterPasswordOverlay.style.opacity = 0
+        const confirmPasswordOverlay = document.querySelector(".confirm-password-overlay")
+        confirmPasswordOverlay.style.visibility = "hidden"
+        confirmPasswordOverlay.style.opacity = 0
         setTimeout(() => this.setState(this.baseState), 100)
     }
     //Arrow fx for binding
     handleAddPasswordBoxClosed = event => {
 
 
-        const enterPasswordBox = document.querySelector(".enter-password-overlay")
-        const closePasswordBoxButton = document.querySelector(".enter-password-box > .close")
-        const cancelButton = document.querySelector(".enter-password-box .cancel-button")
+        const confirmPasswordBox = document.querySelector(".confirm-password-overlay")
+        const closePasswordBoxButton = document.querySelector(".confirm-password-box > .close")
+        const cancelButton = document.querySelector(".confirm-password-box .cancel-button")
 
         if (event.target === closePasswordBoxButton || event.target === cancelButton) {
             this.closeBox()
         }
 
-        else if (event.target !== enterPasswordBox) {
+        else if (event.target !== confirmPasswordBox) {
             return
         }
         this.closeBox()
@@ -67,44 +83,13 @@ class EnterPasswordBox extends Component {
             this.setState({ isLoading: true })
 
             if (!password) {
-                Swal.fire({
-                    title: t("errors.error"),
-                    text: t("errors.complete-all-fields"),
-                    icon: "error",
-                    confirmButtonColor: "#54c2f0",
-                    background: isDarkTheme() ? " #333" : "white"
-
-                }
-                ).then(() => {
-                    this.setState({ isLoading: false })
-                })
-                const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
-                swal2.forEach(element => {
-                    element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-                })
+                this.openErrorBox(t("errors.complete-all-fields"))
                 return
-
             }
             if (!passwordRegex.test(password)) {
-                Swal.fire({
-                    title: t("errors.error"),
-                    text: t("errors.wrong-password"),
-                    icon: "error",
-                    confirmButtonColor: "#54c2f0",
-                    background: isDarkTheme() ? " #333" : "white"
-
-                }
-                ).then(() => {
-                    this.setState({ isLoading: false })
-
-                })
-                const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
-                swal2.forEach(element => {
-                    element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-                })
+                this.openErrorBox(t("errors.wrong-password"))
                 return
             }
-
             const token = readToken(this.props)
             if (token) {
                 axios.get(`${process.env.REACT_APP_SERVER_URL}/api/auth/info`, { headers: { "Authorization": `Bearer ${token}` } })
@@ -143,23 +128,8 @@ class EnterPasswordBox extends Component {
                                         errorMessage = t("errors.invalid-credentials")
                                     }
                                 }
-                                Swal.fire({
-                                    title: t("errors.error"),
-                                    text: errorMessage,
-                                    icon: "error",
-                                    confirmButtonColor: "#54c2f0",
-                                    background: isDarkTheme() ? " #333" : "white"
-                                }
-                                ).then(() => {
-                                    this.setState({ isLoading: false })
-                                })
-                                const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
-                                swal2.forEach(element => {
-                                    element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-                                })
+                                this.openErrorBox(errorMessage)
                             })
-
-
                     })
                     .catch(err => {
                         sendToAuthPage(this.props)
@@ -178,8 +148,8 @@ class EnterPasswordBox extends Component {
         const { showPassword, password, isLoading, passwordFieldFocused } = this.state
         const { t } = this.props
         return (
-            <div className="enter-password-overlay" onClick={event => this.handleAddPasswordBoxClosed(event)} >
-                <div className="enter-password-box">
+            <div className="confirm-password-overlay" onClick={event => this.handleAddPasswordBoxClosed(event)} >
+                <div className="confirm-password-box">
                     <button className="close">&times;</button>
 
                     <h2>{t("passwords.confirm-password")}</h2>

@@ -47,6 +47,24 @@ class AddPasswordBox extends Component {
         addPassword.style.setProperty("--field-bg-theme", isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)")
         addPassword.style.setProperty("--bg-dropdown-theme", isDarkTheme() ? "#212121" : "white")
     }
+
+    openErrorBox(message) {
+        const { t } = this.props
+        Swal.fire({
+            title: t("errors.error"),
+            text: message,
+            icon: "error",
+            confirmButtonColor: "#54c2f0",
+            background: isDarkTheme() ? " #333" : "white"
+        }
+        ).then(() => {
+            this.setState({ isLoading: false })
+        })
+        const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+        swal2.forEach(element => {
+            element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+        })
+    }
     //Arrow fx for binding
     handleAddPasswordBoxClosed = event => {
         const addPasswordBox = document.querySelector(".add-password-overlay")
@@ -55,9 +73,7 @@ class AddPasswordBox extends Component {
 
         if (event.target === closePasswordBoxButton || event.target === cancelButton) {
             this.closeBox()
-
         }
-
         else if (event.target !== addPasswordBox) {
             return
         }
@@ -93,20 +109,7 @@ class AddPasswordBox extends Component {
                         errorMessage = t("errors.internal-error")
                     }
                 }
-                Swal.fire({
-                    title: t("errors.error"),
-                    text: errorMessage,
-                    icon: "error",
-                    confirmButtonColor: "#54c2f0",
-                    background: isDarkTheme() ? " #333" : "white"
-                }
-                ).then(() => {
-                    this.setState({ isLoading: false })
-                })
-                const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
-                swal2.forEach(element => {
-                    element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-                })
+                this.openErrorBox(errorMessage)
             })
     }
     extractHostname(url) {
@@ -143,18 +146,7 @@ class AddPasswordBox extends Component {
         const { t } = this.props
 
         if (!websiteName) {
-            Swal.fire({
-                title: t("errors.error"),
-                text: t("errors.enter-website-name"),
-                icon: "error",
-                confirmButtonColor: "#54c2f0",
-                background: isDarkTheme() ? " #333" : "white"
-            }
-            )
-            const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
-            swal2.forEach(element => {
-                element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-            })
+            this.openErrorBox(t("errors.enter-website-name"))
             return
         }
         this.setState({ isLoading: true })
@@ -169,7 +161,6 @@ class AddPasswordBox extends Component {
                 this.setState({ isLoading: false })
                 this.closeBox()
                 this.reloadCredentials()
-
             })
             .catch(err => {
                 let errorMessage = t("errors.unknown-error")
@@ -178,23 +169,10 @@ class AddPasswordBox extends Component {
                         errorMessage = t("errors.internal-error")
                     } else if (err.response.data.type === "invalid-token") {
                         sendToAuthPage(this.props)
+                        return
                     }
                 }
-                Swal.fire({
-                    title: t("errors.error"),
-                    text: errorMessage,
-                    icon: "error",
-                    confirmButtonColor: "#54c2f0",
-                    background: isDarkTheme() ? " #333" : "white"
-                }
-                ).then(() => {
-                    this.setState({ isLoading: false })
-                })
-                const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
-                swal2.forEach(element => {
-                    element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-                })
-
+                this.openErrorBox(errorMessage)
             })
     }
     handlePasswordLengthSliderChange = (event, newValue) => {

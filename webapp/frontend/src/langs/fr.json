@@ -12,6 +12,7 @@
     "password-require": "Le mot de passe requiert au minimum un chiffre, une lettre majuscule, une lettre minuscule et au moins 8 caractères !",
     "available-password-chars": "Charactères spéciaux autorisés : ",
     "password-confirmation-not-match": "Vos mots de passe ne correspondent pas !",
+    "new-password-confirmation-not-match": "La confirmation du nouveau mot de passe ne correspond pas !",
     "email-already-exists": "Adresse e-mail déjà existante !",
     "check-your-network-connection": "Merci de vérifier votre connexion Internet puis réessayer.",
     "account-confirmation-failed": "Erreur: Le lien de confirmation a expiré ou vous utilisez un compte invalide !",
