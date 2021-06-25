@@ -1,5 +1,5 @@
 import { Component } from "react"
-import "./css/Register.css"
+import "../css/auth/Register.css"
 import Swal from 'sweetalert2'
 import { Link } from "react-router-dom"
 import axios from "axios"
@@ -54,7 +54,7 @@ class Register extends Component {
         this.setState({ email: event.target.value, isEmailValid: event.target.value === "" ? true : emailRegex.test(event.target.value) })
     }
     handlePasswordChange = event => {
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*#?&]{8,}$/
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*#?&_]{8,}$/
 
         this.setState({ password: event.target.value, isPasswordValid: event.target.value === "" ? true : passwordRegex.test(event.target.value) })
     }

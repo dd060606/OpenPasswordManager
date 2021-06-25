@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-import Error404 from './components/errors/Error404'
+import Error404 from './components/Error404'
 import Login from "./components/auth/Login"
 import Register from "./components/auth/Register"
 import EmailConfirmed from "./components/auth/EmailConfirmed"
@@ -11,10 +11,10 @@ import App from "./components/App"
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import Cookies from 'universal-cookie'
-import PasswordsDashboard from './components/dashboard/PasswordsDashboard'
-import AccountDashboard from "./components/dashboard/AccountDashboard"
-import GeneratorDashboard from './components/dashboard/GeneratorDashboard';
-import SettingsDashboard from './components/dashboard/SettingsDashboard';
+import PasswordsDashboard from './components/dashboards/PasswordsDashboard'
+import AccountDashboard from "./components/dashboards/AccountDashboard"
+import GeneratorDashboard from './components/dashboards/GeneratorDashboard';
+import SettingsDashboard from './components/dashboards/SettingsDashboard';
 
 
 

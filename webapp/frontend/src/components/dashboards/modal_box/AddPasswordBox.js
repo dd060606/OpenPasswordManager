@@ -1,5 +1,5 @@
 
-import "../css/passwords/AddPasswordBox.css"
+import "../../css/dashboards/modal_box/AddPasswordBox.css"
 import { withTranslation } from "react-i18next"
 import "../../../i18n"
 import { Component } from "react"
@@ -248,7 +248,25 @@ class AddPasswordBox extends Component {
 
         while (generatedPassword.length !== passwordLength) {
             const randomResult = this.getRandomNumber(4)
-
+            if (generatedPassword.length === passwordLength - 1) {
+                const containLowercase = /^(?=.*[a-z])[a-zA-Z\d@$!%*#?&_]{8,}$/
+                const containUppercase = /^(?=.*[A-Z])[a-zA-Z\d@$!%*#?&_]{8,}$/
+                const containSpecialChar = /^(?=.*[$!%*#?&_])[a-zA-Z\d@$!%*#?&_]{8,}$/
+                const containNumber = /^(?=.*\d)[a-zA-Z\d@$!%*#?&_]{8,}$/
+                if (!containLowercase.test(generatedPassword) && lowercasesEnabled) {
+                    generatedPassword += letters[this.getRandomNumber(letters.length)]
+                }
+                else if (!containUppercase.test(generatedPassword) && uppercaseEnabled) {
+                    generatedPassword += letters[this.getRandomNumber(letters.length)].toUpperCase()
+                }
+                else if (!containSpecialChar.test(generatedPassword) && symbolsEnabled) {
+                    generatedPassword += specialsChars[this.getRandomNumber(specialsChars.length)]
+                }
+                else if (!containNumber.test(generatedPassword) && numbersEnabled) {
+                    generatedPassword += numbers[this.getRandomNumber(numbers.length)]
+                }
+                break
+            }
             if (randomResult === 0) {
                 if (symbolsEnabled) {
                     generatedPassword += specialsChars[this.getRandomNumber(specialsChars.length)]

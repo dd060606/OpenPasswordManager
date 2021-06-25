@@ -1,17 +1,17 @@
 import { Component } from "react"
 import React from "react"
-import "./css/PasswordsDashboard.css"
+import "../css/dashboards/PasswordsDashboard.css"
 import DashboardNav from "./DashboardNav"
 import Loading from "../Loading"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
-import PasswordItem from "./passwords/PasswordItem"
+import PasswordItem from "./PasswordItem"
 import { readToken, sendToAuthPage } from "../../utils/auth-utils"
 import axios from "axios"
 import Swal from "sweetalert2"
-import AddPasswordBox from "./passwords/AddPasswordBox"
-import EnterPasswordBox from "./passwords/EnterPasswordBox"
-import EditPasswordBox from "./passwords/EditPasswordBox"
+import AddPasswordBox from "./modal_box/AddPasswordBox"
+import EnterPasswordBox from "./modal_box/EnterPasswordBox"
+import EditPasswordBox from "./modal_box/EditPasswordBox"
 import { getSavedTheme, isDarkTheme } from "../../utils/themes-utils"
 
 
@@ -63,6 +63,7 @@ class PasswordsDashboard extends Component {
                             errorMessage = t("errors.internal-error")
                         } else if (err.response.data.type === "invalid-token") {
                             sendToAuthPage(this.props)
+                            return
                         }
                     }
                     Swal.fire({
@@ -142,8 +143,6 @@ class PasswordsDashboard extends Component {
             const editPasswordOverlay = document.querySelector(".edit-password-overlay")
             editPasswordOverlay.style.visibility = "visible"
             editPasswordOverlay.style.opacity = 1
-
-
         }
         else {
             const enterPasswordOverlay = document.querySelector(".enter-password-overlay")

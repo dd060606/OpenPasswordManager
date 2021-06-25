@@ -1,9 +1,9 @@
-import "../css/passwords/PasswordItem.css"
+import "../css/dashboards/PasswordItem.css"
 import Tooltip from "@material-ui/core/Tooltip"
 import { useTranslation } from "react-i18next"
-import "../../../i18n"
+import "../../i18n"
 import React, { useEffect } from "react"
-import { isDarkTheme } from "../../../utils/themes-utils"
+import { isDarkTheme } from "../../utils/themes-utils"
 
 
 const PasswordItem = ({ credential, index, onClick }) => {

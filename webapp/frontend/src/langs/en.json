@@ -44,12 +44,12 @@
     "change-password": "Change password",
     "logout": "Logout",
     "want-to-logout": "Are you sure you want to logout?",
-    "old-password": "Old password",
-    "new-password": "New password",
-    "confirm-new-password": "Confirm new password",
     "username": "Username",
     "firstname": "Firstname",
-    "lastname": "Lastname"
+    "lastname": "Lastname",
+    "current-password": "Current password",
+    "new-password": "New password",
+    "confirm-new-password": "Confirm new password"
   },
   "generator": {
     "password-generator": "Password generator",

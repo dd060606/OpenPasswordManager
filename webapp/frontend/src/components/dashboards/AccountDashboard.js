@@ -1,6 +1,6 @@
 import { Component } from "react"
 import DashboardNav from "./DashboardNav"
-import "./css/AccountDashboard.css"
+import "../css/dashboards/AccountDashboard.css"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import Loading from "../Loading"
@@ -8,6 +8,7 @@ import axios from "axios"
 import { deleteEmailCookie, isEmailSaved, readToken, sendToAuthPage } from "../../utils/auth-utils"
 import Swal from "sweetalert2"
 import { isDarkTheme } from "../../utils/themes-utils"
+import ChangePasswordBox from "./modal_box/ChangePasswordBox"
 
 class AccountDashboard extends Component {
 
@@ -78,7 +79,9 @@ class AccountDashboard extends Component {
     }
 
     handleChangePasswordClick = () => {
-
+        const changePasswordOverlay = document.querySelector(".change-password-overlay")
+        changePasswordOverlay.style.visibility = "visible"
+        changePasswordOverlay.style.opacity = 1
     }
 
     render() {
@@ -110,12 +113,14 @@ class AccountDashboard extends Component {
                                 <h3>{t("security")}</h3>
 
                                 <p></p>
+
                                 <button className="change-password-button" onClick={this.handleChangePasswordClick}>{t("account.change-password")}</button>
                                 <br />
                                 <button className="logout-button" onClick={this.handleLogoutClick}>{t("account.logout")}</button>
 
                             </section>
                         </div>
+                        <ChangePasswordBox />
 
                     </div>
 

@@ -1,5 +1,5 @@
 import { Component } from "react"
-import "./css/EmailConfirmed.css"
+import "../css/auth/EmailConfirmed.css"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import i18n from 'i18next'

@@ -1,6 +1,6 @@
 import { Component } from "react"
 import DashboardNav from "./DashboardNav"
-import "./css/SettingsDashboard.css"
+import "../css/dashboards/SettingsDashboard.css"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import RadioGroup from '@material-ui/core/RadioGroup'
@@ -73,16 +73,6 @@ class SettingsDashboard extends Component {
 
                             </section>
                             <span className="line" />
-
-                            <section>
-                                <h3>{t("settings.database")}</h3>
-
-                            </section>
-
-
-
-
-
 
                         </div>
 

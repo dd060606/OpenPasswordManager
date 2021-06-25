@@ -1,7 +1,7 @@
 import './css/Error404.css';
 import { Component } from "react"
 import { withTranslation } from 'react-i18next';
-import "../../i18n"
+import "../i18n"
 
 class Error404 extends Component {
 

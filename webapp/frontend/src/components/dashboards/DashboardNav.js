@@ -1,5 +1,5 @@
 import { Component } from "react"
-import "./css/DashboardNav.css"
+import "../css/dashboards/DashboardNav.css"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import { withRouter } from "react-router"

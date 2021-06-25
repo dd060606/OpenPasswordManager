@@ -1,5 +1,5 @@
 
-import "../css/passwords/EnterPasswordBox.css"
+import "../../css/dashboards/modal_box/EnterPasswordBox.css"
 import { withTranslation } from "react-i18next"
 import "../../../i18n"
 import { Component } from "react"
