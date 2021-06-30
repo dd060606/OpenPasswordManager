@@ -2,15 +2,20 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const path = require("path")
 const cors = require("cors")
+const fs = require('fs')
 
 const authRoutes = require("./routes/auth")
 const credentialsRoutes = require("./routes/credentials")
+const logger = require("./utils/logger")
 
 const authUtils = require("./utils/database")
 
 const app = express()
 
+
 authUtils.initDatabase()
+logger.initLogger()
+
 
 app.use(cors())
 app.use((req, res, next) => {

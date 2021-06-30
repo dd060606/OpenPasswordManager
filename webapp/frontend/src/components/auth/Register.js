@@ -9,6 +9,7 @@ import i18n from 'i18next'
 import { saveEmail, sendToAuthPage } from "../../utils/auth-utils"
 import { isDarkTheme } from "../../utils/themes-utils"
 
+const lettersRegex = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/
 
 
 class Register extends Component {
@@ -59,12 +60,10 @@ class Register extends Component {
         this.setState({ password: event.target.value, isPasswordValid: event.target.value === "" ? true : passwordRegex.test(event.target.value) })
     }
     handleFirstnameChange = event => {
-        const lettersRegex = /^[A-Za-z]+$/
         this.setState({ firstname: event.target.value, isFirstnameValid: event.target.value === "" ? true : lettersRegex.test(event.target.value) })
 
     }
     handleLastnameChange = event => {
-        const lettersRegex = /^[A-Za-z]+$/
         this.setState({ lastname: event.target.value, isLastnameValid: event.target.value === "" ? true : lettersRegex.test(event.target.value) })
 
     }
