@@ -80,6 +80,7 @@ You need to install NodeJS and NPM and you also need to have a MySQL database
 ## To do
   - A desktop app with Electron
   - A react native app
+  - Credentials sorting system
 
 ## License
 

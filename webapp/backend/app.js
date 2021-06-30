@@ -1,7 +1,7 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const path = require("path")
-
+const cors = require("cors")
 
 const authRoutes = require("./routes/auth")
 const credentialsRoutes = require("./routes/credentials")
@@ -12,6 +12,7 @@ const app = express()
 
 authUtils.initDatabase()
 
+app.use(cors())
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization')
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json())
+
 
 app.use("/api/auth", authRoutes)
 app.use("/api/credentials", credentialsRoutes)
