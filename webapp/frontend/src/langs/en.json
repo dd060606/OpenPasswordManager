@@ -86,7 +86,9 @@
     "username": "Username",
     "add-url": "Add an URL",
     "confirm-password": "Confirm password",
-    "delete-password": "Delete password?"
+    "delete-password": "Delete password?",
+    "sort-by": "Sort by",
+    "creation-date": "Creation date"
   },
   "welcome-on": "Welcome on",
   "continue": "Continue",

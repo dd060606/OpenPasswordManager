@@ -86,7 +86,9 @@
     "username": "Identifiant",
     "add-url": "Ajouter une URL",
     "confirm-password": "Confirmer le mot de passe",
-    "delete-password": "Supprimer le mot de passe ?"
+    "delete-password": "Supprimer le mot de passe ?",
+    "sort-by": "Trier par",
+    "creation-date": "Date de création"
   },
   "welcome-on": "Bienvenue sur",
   "continue": "Continuer",

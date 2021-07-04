@@ -11,9 +11,36 @@ import axios from "axios"
 import Swal from "sweetalert2"
 import AddPasswordBox from "./modal_box/AddPasswordBox"
 import EnterPasswordBox from "./modal_box/ConfirmPasswordBox"
+import { InputLabel, MenuItem, Select, withStyles } from "@material-ui/core"
 import EditPasswordBox from "./modal_box/EditPasswordBox"
 import { getSavedTheme, isDarkTheme } from "../../utils/themes-utils"
 
+
+const styles = theme => ({
+    select: {
+        '&:before': {
+            borderColor: "#121212",
+        },
+        '&:after': {
+            borderColor: "#121212",
+        }
+    },
+    selectWhite: {
+        '&:before': {
+            borderColor: "white",
+        },
+        '&:after': {
+            borderColor: "white",
+        }
+    },
+    icon: {
+        fill: "black",
+    },
+    iconWhite: {
+        fill: "white",
+
+    }
+})
 
 class PasswordsDashboard extends Component {
 
@@ -26,9 +53,11 @@ class PasswordsDashboard extends Component {
         password: "",
         enterPasswordType: "new",
         currentCredential: {},
-        currentTheme: getSavedTheme()
+        currentTheme: getSavedTheme(),
+        sortValue: 2
 
     }
+
 
     componentDidMount() {
         const { isLoading } = this.state
@@ -154,9 +183,13 @@ class PasswordsDashboard extends Component {
 
     }
 
+    handleSortChange = event => {
+        this.setState({ sortValue: event.target.value })
+    }
+
     render() {
-        const { isLoading, credentials, search, token, password, enterPasswordType, currentCredential } = this.state
-        const { t } = this.props
+        const { isLoading, credentials, search, token, password, enterPasswordType, currentCredential, sortValue } = this.state
+        const { t, classes } = this.props
 
         return (
             <>
@@ -174,6 +207,25 @@ class PasswordsDashboard extends Component {
                                     <input type="text" placeholder={t("search")} style={{ color: isDarkTheme() ? "white" : "#121212" }} value={search} onChange={event => this.setState({ search: event.target.value })} />
                                 </div>
                             </nav>
+                            <div className="sort">
+                                <InputLabel id="sort-select-label">{t("passwords.sort-by")}</InputLabel>
+                                <Select
+                                    labelId="sort-select-label"
+                                    id="sort-select"
+                                    value={sortValue}
+                                    onChange={event => this.handleSortChange(event)}
+                                    className={isDarkTheme() ? classes.selectWhite : classes.select}
+                                    inputProps={{
+                                        classes: {
+                                            icon: isDarkTheme() ? classes.iconWhite : classes.icon,
+                                        },
+                                    }}
+                                >
+                                    <MenuItem value={0}>A-Z</MenuItem>
+                                    <MenuItem value={1}>Z-A</MenuItem>
+                                    <MenuItem value={2}>{t("passwords.creation-date")}</MenuItem>
+                                </Select>
+                            </div>
 
                             <div className="password-list" style={{ justifyContent: credentials.length === 0 ? "center" : "" }}>
                                 {credentials.length === 0 &&
@@ -208,4 +260,4 @@ class PasswordsDashboard extends Component {
     }
 }
 
-export default withTranslation()(PasswordsDashboard)
+export default withTranslation()(withStyles(styles)(PasswordsDashboard))
