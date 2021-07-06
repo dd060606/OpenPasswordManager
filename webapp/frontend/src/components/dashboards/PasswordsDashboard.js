@@ -14,6 +14,7 @@ import EnterPasswordBox from "./modal_box/ConfirmPasswordBox"
 import { InputLabel, MenuItem, Select, withStyles } from "@material-ui/core"
 import EditPasswordBox from "./modal_box/EditPasswordBox"
 import { getSavedTheme, isDarkTheme } from "../../utils/themes-utils"
+import { cookies } from "../.."
 
 
 const styles = theme => ({
@@ -61,62 +62,90 @@ class PasswordsDashboard extends Component {
 
     componentDidMount() {
         const { isLoading } = this.state
-        const { t } = this.props
         this.setState({ token: readToken(this.props) })
 
 
 
         if (isLoading) {
-
-            axios.get(`${process.env.REACT_APP_SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${readToken(this.props)}` } })
-                .then(result => {
-                    let finalCredentials = []
-                    for (let i = 0; i < result.data.credentials.length; i++) {
-                        result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
-                        result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
-
-                        finalCredentials.push(result.data.credentials[i])
-                    }
-
-                    this.setState({ isLoading: false, credentials: result.data.credentials })
-                    const myPasswords = document.querySelector(".my-passwords")
-                    myPasswords.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-                    myPasswords.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
-                    myPasswords.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
-                })
-                .catch(err => {
-                    let errorMessage = t("errors.unknown-error")
-                    if (err.response && err.response.data) {
-
-                        if (err.response.data.type === "internal-error") {
-                            errorMessage = t("errors.internal-error")
-                        } else if (err.response.data.type === "invalid-token") {
-                            sendToAuthPage(this.props)
-                            return
-                        }
-                    }
-                    Swal.fire({
-                        title: t("errors.error"),
-                        text: errorMessage,
-                        icon: "error",
-                        confirmButtonColor: "#54c2f0",
-                        background: isDarkTheme() ? " #333" : "white",
-                    })
-                    this.setState({ isLoading: false })
-
-                    const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
-                    swal2.forEach(element => {
-                        element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-                    })
-                    const myPasswords = document.querySelector(".my-passwords")
-                    myPasswords.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-                    myPasswords.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
-                    myPasswords.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
-
-                })
-
+            this.updateCredentials()
         }
 
+    }
+
+    updateCredentials() {
+        const { t } = this.props
+
+        const availablesSortValues = [0, 1, 2]
+        if (cookies.get("credentialsSort") && availablesSortValues.includes(parseInt(cookies.get("credentialsSort")))) {
+            this.setState({ sortValue: parseInt(cookies.get("credentialsSort")) })
+        }
+        else {
+            cookies.set("credentialsSort", 2)
+        }
+
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${readToken(this.props)}` } })
+            .then(result => {
+                let finalCredentials = []
+                for (let i = 0; i < result.data.credentials.length; i++) {
+                    result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+                    result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+
+                    finalCredentials.push(result.data.credentials[i])
+                }
+
+                this.setState({
+                    isLoading: false, credentials: this.sortCredentials(result.data.credentials)
+                })
+                const myPasswords = document.querySelector(".my-passwords")
+                myPasswords.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                myPasswords.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
+                myPasswords.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
+            })
+            .catch(err => {
+                let errorMessage = t("errors.unknown-error")
+                if (err.response && err.response.data) {
+
+                    if (err.response.data.type === "internal-error") {
+                        errorMessage = t("errors.internal-error")
+                    } else if (err.response.data.type === "invalid-token") {
+                        sendToAuthPage(this.props)
+                        return
+                    }
+                }
+                Swal.fire({
+                    title: t("errors.error"),
+                    text: errorMessage,
+                    icon: "error",
+                    confirmButtonColor: "#54c2f0",
+                    background: isDarkTheme() ? " #333" : "white",
+                })
+                this.setState({ isLoading: false })
+
+                const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+                swal2.forEach(element => {
+                    element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                })
+                const myPasswords = document.querySelector(".my-passwords")
+                myPasswords.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                myPasswords.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
+                myPasswords.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
+
+            })
+    }
+
+    sortCredentials(credentialsArray) {
+        const { sortValue } = this.state
+        if (sortValue === 0) {
+            return credentialsArray.sort((a, b) => (a.name || "").toString().localeCompare((b.name || "").toString()))
+
+        }
+        else if (sortValue === 1) {
+            return (credentialsArray.sort((a, b) => (a.name || "").toString().localeCompare((b.name || "").toString()))).sort().reverse()
+
+        }
+        else {
+            return credentialsArray.sort((a, b) => b.id - a.id)
+        }
     }
 
     extractHostname(url) {
@@ -184,7 +213,10 @@ class PasswordsDashboard extends Component {
     }
 
     handleSortChange = event => {
-        this.setState({ sortValue: event.target.value })
+        cookies.set("credentialsSort", parseInt(event.target.value))
+        this.setState({ isLoading: true })
+        this.updateCredentials()
+
     }
 
     render() {
