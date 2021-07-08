@@ -254,7 +254,7 @@ function getJsonForInternalError() {
 }
 
 function validateSignup(req) {
-    const lettersRegex = /^[A-Za-z]+$/
+    const lettersRegex = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/
 
     if (req.body.email && req.body.password && req.body.firstname && req.body.lastname) {
         if (emailRegex.test(req.body.email) && passwordRegex.test(req.body.password) && lettersRegex.test(req.body.lastname) && lettersRegex.test(req.body.firstname)) {

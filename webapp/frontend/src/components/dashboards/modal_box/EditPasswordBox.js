@@ -176,7 +176,7 @@ class EditPasswordBox extends Component {
             username: username,
             password: encryptedPassword,
             name: websiteName,
-            url: url.startsWith("http://") || url.startsWith("https://") ? url : `http://${url}`
+            url: url.startsWith("http://") || url.startsWith("https://") ? url : `https://${url}`
         }, { headers: { "Authorization": `Bearer ${this.props.token}` } })
             .then(result => {
                 this.setState({ isLoading: false })

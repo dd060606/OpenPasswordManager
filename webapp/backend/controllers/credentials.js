@@ -57,7 +57,7 @@ exports.delete = (req, res, next) => {
             if (err) {
                 return res.status(500).json(getJsonForInternalError())
             }
-            logger.info(`${req.headers['x-forwarded-for'] || req.connection.remoteAddress} deleted credentials : ${req.body.name} (${req.userId})`)
+            logger.info(`${req.headers['x-forwarded-for'] || req.connection.remoteAddress} deleted credentials : ${req.params.id} (${req.userId})`)
 
             return res.status(200).json({
                 result: "success",
