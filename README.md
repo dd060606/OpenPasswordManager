@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://opm.dd06-dev.rh-web.eu/assets/images/icon.png" alt="Logo" width="50" height="63">
+    <img src="https://opm.dd06-dev.fr/assets/images/logo.png" alt="Logo" width="120" height="110">
 
 </p>
 
