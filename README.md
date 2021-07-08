@@ -29,6 +29,8 @@ OpenPasswordManager use ReactJS for the frontend and ExpressJS for the backend.
     </li>
     <li><a href="#features">Features</a></li>
     <li><a href="#license">License</a></li>
+    <li><a href="#demo">Demo</a></li>
+
   </ol>
 </details>
 
@@ -76,12 +78,16 @@ You need to install NodeJS and NPM and you also need to have a MySQL database
   - Credentials are stored in a database and accessible from your account
   - Simple to use
   - Light theme and dark theme
-
+  - Credentials sorting system
 ## To do
   - A desktop app with Electron
   - A react native app
-  - Credentials sorting system
 
 ## License
 
 Distributed under the GNU General Public License v3.0 License. See `LICENSE` for more information.
+
+## Demo
+
+Demo website -> https://opm.dd06-dev.fr/
+(Don't store important passwords because the app uses a test database)
