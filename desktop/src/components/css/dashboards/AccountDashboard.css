@@ -1,0 +1,75 @@
+.my-account {
+    display: flex;
+    font-family: "Open Sans",sans-serif;
+    color: var(--text-theme);
+    background-color: var(--bg-theme);
+
+}
+#swal2-title,#swal2-content {
+    color: var(--text-theme);
+}
+.my-account-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    
+}
+.line {
+    background-color: var(--line-theme);
+    height: 1px;
+    width: 90%;
+}
+
+.my-account-content > section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    
+}
+
+.my-account-content > section > button{
+    padding: 8px;
+    width: 200px;
+    outline: none;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: 0.5s background;
+}
+.my-account-content > section > .change-password-button {
+    outline: none;
+    border: none;
+    color: white;
+    background-color: #54c2f0;
+}
+.my-account-content > section > .logout-button {
+    background-color: var(--bg-theme);
+    color: var(--text-theme);
+    border:var(--text-theme) 1px solid
+}
+.my-account-content > section > button:hover {
+    transition: 0.5s background;
+    cursor: pointer;
+}
+.my-account-content > section > .change-password-button:hover {
+    background-color: #54AAF0;
+}
+.my-account-content > section > .logout-button:hover {
+    background-color: #E9402C;
+    color:white;
+
+}
+.my-account-content > section > * {
+    margin-left: 50px;
+    font-family: "Open Sans", sans-serif;
+
+}
+@media all and (max-width: 310px) {
+    .my-account-content > section > * {
+        margin-left: 10px;
+
+    }
+
+}
