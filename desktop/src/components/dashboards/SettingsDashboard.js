@@ -27,7 +27,7 @@ class SettingsDashboard extends Component {
         }
 
 
-        // this.handleThemeChange(getSavedTheme())
+        this.handleThemeChange(getSavedTheme())
 
     }
 
@@ -35,14 +35,16 @@ class SettingsDashboard extends Component {
     handleThemeChange = value => {
         this.setState({ currentTheme: value })
         saveTheme(value)
+        const darkTheme = isDarkTheme()
         const settings = document.querySelector(".settings")
-        settings.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-        settings.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
-        settings.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
+        settings.style.setProperty("--text-theme", darkTheme ? "white" : "#121212")
+        settings.style.setProperty("--bg-theme", darkTheme ? "#212121" : "white")
+        settings.style.setProperty("--line-theme", darkTheme ? "white" : "rgba(0,0,0,0.1)")
         const dashboardNav = document.querySelector(".dashboard-nav")
-        dashboardNav.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-        dashboardNav.style.setProperty("--current-nav-theme", isDarkTheme() ? "#CECECE" : "#555555")
-        dashboardNav.style.setProperty("--bg-nav-theme", isDarkTheme() ? "#333" : "rgba(198,237,240, 0.35)")
+        dashboardNav.style.setProperty("--text-theme", darkTheme ? "white" : "#121212")
+        dashboardNav.style.setProperty("--current-nav-theme", darkTheme ? "#CECECE" : "#555555")
+        dashboardNav.style.setProperty("--bg-nav-theme", darkTheme ? "#333" : "rgba(198,237,240, 0.35)")
+
     }
 
     render() {
