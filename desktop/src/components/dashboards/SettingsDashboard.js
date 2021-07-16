@@ -18,6 +18,7 @@ class SettingsDashboard extends Component {
     }
     componentDidMount() {
         const { currentTheme } = this.state
+
         if (isSavedThemeValid()) {
             this.setState({ currentTheme: getSavedTheme() })
         }
@@ -25,7 +26,8 @@ class SettingsDashboard extends Component {
             saveTheme(currentTheme)
         }
 
-        this.handleThemeChange(getSavedTheme())
+
+        // this.handleThemeChange(getSavedTheme())
 
     }
 

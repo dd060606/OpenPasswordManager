@@ -1,7 +1,7 @@
 {
   "name": "desktop-app",
   "version": "1.0",
-  "main": "public/electron.js",
+  "main": "public/electron/electron.js",
   "dependencies": {
     "@material-ui/core": "^4.11.4",
     "@testing-library/jest-dom": "^5.14.1",

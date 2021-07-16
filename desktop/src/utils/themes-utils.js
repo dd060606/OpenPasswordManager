@@ -1,14 +1,15 @@
-import { cookies } from "../index"
 function isSavedThemeValid() {
-    return cookies.get("theme") && (cookies.get("theme") === "light" || cookies.get("theme") === "dark")
+
+    return window.ipc.sendSync("is-saved-theme-valid")
 }
 function getSavedTheme() {
-    return cookies.get("theme")
+    return window.ipc.sendSync("get-saved-theme") === 0 ? "light" : "dark"
 }
 function saveTheme(theme) {
-    cookies.set("theme", theme, { path: "/" })
+    window.ipc.sendSync("set-theme", theme === "light" ? 0 : 1)
 }
 function isDarkTheme() {
-    return cookies.get("theme") === "dark"
+    return window.ipc.sendSync("get-saved-theme") === 1
+
 }
 export { isSavedThemeValid, getSavedTheme, saveTheme, isDarkTheme }

@@ -15,6 +15,12 @@ class App extends Component {
     }
 
     componentDidMount() {
+        window.addEventListener('DOMContentLoaded', () => {
+            window.ipc.receive("fromMain", (data) => {
+                console.log(`Received ${data} from main process`)
+            })
+            window.ipc.send("toMain", "some data")
+        })
 
         if (readToken(this.props)) {
             this.setState({ token: readToken(this.props) })
