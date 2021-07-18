@@ -1,26 +1,22 @@
-import { cookies } from "../index"
 function readToken(props) {
-
     if (props.location.state && props.location.state.token && props.location.state.token !== "") {
         return props.location.state.token
     }
     else {
         return undefined
     }
-
-
 }
 function getEmail() {
-    return cookies.get("email")
+    return window.ipc.sendSync("get-email")
 }
 function saveEmail(email) {
-    cookies.set("email", email, { path: "/" })
+    window.ipc.send("save-email", email)
 }
 function deleteEmailCookie() {
-    cookies.remove("email", { path: "/" })
+    window.ipc.send("delete-email")
 }
 function isEmailSaved() {
-    if (cookies.get("email")) {
+    if (window.ipc.sendSync("get-email")) {
         return true
     }
     else {

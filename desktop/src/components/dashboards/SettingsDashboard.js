@@ -3,12 +3,23 @@ import DashboardNav from "./DashboardNav"
 import "../css/dashboards/SettingsDashboard.css"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
-import RadioGroup from '@material-ui/core/RadioGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio'
+
 import { getSavedTheme, isDarkTheme, isSavedThemeValid, saveTheme } from "../../utils/themes-utils"
+import { Switch, Radio, FormControlLabel, RadioGroup, withStyles } from "@material-ui/core"
 
-
+const SettingsSwitch = withStyles({
+    switchBase: {
+        color: "#54c2f0",
+        '&$checked': {
+            color: "#54c2f0",
+        },
+        '&$checked + $track': {
+            backgroundColor: "#54c2f0",
+        },
+    },
+    checked: {},
+    track: {},
+})(Switch)
 
 class SettingsDashboard extends Component {
 
@@ -74,7 +85,16 @@ class SettingsDashboard extends Component {
                                         <FormControlLabel value="dark" control={<Radio className="radio-button" />} label={t("settings.appearance.dark")} />
                                     </RadioGroup>
                                 </div>
-
+                                <div className="sync">
+                                    <p><strong>{t("settings.sync.synchronization")} : </strong></p>
+                                    <SettingsSwitch
+                                        checked={true}
+                                        className="sync-button"
+                                        onChange={(event) => {
+                                            console.log(event.target.value)
+                                        }} name="sync"
+                                    />
+                                </div>
                             </section>
                             <span className="line" />
 

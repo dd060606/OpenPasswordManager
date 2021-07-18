@@ -73,7 +73,10 @@
       "dark": "Sombre",
       "light": "Clair"
     },
-    "language": "Langage"
+    "language": "Langage",
+    "sync": {
+      "synchronization": "Synchronisation"
+    }
   },
   "passwords": {
     "add": "Ajouter",

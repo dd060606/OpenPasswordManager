@@ -6,13 +6,13 @@ const {
 contextBridge.exposeInMainWorld(
     "ipc", {
     send: (channel, data) => {
-        let validChannels = ["toMain", "set-theme"]
+        let validChannels = ["toMain", "set-theme", "save-email", "delete-email", "set-credentials-sort-value"]
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data)
         }
     },
     sendSync: (channel, data) => {
-        let validChannels = ["is-saved-theme-valid", "get-saved-theme"]
+        let validChannels = ["is-saved-theme-valid", "get-saved-theme", "get-email", "get-credentials-sort-value"]
         if (validChannels.includes(channel)) {
             return ipcRenderer.sendSync(channel, data)
         }

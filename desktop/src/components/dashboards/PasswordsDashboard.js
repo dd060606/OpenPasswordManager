@@ -14,7 +14,6 @@ import EnterPasswordBox from "./modal_box/ConfirmPasswordBox"
 import { InputLabel, MenuItem, Select, withStyles } from "@material-ui/core"
 import EditPasswordBox from "./modal_box/EditPasswordBox"
 import { getSavedTheme, isDarkTheme } from "../../utils/themes-utils"
-import { cookies } from "../.."
 
 
 const styles = theme => ({
@@ -76,11 +75,11 @@ class PasswordsDashboard extends Component {
         const { t } = this.props
 
         const availablesSortValues = [0, 1, 2]
-        if (cookies.get("credentialsSort") && availablesSortValues.includes(parseInt(cookies.get("credentialsSort")))) {
-            this.setState({ sortValue: parseInt(cookies.get("credentialsSort")) })
+        if (!isNaN(window.ipc.sendSync("get-credentials-sort-value")) && availablesSortValues.includes(parseInt(window.ipc.sendSync("get-credentials-sort-value")))) {
+            this.setState({ sortValue: parseInt(window.ipc.sendSync("get-credentials-sort-value")) })
         }
         else {
-            cookies.set("credentialsSort", 2)
+            window.ipc.send("set-credentials-sort-value", 2)
         }
 
         axios.get(`${process.env.REACT_APP_SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${readToken(this.props)}` } })
@@ -213,7 +212,7 @@ class PasswordsDashboard extends Component {
     }
 
     handleSortChange = event => {
-        cookies.set("credentialsSort", parseInt(event.target.value))
+        window.ipc.send("set-credentials-sort-value", parseInt(event.target.value))
         this.setState({ isLoading: true })
         this.updateCredentials()
 

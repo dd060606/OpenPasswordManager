@@ -10,7 +10,6 @@ import EmailConfirmed from "./components/auth/EmailConfirmed"
 import App from "./components/App"
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
-import Cookies from 'universal-cookie'
 import PasswordsDashboard from './components/dashboards/PasswordsDashboard'
 import AccountDashboard from "./components/dashboards/AccountDashboard"
 import GeneratorDashboard from './components/dashboards/GeneratorDashboard';
@@ -18,7 +17,6 @@ import SettingsDashboard from './components/dashboards/SettingsDashboard';
 
 
 
-const cookies = new Cookies()
 
 
 ReactDOM.render(
@@ -46,5 +44,4 @@ ReactDOM.render(
 
 
 
-export { cookies }
 

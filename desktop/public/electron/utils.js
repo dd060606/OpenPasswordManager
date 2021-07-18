@@ -2,11 +2,16 @@ const path = require("path")
 const fs = require("fs")
 
 const defaultConfig = {
-    email: "",
-    hash: "",
+    auth: {
+        email: "",
+        hash: ""
+    },
     syncCredentials: true,
-    theme: 0
+    theme: 0,
+    credentialsSort: 2
 }
+
+exports.getDefaultConfig = () => { return defaultConfig }
 exports.getAppPath = () => {
     switch (process.platform) {
         case 'darwin': {

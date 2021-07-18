@@ -8,7 +8,7 @@ const electronLocalshortcut = require('electron-localshortcut')
 
 const ipc = require("electron").ipcMain
 
-const { getAppPath, configPath, saveDefaultConfig, readConfig, saveConfig } = require("./utils")
+const { getAppPath, configPath, saveDefaultConfig, readConfig, saveConfig, defaultConfig, getDefaultConfig } = require("./utils")
 
 let win
 let config = {}
@@ -56,6 +56,7 @@ function initConfig() {
         fs.access(configPath, (err) => {
             if (err) {
                 saveDefaultConfig()
+                config = getDefaultConfig()
             } else {
                 fs.readFile(configPath, (err, data) => {
                     if (err) throw err
@@ -88,15 +89,40 @@ ipc.on("toMain", (event, args) => {
     win.webContents.send("fromMain", "Test2");
 })
 
+
+//Themes
 ipc.on("is-saved-theme-valid", (event, args) => {
 
     event.returnValue = config.theme && (config.theme === 0 || config.theme === 1)
 })
-
 ipc.on("get-saved-theme", (event, args) => {
     event.returnValue = config.theme
 })
 ipc.on("set-theme", (event, args) => {
     config.theme = args
+    saveConfig(config)
+})
+
+
+//Auth
+
+ipc.on("get-email", (event, args) => {
+    event.returnValue = config.auth.email
+})
+ipc.on("save-email", (event, args) => {
+    config.auth.email = args
+    saveConfig(config)
+})
+ipc.on("delete-email", (event, args) => {
+    config.auth.email = ""
+    saveConfig(config)
+})
+
+//Credentials
+ipc.on("get-credentials-sort-value", (event, args) => {
+    event.returnValue = config.credentialsSort
+})
+ipc.on("set-credentials-sort-value", (event, args) => {
+    config.credentialsSort = args
     saveConfig(config)
 })
