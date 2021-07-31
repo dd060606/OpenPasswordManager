@@ -6,15 +6,14 @@ const fs = require('fs')
 
 const authRoutes = require("./routes/auth")
 const credentialsRoutes = require("./routes/credentials")
-const logger = require("./utils/logger")
 
 const authUtils = require("./utils/database")
+const logger = require("./utils/logger")
 
 const app = express()
 
-
-authUtils.initDatabase()
 logger.initLogger()
+authUtils.initDatabase()
 
 
 app.use(cors())
