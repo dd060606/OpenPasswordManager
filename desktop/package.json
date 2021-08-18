@@ -1,0 +1,100 @@
+{
+  "name": "desktop-app",
+  "productName": "OpenPasswordManager",
+  "version": "1.0.0",
+  "main": "public/electron.js",
+  "author": {
+    "name": "dd_06"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.4",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "axios": "^0.21.1",
+    "crypto-js": "^4.0.0",
+    "electron-localshortcut": "^3.2.1",
+    "i18next": "^20.2.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-i18next": "^11.8.15",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3",
+    "sweetalert2": "^10.16.6",
+    "web-vitals": "^1.1.2"
+  },
+  "scripts": {
+    "electron": "wait-on tcp:3000 && electron .",
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "react-test": "react-scripts test --env=jsdom",
+    "react-eject": "react-scripts eject",
+    "electron-build": "electron-builder",
+    "release": "npm run react-build && electron-builder --publish=always",
+    "build": "npm run react-build && npm run electron-build",
+    "start": "concurrently \"SET BROWSER=none&&npm run react-start\" npm:electron"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.0",
+    "electron": "^13.1.6",
+    "electron-is-dev": "^2.0.0",
+    "electron-builder": "^22.11.7",
+    "wait-on": "^6.0.0"
+  },
+  "build": {
+    "appId": "fr.dd06.opm",
+    "productName": "OpenPasswordManager",
+    "artifactName": "${productName}.${ext}",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "public/"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
+    "asar": true,
+    "win": {
+      "target": "portable",
+      "icon": "build/assets/images/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.utilities",
+      "icon": "build/assets/images/icon.icns",
+      "type": "distribution"
+    },
+    "linux": {
+      "target": "AppImage",
+      "maintainer": "dd_06",
+      "vendor": "OpenPasswordManager",
+      "synopsis": "Open-source password manager",
+      "description": "A simple password manager",
+      "category": "Utility"
+    },
+    "deb": {
+      "compression": "xz",
+      "packageCategory": "Utilities",
+      "priority": "optional"
+    },
+    "compression": "maximum"
+  }
+}
