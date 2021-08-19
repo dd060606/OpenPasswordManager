@@ -6,8 +6,6 @@ import Loading from "../Loading"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import PasswordItem from "./PasswordItem"
-import { readToken, sendToAuthPage } from "../../utils/auth-utils"
-import axios from "axios"
 import Swal from "sweetalert2"
 import AddPasswordBox from "./modal_box/AddPasswordBox"
 import EnterPasswordBox from "./modal_box/ConfirmPasswordBox"
@@ -47,10 +45,8 @@ class PasswordsDashboard extends Component {
     state = {
 
         isLoading: true,
-        token: "",
         credentials: [],
         search: "",
-        password: "",
         enterPasswordType: "new",
         currentCredential: {},
         currentTheme: getSavedTheme(),
@@ -61,53 +57,32 @@ class PasswordsDashboard extends Component {
 
     componentDidMount() {
         const { isLoading } = this.state
-        this.setState({ token: readToken(this.props) })
-
-
-
         if (isLoading) {
             this.updateCredentials()
         }
-
-    }
-
-    updateCredentials() {
-        const { t } = this.props
-
-        const availablesSortValues = [0, 1, 2]
-        if (!isNaN(window.ipc.sendSync("get-credentials-sort-value")) && availablesSortValues.includes(parseInt(window.ipc.sendSync("get-credentials-sort-value")))) {
-            this.setState({ sortValue: parseInt(window.ipc.sendSync("get-credentials-sort-value")) })
-        }
-        else {
-            window.ipc.send("set-credentials-sort-value", 2)
-        }
-
-        axios.get(`${process.env.REACT_APP_SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${readToken(this.props)}` } })
-            .then(result => {
-                let finalCredentials = []
-                for (let i = 0; i < result.data.credentials.length; i++) {
-                    result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
-                    result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
-
-                    finalCredentials.push(result.data.credentials[i])
-                }
-
+        window.ipc.receive("loadCredentialsResult", res => {
+            const { t } = this.props
+            if (res.result === "success") {
                 this.setState({
-                    isLoading: false, credentials: this.sortCredentials(result.data.credentials)
+                    isLoading: false, credentials: res.credentials
                 })
-                const myPasswords = document.querySelector(".my-passwords")
-                myPasswords.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-                myPasswords.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
-                myPasswords.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
-            })
-            .catch(err => {
-                let errorMessage = t("errors.unknown-error")
-                if (err.response && err.response.data) {
+                setTimeout(() => {
+                    const myPasswords = document.querySelector(".my-passwords")
+                    myPasswords.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                    myPasswords.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
+                    myPasswords.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
+                }, 50)
 
-                    if (err.response.data.type === "internal-error") {
+            }
+            else {
+                let errorMessage = t("errors.unknown-error")
+
+                if (res.error) {
+
+                    if (res.error.type === "internal-error") {
                         errorMessage = t("errors.internal-error")
-                    } else if (err.response.data.type === "invalid-token") {
-                        sendToAuthPage(this.props)
+                    } else if (res.error.type === "invalid-token") {
+                        this.props.history.push("/auth/login")
                         return
                     }
                 }
@@ -128,58 +103,30 @@ class PasswordsDashboard extends Component {
                 myPasswords.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
                 myPasswords.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
                 myPasswords.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
-
-            })
-    }
-
-    sortCredentials(credentialsArray) {
-        const { sortValue } = this.state
-        if (sortValue === 0) {
-            return credentialsArray.sort((a, b) => (a.name || "").toString().localeCompare((b.name || "").toString()))
-
-        }
-        else if (sortValue === 1) {
-            return (credentialsArray.sort((a, b) => (a.name || "").toString().localeCompare((b.name || "").toString()))).sort().reverse()
-
-        }
-        else {
-            return credentialsArray.sort((a, b) => b.id - a.id)
-        }
-    }
-
-    extractHostname(url) {
-        var hostname;
-
-        if (url.indexOf("//") > -1) {
-            hostname = url.split('/')[2];
-        }
-        else {
-            hostname = url.split('/')[0];
-        }
-
-        hostname = hostname.split(':')[0];
-        hostname = hostname.split('?')[0];
-
-        return hostname;
-    }
-
-    extractRootDomain(url) {
-        var domain = this.extractHostname(url),
-            splitArr = domain.split('.'),
-            arrLen = splitArr.length;
-        if (arrLen > 2) {
-            domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
-            if (splitArr[arrLen - 2].length === 2 && splitArr[arrLen - 1].length === 2) {
-                domain = splitArr[arrLen - 3] + '.' + domain;
             }
-        }
-        return domain;
+        })
+
     }
+
+    updateCredentials() {
+
+        const availablesSortValues = [0, 1, 2]
+        const credentialsSort = window.ipc.sendSync("getCredentialsSort")
+        if (!isNaN(credentialsSort) && availablesSortValues.includes(parseInt(credentialsSort))) {
+            this.setState({ sortValue: parseInt(credentialsSort) })
+        }
+        else {
+            window.ipc.send("setCredentialsSort", 2)
+        }
+        window.ipc.send("loadCredentials")
+    }
+
+
+
 
     //Arrow fx for binding
     handleAddPassword = () => {
-        const { password } = this.state
-        if (password) {
+        if (window.ipc.sendSync("isPasswordSaved")) {
             const addPasswordOverlay = document.querySelector(".add-password-overlay")
             addPasswordOverlay.style.visibility = "visible"
             addPasswordOverlay.style.opacity = 1
@@ -194,9 +141,8 @@ class PasswordsDashboard extends Component {
     }
 
     handleEditPassword = credential => {
-        const { password } = this.state
         this.setState({ currentCredential: credential })
-        if (password) {
+        if (window.ipc.sendSync("isPasswordSaved")) {
             const editPasswordOverlay = document.querySelector(".edit-password-overlay")
             editPasswordOverlay.style.visibility = "visible"
             editPasswordOverlay.style.opacity = 1
@@ -212,14 +158,14 @@ class PasswordsDashboard extends Component {
     }
 
     handleSortChange = event => {
-        window.ipc.send("set-credentials-sort-value", parseInt(event.target.value))
+        window.ipc.send("setCredentialsSort", parseInt(event.target.value))
         this.setState({ isLoading: true })
         this.updateCredentials()
 
     }
 
     render() {
-        const { isLoading, credentials, search, token, password, enterPasswordType, currentCredential, sortValue } = this.state
+        const { isLoading, credentials, search, enterPasswordType, currentCredential, sortValue } = this.state
         const { t, classes } = this.props
 
         return (
@@ -228,7 +174,7 @@ class PasswordsDashboard extends Component {
                 {
                     !isLoading &&
                     <div className="my-passwords" >
-                        <DashboardNav token={token} />
+                        <DashboardNav />
 
                         <div className="passwords-content">
                             <nav>
@@ -277,9 +223,9 @@ class PasswordsDashboard extends Component {
 
                                     })
                                 }
-                                <EnterPasswordBox token={token} type={enterPasswordType} setPassword={password => this.setState({ password: password })} />
-                                <AddPasswordBox token={token} password={password} reloadCredentials={credentials => this.setState({ credentials: credentials })} />
-                                <EditPasswordBox token={token} password={password} credential={currentCredential} reloadCredentials={credentials => this.setState({ credentials: credentials })} />
+                                <EnterPasswordBox type={enterPasswordType} />
+                                <AddPasswordBox reloadCredentials={credentials => this.setState({ credentials: credentials })} />
+                                <EditPasswordBox credential={currentCredential} />
                             </div>
                         </div>
 

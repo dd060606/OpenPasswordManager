@@ -50,7 +50,8 @@
     "lastname": "Nom",
     "current-password": "Mot de passe actuel",
     "new-password": "Nouveau mot de passe",
-    "confirm-new-password": "Confirmation du mot de passe"
+    "confirm-new-password": "Confirmation du mot de passe",
+    "password-modified": "Mot de passe modifié avec succès !"
   },
   "generator": {
     "password-generator": "Générateur de mots de passe",
@@ -103,5 +104,6 @@
   "copy": "Copier",
   "copied": "Copié",
   "search": "Rechercher",
-  "save": "Sauvegarder"
+  "save": "Sauvegarder",
+  "success": "Succès"
 }

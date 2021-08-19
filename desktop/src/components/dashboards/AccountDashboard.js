@@ -4,8 +4,7 @@ import "../css/dashboards/AccountDashboard.css"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import Loading from "../Loading"
-import axios from "axios"
-import { deleteEmailCookie, isEmailSaved, readToken, sendToAuthPage } from "../../utils/auth-utils"
+import { isEmailSaved, saveEmail } from "../../utils/auth-utils"
 import Swal from "sweetalert2"
 import { isDarkTheme } from "../../utils/themes-utils"
 import ChangePasswordBox from "./modal_box/ChangePasswordBox"
@@ -18,7 +17,6 @@ class AccountDashboard extends Component {
         lastname: "",
         firstname: "",
         isLoading: true,
-        token: ""
     }
 
     componentDidMount() {
@@ -26,28 +24,20 @@ class AccountDashboard extends Component {
 
 
         if (isLoading) {
-            const token = readToken(this.props)
-            if (token) {
-                axios.get(`${process.env.REACT_APP_SERVER_URL}/api/auth/info`, { headers: { "Authorization": `Bearer ${token}` } })
-                    .then(result => {
-                        this.setState({ isLoading: false, token: token, email: result.data.email, lastname: result.data.lastname, firstname: result.data.firstname })
-                        const myAccount = document.querySelector(".my-account")
-                        myAccount.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-                        myAccount.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
-                        myAccount.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
 
-
-                    })
-                    .catch(err => {
-                        sendToAuthPage(this.props)
-                        console.log(err)
-                    })
-            }
-            else {
-                sendToAuthPage(this.props)
-            }
+            window.ipc.send("getAccountInfo")
 
         }
+        window.ipc.receive("accountInfoResult", account => {
+            this.setState({ isLoading: false, email: account.email, lastname: account.lastname, firstname: account.firstname })
+            setTimeout(() => {
+                const myAccount = document.querySelector(".my-account")
+                myAccount.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                myAccount.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
+                myAccount.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
+            }, 50)
+
+        })
     }
 
 
@@ -69,9 +59,9 @@ class AccountDashboard extends Component {
         }).then((result) => {
             if (result.isConfirmed) {
                 if (isEmailSaved()) {
-                    deleteEmailCookie()
+                    saveEmail("")
                 }
-                sendToAuthPage(this.props)
+                this.props.history.push("/auth/login")
             }
         })
         const swal2 = document.querySelector("#swal2-content")
@@ -86,7 +76,7 @@ class AccountDashboard extends Component {
 
     render() {
         const { t } = this.props
-        const { email, isLoading, lastname, firstname, token } = this.state
+        const { email, isLoading, lastname, firstname } = this.state
         return (
 
             <>
@@ -120,7 +110,7 @@ class AccountDashboard extends Component {
 
                             </section>
                         </div>
-                        <ChangePasswordBox token={token} />
+                        <ChangePasswordBox />
 
                     </div>
 

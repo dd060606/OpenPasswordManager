@@ -4,10 +4,7 @@ import { withTranslation } from "react-i18next"
 import "../../../i18n"
 import { Component } from "react"
 import { withRouter } from "react-router-dom"
-import CryptoJS from "crypto-js"
 import Swal from "sweetalert2"
-import axios from "axios"
-import { sendToAuthPage } from "../../../utils/auth-utils"
 import Checkbox from "@material-ui/core/Checkbox"
 import Slider from "@material-ui/core/Slider"
 import { isDarkTheme } from "../../../utils/themes-utils"
@@ -47,7 +44,10 @@ class EditPasswordBox extends Component {
             mutations.forEach(mutationRecord => {
                 if (mutationRecord.target === editPasswordOverlay) {
                     if (editPasswordOverlay.style.visibility === "visible") {
-                        this.setState({ websiteName: this.props.credential.name, url: this.props.credential.url, username: this.props.credential.username, password: CryptoJS.AES.decrypt(this.props.credential.password, this.props.password).toString(CryptoJS.enc.Utf8) })
+                        this.setState({
+                            websiteName: this.props.credential.name, url: this.props.credential.url,
+                            username: this.props.credential.username, password: window.ipc.sendSync("decryptCredentialsPassword", this.props.credential.password)
+                        })
                     }
                 }
             });
@@ -58,9 +58,50 @@ class EditPasswordBox extends Component {
         editPassword.style.setProperty("--bg-theme", isDarkTheme() ? "#333" : "white")
         editPassword.style.setProperty("--field-bg-theme", isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)")
         editPassword.style.setProperty("--bg-dropdown-theme", isDarkTheme() ? "#212121" : "white")
+        window.ipc.receive("saveCredentialsResult", res => {
+            const { t } = this.props
 
+            if (res.result === "success") {
+                this.setState({ isLoading: false })
+                this.closeBox()
+                this.reloadCredentials()
+            }
+            else {
 
+                let errorMessage = t("errors.unknown-error")
+                if (res.error) {
+                    if (res.error.type === "internal-error") {
+                        errorMessage = t("errors.internal-error")
+                    } else if (res.error.type === "invalid-token") {
+                        this.props.history.push("/auth/login")
+                        return
+                    }
+                }
+                this.openErrorBox(errorMessage)
+            }
+        })
+        window.ipc.receive("deleteCredentialsResult", res => {
+            const { t } = this.props
+            if (res.result === "success") {
+                this.setState({ isLoading: false })
+                this.closeBox()
+                this.reloadCredentials()
 
+            }
+            else {
+
+                let errorMessage = t("errors.unknown-error")
+                if (res.error) {
+                    if (res.error.type === "internal-error") {
+                        errorMessage = t("errors.internal-error")
+                    } else if (res.error.type === "invalid-token") {
+                        this.props.history.push("/auth/login")
+                        return
+                    }
+                }
+                this.openErrorBox(errorMessage)
+            }
+        })
     }
 
     openErrorBox(message) {
@@ -83,15 +124,12 @@ class EditPasswordBox extends Component {
 
     //Arrow fx for binding
     handleEditPasswordBoxClosed = event => {
-
-
         const editPasswordBox = document.querySelector(".edit-password-overlay")
         const closePasswordBoxButton = document.querySelector(".edit-password-box > .close")
         const cancelButton = document.querySelector(".edit-password-box .cancel-button")
 
         if (event.target === closePasswordBoxButton || event.target === cancelButton) {
             this.closeBox()
-
         }
 
         else if (event.target !== editPasswordBox) {
@@ -109,57 +147,8 @@ class EditPasswordBox extends Component {
     }
 
     reloadCredentials() {
-        const { t } = this.props
         this.setState({ isLoading: true })
-        axios.get(`${process.env.REACT_APP_SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${this.props.token}` } })
-            .then(result => {
-                let finalCredentials = []
-                for (let i = 0; i < result.data.credentials.length; i++) {
-                    result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
-                    result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
-
-                    finalCredentials.push(result.data.credentials[i])
-                }
-                this.props.reloadCredentials(result.data.credentials)
-                this.setState({ isLoading: false })
-            })
-            .catch(err => {
-                let errorMessage = t("errors.unknown-error")
-                if (err.response && err.response.data) {
-                    if (err.response.data.type === "internal-error") {
-                        errorMessage = t("errors.internal-error")
-                    }
-                }
-                this.openErrorBox(errorMessage)
-            })
-    }
-    extractHostname(url) {
-        var hostname;
-
-        if (url.indexOf("//") > -1) {
-            hostname = url.split('/')[2];
-        }
-        else {
-            hostname = url.split('/')[0];
-        }
-
-        hostname = hostname.split(':')[0];
-        hostname = hostname.split('?')[0];
-
-        return hostname;
-    }
-
-    extractRootDomain(url) {
-        var domain = this.extractHostname(url),
-            splitArr = domain.split('.'),
-            arrLen = splitArr.length;
-        if (arrLen > 2) {
-            domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
-            if (splitArr[arrLen - 2].length === 2 && splitArr[arrLen - 1].length === 2) {
-                domain = splitArr[arrLen - 3] + '.' + domain;
-            }
-        }
-        return domain;
+        window.ipc.send("loadCredentials")
     }
 
     handleSave = () => {
@@ -171,30 +160,7 @@ class EditPasswordBox extends Component {
             return
         }
         this.setState({ isLoading: true })
-        let encryptedPassword = CryptoJS.AES.encrypt(password, this.props.password).toString()
-        axios.put(`${process.env.REACT_APP_SERVER_URL}/api/credentials/edit/${this.props.credential.id}`, {
-            username: username,
-            password: encryptedPassword,
-            name: websiteName,
-            url: url.startsWith("http://") || url.startsWith("https://") ? url : `https://${url}`
-        }, { headers: { "Authorization": `Bearer ${this.props.token}` } })
-            .then(result => {
-                this.setState({ isLoading: false })
-                this.closeBox()
-                this.reloadCredentials()
-            })
-            .catch(err => {
-                let errorMessage = t("errors.unknown-error")
-                if (err.response && err.response.data) {
-                    if (err.response.data.type === "internal-error") {
-                        errorMessage = t("errors.internal-error")
-                    } else if (err.response.data.type === "invalid-token") {
-                        sendToAuthPage(this.props)
-                        return
-                    }
-                }
-                this.openErrorBox(errorMessage)
-            })
+        window.ipc.send("saveCredentials", { id: this.props.credential.id, websiteName: websiteName, password: password, username: username, url: url })
     }
     handleDelete = () => {
         const { t } = this.props
@@ -212,27 +178,9 @@ class EditPasswordBox extends Component {
         }).then((result) => {
             if (result.isConfirmed) {
                 this.setState({ isLoading: true })
-                axios.delete(`${process.env.REACT_APP_SERVER_URL}/api/credentials/delete/${this.props.credential.id}`, { headers: { "Authorization": `Bearer ${this.props.token}` } })
-                    .then(result => {
-                        this.setState({ isLoading: false })
-                        this.closeBox()
-                        this.reloadCredentials()
+                window.ipc.send("deleteCredentials", this.props.credential.id)
 
-                    })
-                    .catch(err => {
-                        let errorMessage = t("errors.unknown-error")
 
-                        if (err.response && err.response.data) {
-                            if (err.response.data.type === "internal-error") {
-                                errorMessage = t("errors.internal-error")
-                            } else if (err.response.data.type === "invalid-token") {
-                                sendToAuthPage(this.props)
-                                return
-                            }
-                        }
-                        this.openErrorBox(errorMessage)
-
-                    })
             }
         })
         const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")

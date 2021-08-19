@@ -6,7 +6,6 @@ import './index.css';
 import Error404 from './components/Error404'
 import Login from "./components/auth/Login"
 import Register from "./components/auth/Register"
-import EmailConfirmed from "./components/auth/EmailConfirmed"
 import App from "./components/App"
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
@@ -28,8 +27,6 @@ ReactDOM.render(
         <Route path="/" exact component={App} />
         <Route path="/auth/login" exact component={Login} />
         <Route path="/auth/signup" exact component={Register} />
-        <Route path="/auth/email/confirmation" exact component={EmailConfirmed} />
-        <Route path="/auth/email/confirmation/:token" exact component={EmailConfirmed} />
         <Route path="/dashboard/passwords" exact component={PasswordsDashboard} />
         <Route path="/dashboard/my-account" exact component={AccountDashboard} />
         <Route path="/dashboard/generator" exact component={GeneratorDashboard} />

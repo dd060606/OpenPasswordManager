@@ -2,11 +2,9 @@ import { Component } from "react"
 import "../css/auth/Register.css"
 import Swal from 'sweetalert2'
 import { Link } from "react-router-dom"
-import axios from "axios"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
 import i18n from 'i18next'
-import { saveEmail, sendToAuthPage } from "../../utils/auth-utils"
 import { isDarkTheme } from "../../utils/themes-utils"
 
 const lettersRegex = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/
@@ -38,13 +36,40 @@ class Register extends Component {
 
     componentDidMount() {
 
-
         const authRegister = document.querySelector(".auth-register")
         authRegister.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
         authRegister.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
         authRegister.style.setProperty("--bg-2-theme", isDarkTheme() ? "#333" : "white")
         authRegister.style.setProperty("--field-bg-theme", isDarkTheme() ? "#333" : "rgba(236, 236, 236, 0.8)")
         authRegister.style.setProperty("--blue-bg-theme", isDarkTheme() ? "#333" : "rgba(198,237,240,0.35)")
+
+        window.ipc.receive("signupSuccess", () => {
+            const { email, password } = this.state
+            this.setState({ emailConfirmationEnabled: true })
+            window.ipc.send("checkEmailConfirmation", { email: email, password: password })
+            this.setState({ isConnecting: false })
+        })
+        window.ipc.receive("signupError", (error) => {
+            const { t } = this.props
+            if (error) {
+                if (error.result === "error") {
+                    if (error.type === "internal-error") {
+                        this.openErrorBox(t("errors.internal-error"))
+                    }
+                    else if (error.type === "email-already-exists") {
+                        this.openErrorBox(t("errors.email-already-exists"))
+                    }
+                    else {
+                        this.openErrorBox(t("errors.unknown-error"))
+                    }
+                }
+            }
+            else {
+                this.openErrorBox(t("errors.unknown-error"))
+            }
+        })
+        window.ipc.receive("emailValidated", () => this.props.history.push("/"))
+        window.ipc.receive("emailValidationError", () => this.props.history.push("/auth/login"))
 
     }
 
@@ -129,69 +154,12 @@ class Register extends Component {
             this.openErrorBox(t("errors.password-confirmation-not-match"))
         }
         else {
-            axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/signup`,
-                {
-                    lastname: lastname,
-                    firstname: firstname,
-                    email: email,
-                    password: password,
-                    lang: i18n.language
-                }
-            ).then(res => {
-                if (res.data.result === "success") {
-                    this.setState({ emailConfirmationEnabled: true })
-                    const interval = setInterval(() => {
-                        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/email/validated`, { email: email })
-                            .then(res => {
-                                if (res.data.value === true) {
-                                    clearInterval(interval)
-
-
-                                    axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/login`,
-                                        {
-                                            email: email,
-                                            password: password
-                                        }
-                                    ).then(res => {
-                                        if (res.data.result === "success") {
-                                            saveEmail(email)
-                                            this.props.history.push({
-                                                pathname: "/", state: {
-                                                    token: res.data.token
-                                                }
-                                            })
-                                        }
-                                    })
-                                        .catch(err => {
-                                            sendToAuthPage()
-                                        })
-
-                                }
-                            })
-                    }, 5000);
-
-                }
-
-                this.setState({ isConnecting: false })
-
-            }).catch(error => {
-                if (error.response && error.response.data) {
-                    if (error.response.data.result === "error") {
-                        if (error.response.data.type === "internal-error") {
-                            this.openErrorBox(t("errors.internal-error"))
-                        }
-                        else if (error.response.data.type === "email-already-exists") {
-                            this.openErrorBox(t("errors.email-already-exists"))
-                        }
-                        else {
-                            this.openErrorBox(t("errors.unknown-error"))
-                        }
-                    }
-                }
-                else {
-                    this.openErrorBox(t("errors.unknown-error"))
-                }
-                this.setState({ isConnecting: false })
+            window.ipc.send("signup", {
+                lastname: lastname,
+                firstname: firstname,
+                email: email,
+                password: password,
+                lang: i18n.language
             })
         }
     }
@@ -208,12 +176,7 @@ class Register extends Component {
     handleResendEmail = event => {
         const { email } = this.state
         event.target.disabled = true
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/email/resend`,
-            {
-                email: email,
-                lang: i18n.language
-            }
-        )
+        window.ipc.send("resendEmail", { email: email, lang: i18n.language })
         setTimeout(function () {
             event.target.disabled = false
         }, 30000)

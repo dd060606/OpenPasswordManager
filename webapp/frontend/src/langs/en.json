@@ -50,7 +50,8 @@
     "lastname": "Lastname",
     "current-password": "Current password",
     "new-password": "New password",
-    "confirm-new-password": "Confirm new password"
+    "confirm-new-password": "Confirm new password",
+    "password-modified": "Password successfully modified!"
   },
   "generator": {
     "password-generator": "Password generator",
@@ -100,5 +101,6 @@
   "copy": "Copy",
   "copied": "Copied",
   "search": "Search",
-  "save": "Save"
+  "save": "Save",
+  "success": "Success"
 }

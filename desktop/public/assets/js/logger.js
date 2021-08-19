@@ -1,4 +1,4 @@
-exports.info = function (message) {
+exports.log = function (message) {
     console.log("[INFO] : " + message)
 }
 exports.error = function (message) {

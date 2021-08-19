@@ -4,8 +4,7 @@ import Swal from 'sweetalert2'
 import { Link } from "react-router-dom"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
-import axios from "axios"
-import { deleteEmailCookie, getEmail, isEmailSaved, saveEmail } from "../../utils/auth-utils"
+import { getEmail, isEmailSaved, saveEmail } from "../../utils/auth-utils"
 import { isDarkTheme } from "../../utils/themes-utils"
 
 
@@ -34,6 +33,36 @@ class Login extends Component {
         authLogin.style.setProperty("--bg-2-theme", isDarkTheme() ? "#333" : "white")
         authLogin.style.setProperty("--field-bg-theme", isDarkTheme() ? "#333" : "rgba(236, 236, 236, 0.8)")
         authLogin.style.setProperty("--blue-bg-theme", isDarkTheme() ? "#333" : "rgba(198,237,240,0.35)")
+
+        window.ipc.receive("loginSuccess", () => this.props.history.push("/"))
+        window.ipc.receive("loginError", err => {
+            const { t } = this.props
+
+            const { email } = this.state
+
+            if (err) {
+
+                if (err.type === "internal-error") {
+                    this.openErrorBox(t("errors.internal-error"))
+                } else if (err.type === "invalid-credentials") {
+                    this.openErrorBox(t("errors.invalid-credentials"))
+                }
+                else if (err.type === "email-not-verified") {
+                    this.props.history.push({
+                        pathname: '/auth/email/confirmation',
+                        state: { redirectedAfterLogin: true, email: email }
+                    })
+                }
+                else {
+                    this.openErrorBox(t("errors.unknown-error"))
+                }
+            }
+            else {
+                this.openErrorBox(t("errors.unknown-error"))
+            }
+        })
+        window.ipc.receive("goToAuth", () => this.props.history.push("/auth/login"))
+
 
     }
 
@@ -80,52 +109,14 @@ class Login extends Component {
             this.openErrorBox(t("errors.wrong-password"))
         }
         else {
-
-            axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/login`,
-                {
-                    email: email,
-                    password: password
-                }
-            ).then(res => {
-                if (res.data.result === "success") {
-                    saveEmail(email)
-                    this.props.history.push({
-                        pathname: "/", state: {
-                            token: res.data.token
-                        }
-                    })
-                }
-            })
-                .catch(err => {
-                    if (err.response && err.response.data) {
-                        if (err.response.data.type === "internal-error") {
-                            this.openErrorBox(t("errors.internal-error"))
-                        } else if (err.response.data.type === "invalid-credentials") {
-                            this.openErrorBox(t("errors.invalid-credentials"))
-
-                        }
-                        else if (err.response.data.type === "email-not-verified") {
-                            this.props.history.push({
-                                pathname: '/auth/email/confirmation',
-                                state: { redirectedAfterLogin: true, email: email }
-                            })
-                        }
-                        else {
-                            this.openErrorBox(t("errors.unknown-error"))
-                        }
-                    }
-                    else {
-                        this.openErrorBox(t("errors.unknown-error"))
-                    }
-                })
-
+            window.ipc.send("login", { email: email, password: password })
         }
     }
 
 
     handleAuthToAnotherAccount = event => {
         event.preventDefault()
-        deleteEmailCookie()
+        saveEmail("")
         window.location.reload()
     }
 

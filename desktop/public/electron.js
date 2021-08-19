@@ -5,9 +5,7 @@ const path = require('path')
 const fs = require("fs")
 const isDev = require('electron-is-dev')
 const electronLocalshortcut = require('electron-localshortcut')
-
-const { initConfig } = require("./assets/js/configmanager")
-
+const ConfigManager = require("./assets/js/configmanager")
 const { initMainIPC } = require('./assets/js/mainIPC')
 
 let win
@@ -22,7 +20,7 @@ function createWindow() {
             preload: path.join(__dirname, "preload.js")
         },
         title: "OpenPasswordManager",
-        icon: path.join(__dirname, "assets/favicon.ico")
+        icon: path.join(__dirname, "assets", "images", "icon.png")
     })
 
 
@@ -44,13 +42,20 @@ function createWindow() {
     if (!isDev) {
         win.removeMenu()
     }
-    initConfig()
-    initMainIPC()
+    win.on("closed", () => {
+        win = null
+    })
+    exports.win = win
+
 
 }
 
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+    ConfigManager.load()
+    initMainIPC()
+    createWindow()
+})
 
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
@@ -65,6 +70,6 @@ app.on("activate", () => {
 })
 
 
-
+exports.SERVER_URL = "https://apis.dd06-dev.fr/opm"
 
 

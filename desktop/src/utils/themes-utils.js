@@ -1,15 +1,15 @@
 function isSavedThemeValid() {
 
-    return window.ipc.sendSync("is-saved-theme-valid")
+    return window.ipc.sendSync("isSavedThemeValid")
 }
 function getSavedTheme() {
-    return window.ipc.sendSync("get-saved-theme") === 0 ? "light" : "dark"
+    return window.ipc.sendSync("getSavedTheme") === 0 ? "light" : "dark"
 }
 function saveTheme(theme) {
-    window.ipc.send("set-theme", theme === "light" ? 0 : 1)
+    window.ipc.send("setTheme", theme === "light" ? 0 : 1)
 }
 function isDarkTheme() {
-    return window.ipc.sendSync("get-saved-theme") === 1
+    return window.ipc.sendSync("getSavedTheme") === 1
 
 }
 export { isSavedThemeValid, getSavedTheme, saveTheme, isDarkTheme }

@@ -6,8 +6,6 @@ import { Component } from "react"
 import { withRouter } from "react-router-dom"
 import { isDarkTheme } from "../../../utils/themes-utils"
 import Swal from "sweetalert2"
-import axios from "axios"
-import { sendToAuthPage } from "../../../utils/auth-utils"
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*#?&_]{8,}$/
 
@@ -40,6 +38,43 @@ class EnterPasswordBox extends Component {
         changePassword.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
         changePassword.style.setProperty("--bg-theme", isDarkTheme() ? "#333" : "white")
         changePassword.style.setProperty("--field-bg-theme", isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)")
+
+        window.ipc.receive("changePasswordResult", res => {
+            const { t } = this.props
+
+            if (res.result === "success") {
+                Swal.fire({
+                    title: t("success"),
+                    text: t("account.password-modified"),
+                    icon: "success",
+                    confirmButtonColor: "#54c2f0",
+                    background: isDarkTheme() ? " #333" : "white"
+                }
+                ).then(() => {
+                    this.setState({ isLoading: false })
+                    this.closeBox()
+                })
+                const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+                swal2.forEach(element => {
+                    element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                })
+            }
+            else {
+                let errorMessage = t("errors.unknown-error")
+                if (res.error) {
+                    if (res.error.type === "internal-error") {
+                        errorMessage = t("errors.internal-error")
+                    } else if (res.error.type === "invalid-token") {
+                        this.props.history.push("/auth/login")
+                        return
+                    }
+                    else if (res.error.type === "wrong-password") {
+                        errorMessage = t("errors.wrong-password")
+                    }
+                }
+                this.openErrorBox(errorMessage)
+            }
+        })
     }
 
 
@@ -113,42 +148,7 @@ class EnterPasswordBox extends Component {
             this.openErrorBox(t("errors.new-password-confirmation-not-match"))
         }
         else {
-            axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/change-password/`, {
-                currentPassword: currentPassword,
-                newPassword: newPassword
-            }, { headers: { "Authorization": `Bearer ${this.props.token}` } })
-                .then(result => {
-                    Swal.fire({
-                        title: "Succès",
-                        text: "Mot de passe modifié avec succès !",
-                        icon: "success",
-                        confirmButtonColor: "#54c2f0",
-                        background: isDarkTheme() ? " #333" : "white"
-                    }
-                    ).then(() => {
-                        this.setState({ isLoading: false })
-                        this.closeBox()
-                    })
-                    const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
-                    swal2.forEach(element => {
-                        element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
-                    })
-                })
-                .catch(err => {
-                    let errorMessage = t("errors.unknown-error")
-                    if (err.response && err.response.data) {
-                        if (err.response.data.type === "internal-error") {
-                            errorMessage = t("errors.internal-error")
-                        } else if (err.response.data.type === "invalid-token") {
-                            sendToAuthPage(this.props)
-                            return
-                        }
-                        else if (err.response.data.type === "wrong-password") {
-                            errorMessage = t("errors.wrong-password")
-                        }
-                    }
-                    this.openErrorBox(errorMessage)
-                })
+            window.ipc.send("changePassword", { currentPassword: currentPassword, newPassword: newPassword })
         }
 
 

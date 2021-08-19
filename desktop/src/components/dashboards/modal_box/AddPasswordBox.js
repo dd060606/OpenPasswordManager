@@ -4,10 +4,7 @@ import { withTranslation } from "react-i18next"
 import "../../../i18n"
 import { Component } from "react"
 import Swal from "sweetalert2"
-import axios from "axios"
-import { sendToAuthPage } from "../../../utils/auth-utils"
 import { withRouter } from "react-router-dom"
-import CryptoJS from "crypto-js"
 import Checkbox from "@material-ui/core/Checkbox"
 import Slider from "@material-ui/core/Slider"
 import { isDarkTheme } from "../../../utils/themes-utils"
@@ -46,6 +43,29 @@ class AddPasswordBox extends Component {
         addPassword.style.setProperty("--bg-theme", isDarkTheme() ? "#333" : "white")
         addPassword.style.setProperty("--field-bg-theme", isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)")
         addPassword.style.setProperty("--bg-dropdown-theme", isDarkTheme() ? "#212121" : "white")
+
+        window.ipc.receive("addCredentialsResult", (result, err) => {
+            const { t } = this.props
+
+            if (result === "success") {
+                this.setState({ isLoading: false })
+                this.closeBox()
+                this.reloadCredentials()
+            }
+            else {
+                let errorMessage = t("errors.unknown-error")
+                if (err) {
+                    if (err.type === "internal-error") {
+                        errorMessage = t("errors.internal-error")
+                    } else if (err.type === "invalid-token") {
+                        this.props.history.push("/auth/login")
+                        return
+                    }
+                }
+                this.openErrorBox(errorMessage)
+            }
+
+        })
     }
 
     openErrorBox(message) {
@@ -88,57 +108,8 @@ class AddPasswordBox extends Component {
     }
 
     reloadCredentials() {
-        const { t } = this.props
         this.setState({ isLoading: true })
-        axios.get(`${process.env.REACT_APP_SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${this.props.token}` } })
-            .then(result => {
-                let finalCredentials = []
-                for (let i = 0; i < result.data.credentials.length; i++) {
-                    result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
-                    result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
-
-                    finalCredentials.push(result.data.credentials[i])
-                }
-                this.props.reloadCredentials(result.data.credentials)
-                this.setState({ isLoading: false })
-            })
-            .catch(err => {
-                let errorMessage = t("errors.unknown-error")
-                if (err.response && err.response.data) {
-                    if (err.response.data.type === "internal-error") {
-                        errorMessage = t("errors.internal-error")
-                    }
-                }
-                this.openErrorBox(errorMessage)
-            })
-    }
-    extractHostname(url) {
-        var hostname;
-
-        if (url.indexOf("//") > -1) {
-            hostname = url.split('/')[2];
-        }
-        else {
-            hostname = url.split('/')[0];
-        }
-
-        hostname = hostname.split(':')[0];
-        hostname = hostname.split('?')[0];
-
-        return hostname;
-    }
-
-    extractRootDomain(url) {
-        var domain = this.extractHostname(url),
-            splitArr = domain.split('.'),
-            arrLen = splitArr.length;
-        if (arrLen > 2) {
-            domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
-            if (splitArr[arrLen - 2].length === 2 && splitArr[arrLen - 1].length === 2) {
-                domain = splitArr[arrLen - 3] + '.' + domain;
-            }
-        }
-        return domain;
+        window.ipc.send("loadCredentials")
     }
 
     handleAddPassword = () => {
@@ -150,30 +121,8 @@ class AddPasswordBox extends Component {
             return
         }
         this.setState({ isLoading: true })
-        let encryptedPassword = CryptoJS.AES.encrypt(password, this.props.password).toString()
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/credentials/add/`, {
-            username: username,
-            password: encryptedPassword,
-            name: websiteName,
-            url: url ? url.startsWith("http://") || url.startsWith("https://") ? url : `https://${url}` : ""
-        }, { headers: { "Authorization": `Bearer ${this.props.token}` } })
-            .then(result => {
-                this.setState({ isLoading: false })
-                this.closeBox()
-                this.reloadCredentials()
-            })
-            .catch(err => {
-                let errorMessage = t("errors.unknown-error")
-                if (err.response && err.response.data) {
-                    if (err.response.data.type === "internal-error") {
-                        errorMessage = t("errors.internal-error")
-                    } else if (err.response.data.type === "invalid-token") {
-                        sendToAuthPage(this.props)
-                        return
-                    }
-                }
-                this.openErrorBox(errorMessage)
-            })
+
+        window.ipc.send("addCredentials", { websiteName: websiteName, password: password, username: username, url: url })
     }
     handlePasswordLengthSliderChange = (event, newValue) => {
         const { passwordLength } = this.state

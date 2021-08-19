@@ -119,8 +119,8 @@ class EnterPasswordBox extends Component {
             }, { headers: { "Authorization": `Bearer ${this.props.token}` } })
                 .then(result => {
                     Swal.fire({
-                        title: "Succès",
-                        text: "Mot de passe modifié avec succès !",
+                        title: t("success"),
+                        text: t("account.password-modified"),
                         icon: "success",
                         confirmButtonColor: "#54c2f0",
                         background: isDarkTheme() ? " #333" : "white"

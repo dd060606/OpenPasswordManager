@@ -4,8 +4,6 @@ import { withTranslation } from "react-i18next"
 import "../../../i18n"
 import { Component } from "react"
 import Swal from "sweetalert2"
-import axios from "axios"
-import { readToken, sendToAuthPage } from "../../../utils/auth-utils"
 import { withRouter } from "react-router-dom"
 import { isDarkTheme } from "../../../utils/themes-utils"
 
@@ -29,6 +27,36 @@ class EnterPasswordBox extends Component {
         confirmPassword.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
         confirmPassword.style.setProperty("--bg-theme", isDarkTheme() ? "#333" : "white")
         confirmPassword.style.setProperty("--field-bg-theme", isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)")
+
+        window.ipc.receive("confirmPasswordResult", res => {
+            const { t } = this.props
+
+            if (res.result === "success") {
+                this.setState({ isLoading: false })
+                this.closeBox()
+                if (this.props.type === "new") {
+                    const addPasswordOverlay = document.querySelector(".add-password-overlay")
+                    addPasswordOverlay.style.visibility = "visible"
+                    addPasswordOverlay.style.opacity = 1
+                }
+                else if (this.props.type === "edit") {
+                    const editPasswordOverlay = document.querySelector(".edit-password-overlay")
+                    editPasswordOverlay.style.visibility = "visible"
+                    editPasswordOverlay.style.opacity = 1
+                }
+            }
+            else {
+                let errorMessage = t("errors.unknown-error")
+                if (res.error) {
+                    if (res.error.type === "internal-error") {
+                        errorMessage = t("errors.internal-error")
+                    } else if (res.error.type === "invalid-credentials") {
+                        errorMessage = t("errors.invalid-credentials")
+                    }
+                }
+                this.openErrorBox(errorMessage)
+            }
+        })
     }
     openErrorBox(message) {
         const { t } = this.props
@@ -90,54 +118,8 @@ class EnterPasswordBox extends Component {
                 this.openErrorBox(t("errors.wrong-password"))
                 return
             }
-            const token = readToken(this.props)
-            if (token) {
-                axios.get(`${process.env.REACT_APP_SERVER_URL}/api/auth/info`, { headers: { "Authorization": `Bearer ${token}` } })
-                    .then(result => {
-                        const email = result.data.email
-                        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/login`,
-                            {
-                                email: email,
-                                password: password
-                            }
-                        ).then(res => {
-                            if (res.data.result === "success") {
-                                this.setState({ isLoading: false })
-                                this.closeBox()
 
-                                if (this.props.type === "new") {
-                                    const addPasswordOverlay = document.querySelector(".add-password-overlay")
-                                    addPasswordOverlay.style.visibility = "visible"
-                                    addPasswordOverlay.style.opacity = 1
-                                    this.props.setPassword(password)
-                                }
-                                else if (this.props.type === "edit") {
-                                    const editPasswordOverlay = document.querySelector(".edit-password-overlay")
-                                    editPasswordOverlay.style.visibility = "visible"
-                                    editPasswordOverlay.style.opacity = 1
-                                    this.props.setPassword(password)
-                                }
-                            }
-                        })
-                            .catch(err => {
-                                let errorMessage = t("errors.unknown-error")
-                                if (err.response && err.response.data) {
-                                    if (err.response.data.type === "internal-error") {
-                                        errorMessage = t("errors.internal-error")
-                                    } else if (err.response.data.type === "invalid-credentials") {
-                                        errorMessage = t("errors.invalid-credentials")
-                                    }
-                                }
-                                this.openErrorBox(errorMessage)
-                            })
-                    })
-                    .catch(err => {
-                        sendToAuthPage(this.props)
-                    })
-            }
-            else {
-                sendToAuthPage(this.props)
-            }
+            window.ipc.send("confirmPassword", password)
 
         }
     }
