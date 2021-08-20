@@ -18,14 +18,15 @@ const SettingsSwitch = withStyles({
         },
     },
     checked: {},
-    track: {},
+    track: {}
 })(Switch)
 
 class SettingsDashboard extends Component {
 
     state = {
         isLoading: false,
-        currentTheme: "light"
+        currentTheme: "light",
+        launchAtStartup: true
     }
     componentDidMount() {
         const { currentTheme } = this.state
@@ -36,6 +37,8 @@ class SettingsDashboard extends Component {
         else {
             saveTheme(currentTheme)
         }
+
+        this.setState({ launchAtStartup: window.ipc.sendSync("isLaunchAtStartup") })
 
 
         this.handleThemeChange(getSavedTheme())
@@ -58,9 +61,15 @@ class SettingsDashboard extends Component {
 
     }
 
+    handleLaunchAtStartupChange = () => {
+        const { launchAtStartup } = this.state
+        window.ipc.send("setLaunchAtStartup", !launchAtStartup)
+        this.setState({ launchAtStartup: !launchAtStartup })
+    }
+
     render() {
         const { t } = this.props
-        const { isLoading, currentTheme } = this.state
+        const { isLoading, currentTheme, launchAtStartup } = this.state
         return (
 
 
@@ -85,14 +94,12 @@ class SettingsDashboard extends Component {
                                         <FormControlLabel value="dark" control={<Radio className="radio-button" />} label={t("settings.appearance.dark")} />
                                     </RadioGroup>
                                 </div>
-                                <div className="sync">
-                                    <p><strong>{t("settings.sync.synchronization")} : </strong></p>
-                                    <SettingsSwitch
-                                        checked={true}
-                                        className="sync-button"
-                                        onChange={(event) => {
-                                            console.log(event.target.value)
-                                        }} name="sync"
+                                <div className="startup">
+                                    <p><strong>{t("settings.startup.startup")} : </strong></p>
+                                    <FormControlLabel
+                                        className="startup-switch-label"
+                                        control={<SettingsSwitch className="startup-switch" checked={launchAtStartup} onChange={this.handleLaunchAtStartupChange} />}
+                                        label={t("settings.startup.launch-at-startup")}
                                     />
                                 </div>
                             </section>

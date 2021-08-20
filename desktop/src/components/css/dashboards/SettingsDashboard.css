@@ -64,7 +64,7 @@
     margin-left: 20px;
 
 }
-.settings-content .sync .sync-button {
+.settings-content .startup p,  .settings-content .startup .startup-switch {
     margin-left: 20px;
 }
 .settings-content .appearance .appearance-select .radio-button {

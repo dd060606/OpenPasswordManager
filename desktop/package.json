@@ -2,7 +2,9 @@
   "name": "open-password-manager",
   "productName": "OpenPasswordManager",
   "version": "1.0.0",
+  "description": "OpenPasswordManager is a passsword manager",
   "main": "public/electron.js",
+  "homepage": "./",
   "author": {
     "name": "dd_06"
   },
@@ -21,7 +23,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "sweetalert2": "^10.16.6",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^1.1.2",
+    "electron-is-dev": "^2.0.0"
   },
   "scripts": {
     "electron": "wait-on tcp:3000 && electron .",
@@ -55,8 +58,11 @@
   "devDependencies": {
     "concurrently": "^6.2.0",
     "electron": "^13.1.6",
-    "electron-is-dev": "^2.0.0",
     "electron-builder": "^22.11.7",
     "wait-on": "^6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dd060606/OpenPasswordManager.git"
   }
 }

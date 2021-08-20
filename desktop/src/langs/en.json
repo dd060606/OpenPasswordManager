@@ -74,6 +74,10 @@
       "dark": "Dark",
       "light": "Light"
     },
+    "startup": {
+      "startup": "Startup",
+      "launch-at-startup": "Launch OpenPasswordManager on your computer startup."
+    },
     "language": "Language",
     "sync": {
       "synchronization": "synchronization"

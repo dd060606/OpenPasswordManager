@@ -18,6 +18,14 @@ exports.initMainIPC = function () {
         ConfigManager.saveConfig()
     })
 
+    //Settings
+    ipc.on("isLaunchAtStartup", event => {
+        event.returnValue = ConfigManager.isLaunchAtStartup()
+    })
+    ipc.on("setLaunchAtStartup", (event, launchAtStartup) => {
+        ConfigManager.setLaunchAtStartup(launchAtStartup)
+        ConfigManager.saveConfig()
+    })
 
     //Auth
     ipc.on("getEmail", (event) => {

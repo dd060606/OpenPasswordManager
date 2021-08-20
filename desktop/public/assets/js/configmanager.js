@@ -14,7 +14,8 @@ const DEFAULT_CONFIG = {
         email: ""
     },
     theme: 0,
-    credentialsSort: 2
+    credentialsSort: 2,
+    launchAtStartup: true
 }
 const configPath = path.join(dataPath, 'config.json')
 
@@ -59,7 +60,7 @@ exports.isLoaded = function () {
 }
 
 exports.getTheme = function () {
-    return config.theme
+    return config.theme ? config.theme : DEFAULT_CONFIG.theme
 }
 
 exports.setTheme = function (theme) {
@@ -67,19 +68,28 @@ exports.setTheme = function (theme) {
 }
 
 exports.getCredentialsSort = function () {
-    return config.credentialsSort
+    return config.credentialsSort ? config.credentialsSort : DEFAULT_CONFIG.credentialsSort
 }
 
 exports.setCredentialsSort = function (credentialsSort) {
     config.credentialsSort = credentialsSort
 }
 exports.getEmail = function () {
-    return config.auth.email
+    return config.auth.email ? config.auth.email : DEFAULT_CONFIG.auth.email
 }
 
 exports.setEmail = function (email) {
     config.auth.email = email
 }
+exports.isLaunchAtStartup = function () {
+    return config.launchAtStartup === true || config.launchAtStartup === false ? config.launchAtStartup : DEFAULT_CONFIG.launchAtStartup
+}
+exports.setLaunchAtStartup = function (launchAtStartup) {
+    config.launchAtStartup = launchAtStartup
+}
+
+
+
 
 let token = null
 let password = ""

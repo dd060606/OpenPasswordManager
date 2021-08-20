@@ -7,7 +7,7 @@ import Error404 from './components/Error404'
 import Login from "./components/auth/Login"
 import Register from "./components/auth/Register"
 import App from "./components/App"
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 
 import PasswordsDashboard from './components/dashboards/PasswordsDashboard'
 import AccountDashboard from "./components/dashboards/AccountDashboard"
