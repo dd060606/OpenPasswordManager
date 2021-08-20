@@ -4,6 +4,7 @@ artifactName: "${productName}-setup-${version}.${ext}"
 
 asar: true
 compression: "maximum"
+extends: null
 
 publish:
   provider: github

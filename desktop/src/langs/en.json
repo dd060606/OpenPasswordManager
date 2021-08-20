@@ -78,6 +78,10 @@
       "startup": "Startup",
       "launch-at-startup": "Launch OpenPasswordManager on your computer startup."
     },
+    "close": {
+      "close": "Close",
+      "minimize-on-close": "Minimize OpenPasswordManager in your system tray when you close the app"
+    },
     "language": "Language",
     "sync": {
       "synchronization": "synchronization"

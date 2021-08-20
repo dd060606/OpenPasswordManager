@@ -7,6 +7,13 @@ const isDev = require('electron-is-dev')
 const electronLocalshortcut = require('electron-localshortcut')
 const ConfigManager = require("./assets/js/configmanager")
 const { initMainIPC } = require('./assets/js/mainIPC')
+const AutoLaunch = require('auto-launch')
+const logger = require("./assets/js/logger")
+
+exports.autoLauncher = new AutoLaunch({
+    name: "OpenPasswordManager",
+    isHidden: true
+})
 
 let win
 let forceQuit = false
@@ -19,12 +26,11 @@ if (!gotTheLock) {
 } else {
     app.on("second-instance", () => {
         if (win) {
-
-            if (win.isMinimized()) {
-                win.restore()
-            }
             if (!win.isVisible()) {
                 win.show()
+            }
+            if (win.isMinimized()) {
+                win.restore()
             }
             win.focus()
         }
@@ -65,7 +71,7 @@ function createWindow() {
         win = null
     })
     win.on("close", event => {
-        if (!forceQuit) {
+        if (ConfigManager.isMinimizeOnClose() && !forceQuit) {
             event.preventDefault()
             win.hide()
         }
@@ -96,6 +102,17 @@ function initTray() {
     ])
     win.tray.setToolTip("OpenPasswordManager")
     win.tray.setContextMenu(contextMenu)
+    win.tray.on('click', function () {
+        if (win) {
+            if (!win.isVisible()) {
+                win.show()
+            }
+            if (win.isMinimized()) {
+                win.restore()
+            }
+            win.focus()
+        }
+    })
 }
 
 app.whenReady().then(() => {
@@ -103,6 +120,23 @@ app.whenReady().then(() => {
     initMainIPC()
     createWindow()
     initTray()
+
+
+    exports.autoLauncher.isEnabled()
+        .then((isEnabled) => {
+            if (ConfigManager.isLaunchAtStartup() && !isEnabled) {
+                exports.autoLauncher.enable()
+            }
+            else if (!ConfigManager.isLaunchAtStartup() && isEnabled) {
+                exports.autoLauncher.disable()
+            }
+
+        })
+        .catch(function (err) {
+            logger.error(err)
+        })
+
+
 
 })
 

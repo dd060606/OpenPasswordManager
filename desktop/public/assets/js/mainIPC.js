@@ -4,6 +4,9 @@ const auth = require("./auth")
 const credentials = require("./credentials")
 const main = require("../../electron")
 const CryptoJS = require("crypto-js")
+const logger = require("./logger")
+
+
 
 exports.initMainIPC = function () {
     //Themes
@@ -24,6 +27,29 @@ exports.initMainIPC = function () {
     })
     ipc.on("setLaunchAtStartup", (event, launchAtStartup) => {
         ConfigManager.setLaunchAtStartup(launchAtStartup)
+        ConfigManager.saveConfig()
+
+
+
+        exports.autoLauncher.isEnabled()
+            .then((isEnabled) => {
+                if (launchAtStartup && !isEnabled) {
+                    exports.autoLauncher.enable()
+                }
+                else if (!launchAtStartup && isEnabled) {
+                    exports.autoLauncher.disable()
+                }
+
+            })
+            .catch(function (err) {
+                logger.error(err)
+            })
+    })
+    ipc.on("isMinimizeOnClose", event => {
+        event.returnValue = ConfigManager.isMinimizeOnClose()
+    })
+    ipc.on("setMinimizeOnClose", (event, minimizeOnClose) => {
+        ConfigManager.setMinimizeOnClose(minimizeOnClose)
         ConfigManager.saveConfig()
     })
 

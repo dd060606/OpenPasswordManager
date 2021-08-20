@@ -78,6 +78,10 @@
       "startup": "Démarrage",
       "launch-at-startup": "Lancer automatiquement OpenPasswordManager lors du démarrage de votre ordinateur."
     },
+    "close": {
+      "close": "Fermer",
+      "minimize-on-close": "Mettre OpenPasswordManager en arrière plan lorsque vous fermez l'application"
+    },
     "language": "Langage",
     "sync": {
       "synchronization": "Synchronisation"

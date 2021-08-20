@@ -15,7 +15,8 @@ const DEFAULT_CONFIG = {
     },
     theme: 0,
     credentialsSort: 2,
-    launchAtStartup: true
+    launchAtStartup: true,
+    minimizeOnClose: true
 }
 const configPath = path.join(dataPath, 'config.json')
 
@@ -86,6 +87,13 @@ exports.isLaunchAtStartup = function () {
 }
 exports.setLaunchAtStartup = function (launchAtStartup) {
     config.launchAtStartup = launchAtStartup
+}
+
+exports.isMinimizeOnClose = function () {
+    return config.minimizeOnClose === true || config.minimizeOnClose === false ? config.minimizeOnClose : DEFAULT_CONFIG.minimizeOnClose
+}
+exports.setMinimizeOnClose = function (minimizeOnClose) {
+    config.minimizeOnClose = minimizeOnClose
 }
 
 

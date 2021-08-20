@@ -26,7 +26,8 @@ class SettingsDashboard extends Component {
     state = {
         isLoading: false,
         currentTheme: "light",
-        launchAtStartup: true
+        launchAtStartup: true,
+        minimizeOnClose: true
     }
     componentDidMount() {
         const { currentTheme } = this.state
@@ -38,7 +39,7 @@ class SettingsDashboard extends Component {
             saveTheme(currentTheme)
         }
 
-        this.setState({ launchAtStartup: window.ipc.sendSync("isLaunchAtStartup") })
+        this.setState({ launchAtStartup: window.ipc.sendSync("isLaunchAtStartup"), minimizeOnClose: window.ipc.sendSync("isMinimizeOnClose") })
 
 
         this.handleThemeChange(getSavedTheme())
@@ -66,10 +67,15 @@ class SettingsDashboard extends Component {
         window.ipc.send("setLaunchAtStartup", !launchAtStartup)
         this.setState({ launchAtStartup: !launchAtStartup })
     }
+    handleMinimizeOnCloseChange = () => {
+        const { minimizeOnClose } = this.state
+        window.ipc.send("setMinimizeOnClose", !minimizeOnClose)
+        this.setState({ minimizeOnClose: !minimizeOnClose })
+    }
 
     render() {
         const { t } = this.props
-        const { isLoading, currentTheme, launchAtStartup } = this.state
+        const { isLoading, currentTheme, launchAtStartup, minimizeOnClose } = this.state
         return (
 
 
@@ -97,11 +103,22 @@ class SettingsDashboard extends Component {
                                 <div className="startup">
                                     <p><strong>{t("settings.startup.startup")} : </strong></p>
                                     <FormControlLabel
-                                        className="startup-switch-label"
-                                        control={<SettingsSwitch className="startup-switch" checked={launchAtStartup} onChange={this.handleLaunchAtStartupChange} />}
+                                        className="switch-label"
+                                        control={<SettingsSwitch className="settings-switch" checked={launchAtStartup} onChange={this.handleLaunchAtStartupChange} />}
                                         label={t("settings.startup.launch-at-startup")}
                                     />
+
                                 </div>
+                                <div className="close">
+                                    <p><strong>{t("settings.close.close")} : </strong></p>
+
+                                    <FormControlLabel
+                                        className="switch-label"
+                                        control={<SettingsSwitch className="settings-switch" checked={minimizeOnClose} onChange={this.handleMinimizeOnCloseChange} />}
+                                        label={t("settings.close.minimize-on-close")}
+                                    />
+                                </div>
+
                             </section>
                             <span className="line" />
 

@@ -1,7 +1,8 @@
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import "./fontawesome.css"
 
 import Error404 from './components/Error404'
 import Login from "./components/auth/Login"
@@ -11,8 +12,8 @@ import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 
 import PasswordsDashboard from './components/dashboards/PasswordsDashboard'
 import AccountDashboard from "./components/dashboards/AccountDashboard"
-import GeneratorDashboard from './components/dashboards/GeneratorDashboard';
-import SettingsDashboard from './components/dashboards/SettingsDashboard';
+import GeneratorDashboard from './components/dashboards/GeneratorDashboard'
+import SettingsDashboard from './components/dashboards/SettingsDashboard'
 
 
 
