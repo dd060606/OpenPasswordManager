@@ -4,7 +4,7 @@ const auth = require("./auth")
 const credentials = require("./credentials")
 const main = require("../../electron")
 const CryptoJS = require("crypto-js")
-const logger = require("./logger")
+
 
 
 
@@ -29,21 +29,10 @@ exports.initMainIPC = function () {
         ConfigManager.setLaunchAtStartup(launchAtStartup)
         ConfigManager.saveConfig()
 
+        main.openAppOnStartup()
 
 
-        exports.autoLauncher.isEnabled()
-            .then((isEnabled) => {
-                if (launchAtStartup && !isEnabled) {
-                    exports.autoLauncher.enable()
-                }
-                else if (!launchAtStartup && isEnabled) {
-                    exports.autoLauncher.disable()
-                }
 
-            })
-            .catch(function (err) {
-                logger.error(err)
-            })
     })
     ipc.on("isMinimizeOnClose", event => {
         event.returnValue = ConfigManager.isMinimizeOnClose()

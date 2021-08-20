@@ -27,7 +27,6 @@ nsis:
   allowToChangeInstallationDirectory: true
   installerIcon: "icons/icon.ico"
   installerHeaderIcon: "icons/icon.ico"
-  deleteAppDataOnUninstall: true
 
 # macOS Configuration
 mac:

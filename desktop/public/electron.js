@@ -7,10 +7,10 @@ const isDev = require('electron-is-dev')
 const electronLocalshortcut = require('electron-localshortcut')
 const ConfigManager = require("./assets/js/configmanager")
 const { initMainIPC } = require('./assets/js/mainIPC')
-const AutoLaunch = require('auto-launch')
 const logger = require("./assets/js/logger")
+const AutoLaunch = require("auto-launch")
 
-exports.autoLauncher = new AutoLaunch({
+var autoLaunch = new AutoLaunch({
     name: "OpenPasswordManager",
     isHidden: true
 })
@@ -49,7 +49,9 @@ function createWindow() {
         title: "OpenPasswordManager",
         icon: path.join(__dirname, "assets", "images", "logo_square.png")
     })
-
+    if (wasOpenedAtStartup()) {
+        win.hide()
+    }
     win.loadURL(
         isDev
             ? "http://localhost:3000"
@@ -77,6 +79,7 @@ function createWindow() {
         }
 
     })
+
 
 
 
@@ -120,23 +123,7 @@ app.whenReady().then(() => {
     initMainIPC()
     createWindow()
     initTray()
-
-
-    exports.autoLauncher.isEnabled()
-        .then((isEnabled) => {
-            if (ConfigManager.isLaunchAtStartup() && !isEnabled) {
-                exports.autoLauncher.enable()
-            }
-            else if (!ConfigManager.isLaunchAtStartup() && isEnabled) {
-                exports.autoLauncher.disable()
-            }
-
-        })
-        .catch(function (err) {
-            logger.error(err)
-        })
-
-
+    exports.openAppOnStartup()
 
 })
 
@@ -151,6 +138,33 @@ app.on("activate", () => {
         createWindow()
     }
 })
+
+exports.openAppOnStartup = function () {
+    if (!isDev) {
+        autoLaunch.isEnabled().then((isEnabled) => {
+            if (!isEnabled && ConfigManager.isLaunchAtStartup()) {
+                autoLaunch.enable()
+            }
+            else if (isEnabled && !ConfigManager.isLaunchAtStartup()) {
+                autoLaunch.disable()
+
+            }
+        }).catch(function (err) {
+            logger.error(err.message)
+        })
+    }
+}
+function wasOpenedAtStartup() {
+    try {
+        if (process.platform === "darwin") {
+            const loginSettings = app.getLoginItemSettings()
+            return loginSettings.wasOpenedAtLogin
+        }
+        return app.commandLine.hasSwitch("hidden")
+    } catch {
+        return false
+    }
+}
 
 
 exports.SERVER_URL = "https://apis.dd06-dev.fr/opm"
