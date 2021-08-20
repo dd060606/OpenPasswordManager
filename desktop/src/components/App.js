@@ -12,17 +12,20 @@ class App extends Component {
     }
 
     componentDidMount() {
-        window.ipc.send("checkAuthentication")
-        window.ipc.receive("checkAuthenticationResult", (result) => {
-            if (result === "success") {
-                this.setState({ isLoading: false })
-            }
-            else {
-                this.props.history.push("/auth/login")
-            }
-        })
-
-
+        if (window.ipc.sendSync("isCheckedForUpdates")) {
+            window.ipc.send("checkAuthentication")
+            window.ipc.receive("checkAuthenticationResult", (result) => {
+                if (result === "success") {
+                    this.setState({ isLoading: false })
+                }
+                else {
+                    this.props.history.push("/auth/login")
+                }
+            })
+        }
+        else {
+            this.props.history.push("/updater")
+        }
     }
     render() {
         const { isLoading } = this.state

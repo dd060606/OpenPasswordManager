@@ -18,13 +18,14 @@
     "crypto-js": "^4.1.1",
     "electron-is-dev": "^2.0.0",
     "electron-localshortcut": "^3.2.1",
+    "electron-updater": "^4.3.9",
     "i18next": "^20.4.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.11.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
-    "sweetalert2": "^11.1.4",
+    "sweetalert2": "10.16.6",
     "web-vitals": "^2.1.0"
   },
   "scripts": {

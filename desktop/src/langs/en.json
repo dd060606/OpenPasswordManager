@@ -102,6 +102,14 @@
     "sort-by": "Sort by",
     "creation-date": "Creation date"
   },
+  "updater": {
+    "searching-for-updates": "Searching for updates",
+    "downloading-update": "Downloading update",
+    "update-available": "Update available",
+    "new-update-available": "A new update is available!",
+    "to-download-new-release": "to download the new release.",
+    "click-here": "Click here"
+  },
   "welcome-on": "Welcome on",
   "continue": "Continue",
   "my-passwords": "My passwords",

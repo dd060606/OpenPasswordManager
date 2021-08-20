@@ -35,7 +35,7 @@ const PasswordItem = ({ credential, index, onClick }) => {
             <div className="password-action">
                 <Tooltip title={t("passwords.browse-website")} placement="top">
 
-                    <a href={credential.url} target="_blank" rel="noreferrer" className="browse-to-website-button"><i className="far fa-external-link" /></a>
+                    <p onClick={() => window.ipc.send("openExternalLink", credential.url)} className="browse-to-website-button"><i className="far fa-external-link" /></p>
                 </Tooltip>
                 <Tooltip title={t("passwords.edit")} placement="top">
 

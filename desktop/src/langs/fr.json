@@ -102,6 +102,14 @@
     "sort-by": "Trier par",
     "creation-date": "Date de création"
   },
+  "updater": {
+    "searching-for-updates": "Recherche de mises à jour",
+    "downloading-update": "Téléchargement de la mise à jour",
+    "update-available": "Mise à jour disponible",
+    "new-update-available": "Une nouvelle mise à jour est disponible !",
+    "to-download-new-release": "pour télécharger la nouvelle version.",
+    "click-here": "Cliquez ici"
+  },
   "welcome-on": "Bienvenue sur",
   "continue": "Continuer",
   "my-passwords": "Mes mots de passe",
