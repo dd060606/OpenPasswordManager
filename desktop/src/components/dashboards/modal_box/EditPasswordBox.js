@@ -48,6 +48,7 @@ class EditPasswordBox extends Component {
                             websiteName: this.props.credential.name, url: this.props.credential.url,
                             username: this.props.credential.username, password: window.ipc.sendSync("decryptCredentialsPassword", this.props.credential.password)
                         })
+
                     }
                 }
             });
@@ -58,6 +59,8 @@ class EditPasswordBox extends Component {
         editPassword.style.setProperty("--bg-theme", isDarkTheme() ? "#333" : "white")
         editPassword.style.setProperty("--field-bg-theme", isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)")
         editPassword.style.setProperty("--bg-dropdown-theme", isDarkTheme() ? "#212121" : "white")
+
+
         window.ipc.receive("saveCredentialsResult", res => {
             const { t } = this.props
 
@@ -148,6 +151,8 @@ class EditPasswordBox extends Component {
 
     reloadCredentials() {
         this.setState({ isLoading: true })
+
+
         window.ipc.send("loadCredentials")
     }
 
@@ -308,7 +313,9 @@ class EditPasswordBox extends Component {
 
 
                     <div className="content" onClick={event => this.handleCloseGeneratePasswordBox(event)}>
-                        <span style={{ backgroundImage: `url(${this.props.credential.largeImageURL})` }} alt="" className="website-icon" />
+                        <img src={this.props.credential.largeImageURL} alt="" className="website-icon" onError={event => {
+                            event.target.src = `${process.env.PUBLIC_URL}/assets/images/unknown_145x96.png`
+                        }} />
 
                         <div className="fields">
                             <p className="field-name">{t("passwords.website-name")}</p>

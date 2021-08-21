@@ -7,13 +7,11 @@ const logger = require("./logger")
 exports.loadCredentials = function () {
 
     axios.get(`${main.SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${ConfigManager.getToken()}` } })
-        .then(result => {
-            let finalCredentials = []
+        .then(async result => {
             for (let i = 0; i < result.data.credentials.length; i++) {
                 result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
                 result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
 
-                finalCredentials.push(result.data.credentials[i])
             }
             main.win.webContents.send("loadCredentialsResult", { result: "success", credentials: sortCredentials(result.data.credentials) })
         })

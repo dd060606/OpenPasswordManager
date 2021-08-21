@@ -69,7 +69,13 @@ exports.setTheme = function (theme) {
 }
 
 exports.getCredentialsSort = function () {
-    return config.credentialsSort ? config.credentialsSort : DEFAULT_CONFIG.credentialsSort
+    const availablesSortValues = [0, 1, 2]
+    if (availablesSortValues.includes(config.credentialsSort)) {
+        return config.credentialsSort
+    }
+    else {
+        return DEFAULT_CONFIG.credentialsSort
+    }
 }
 
 exports.setCredentialsSort = function (credentialsSort) {

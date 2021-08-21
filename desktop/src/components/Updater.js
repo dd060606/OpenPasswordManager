@@ -41,7 +41,7 @@ class Updater extends Component {
             const { t } = this.props
             Swal.fire({
                 title: t("updater.update-available"),
-                html: t("updater.new-update-available") + "<br />" + "<span class='update-link'>" + t("updater.click-here") + "</span> " + t("updater.to-download-new-release"),
+                html: `${t("updater.new-update-available")}<br /><span class='update-link'>${t("updater.click-here")}</span> ${t("updater.to-download-new-release")}`,
                 icon: "info",
                 confirmButtonColor: "#54c2f0",
                 background: isDarkTheme() ? " #333" : "white"
@@ -81,7 +81,6 @@ class Updater extends Component {
 
     render() {
         const { updateText, progress } = this.state
-        const { t } = this.props
         return (
 
             <div className="updater-content">
