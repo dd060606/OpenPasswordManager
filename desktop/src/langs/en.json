@@ -1,0 +1,125 @@
+{
+  "errors": {
+    "error404": "Error 404",
+    "error404-page-not-found": "Sorry, the page you're looking for was not found.",
+    "error": "Error",
+    "internal-error": "Internal server error! Please try again later.",
+    "unknown-error": "Unknown error, please try again later.",
+    "complete-all-fields": "Please complete all fields!",
+    "invalid-email": "Please enter a valid email!",
+    "invalid-lastname": "Please enter a valid lastname!",
+    "invalid-firstname": "Please enter a valid firstname!",
+    "password-require": "The password requires at least one number, one uppercase letter, one lowercase letter and 8 characters!",
+    "available-password-chars": "Available special characters : ",
+    "password-confirmation-not-match": "Password confirmation doesn't match!",
+    "new-password-confirmation-not-match": "New password confirmation doesn't match!",
+    "email-already-exists": "E-mail already exists!",
+    "check-your-network-connection": "Please check your network connection and try again.",
+    "account-confirmation-failed": "Error: Your confirmation link has expired or you are using an invalid account!",
+    "account-not-exists": "Account not exists!",
+    "wrong-password": "Wrong password !",
+    "invalid-credentials": "Invalid credentials!",
+    "enter-website-name": "Please enter a website name!"
+  },
+  "auth": {
+    "new-on-opm": "New on OpenPasswordManager?",
+    "already-registered": "Already registered?",
+    "login": "Login",
+    "signup": "Sign up",
+    "email": "E-Mail",
+    "firstname": "Firstname",
+    "lastname": "Lastname",
+    "password": "Password",
+    "confirm-password": "Confirm password",
+    "forgot-password": "Forgot your password?",
+    "already-have-account": "Already have an account? Sign in",
+    "no-account": "You don't have an account? Sign up",
+    "resend-email": "Resend e-mail",
+    "account-confirmation": "Account confirmation",
+    "account-successfully-activated": "Account successfully activated!",
+    "confirm-email-to-continue": "To continue, you must confirm your account with e-mail that was sent.",
+    "login-another-account": "Login with another account"
+  },
+  "account": {
+    "my-account": "My account",
+    "change-password": "Change password",
+    "logout": "Logout",
+    "want-to-logout": "Are you sure you want to logout?",
+    "username": "Username",
+    "firstname": "Firstname",
+    "lastname": "Lastname",
+    "current-password": "Current password",
+    "new-password": "New password",
+    "confirm-new-password": "Confirm new password",
+    "password-modified": "Password successfully modified!"
+  },
+  "generator": {
+    "password-generator": "Password generator",
+    "generator": "Generator",
+    "use-generator": "Use the password generator to generate a new password randomly and securely.",
+    "generate": "Generate",
+    "configure-password": "Configure your password",
+    "password-length": "Password length",
+    "numbers": "Numbers",
+    "uppercases": "Uppercases",
+    "lowercases": "Lowercases",
+    "symbols": "Symbols"
+  },
+  "settings": {
+    "settings": "Settings",
+    "general": "General",
+    "appearance": {
+      "appearance": "Appearance",
+      "theme": "Theme",
+      "dark": "Dark",
+      "light": "Light"
+    },
+    "startup": {
+      "startup": "Startup",
+      "launch-at-startup": "Launch OpenPasswordManager on your computer startup."
+    },
+    "close": {
+      "close": "Close",
+      "minimize-on-close": "Minimize OpenPasswordManager in your system tray when you close the app"
+    },
+    "language": "Language",
+    "sync": {
+      "synchronization": "synchronization"
+    }
+  },
+  "passwords": {
+    "add": "Add",
+    "no-passwords": "You don't have any saved passwords",
+    "edit": "Edit",
+    "browse-website": "Browse website",
+    "add-password": "Add password",
+    "website": "Website",
+    "website-name": "Website name",
+    "username": "Username",
+    "add-url": "Add an URL",
+    "confirm-password": "Confirm password",
+    "delete-password": "Delete password?",
+    "sort-by": "Sort by",
+    "creation-date": "Creation date"
+  },
+  "updater": {
+    "searching-for-updates": "Searching for updates",
+    "downloading-update": "Downloading update",
+    "update-available": "Update available",
+    "new-update-available": "A new update is available!",
+    "to-download-new-release": "to download the new release.",
+    "click-here": "Click here"
+  },
+  "welcome-on": "Welcome on",
+  "continue": "Continue",
+  "my-passwords": "My passwords",
+  "information": "Information",
+  "security": "Security",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "copy": "Copy",
+  "copied": "Copied",
+  "search": "Search",
+  "save": "Save",
+  "success": "Success"
+}

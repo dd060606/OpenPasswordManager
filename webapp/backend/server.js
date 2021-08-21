@@ -1,6 +1,8 @@
+
 const http = require('http')
 const app = require('./app')
-require('dotenv').config();
+const logger = require("./utils/logger")
+require('dotenv').config()
 
 
 
@@ -14,7 +16,7 @@ const normalizePort = val => {
         return port
     }
     return false
-};
+}
 const port = normalizePort(process.env.PORT)
 app.set('port', port)
 
@@ -26,25 +28,25 @@ const errorHandler = error => {
     const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port
     switch (error.code) {
         case 'EACCES':
-            console.error(bind + ' requires elevated privileges.')
+            logger.error(bind + ' requires elevated privileges.')
             process.exit(1)
-            break;
+            break
         case 'EADDRINUSE':
-            console.error(bind + ' is already in use.')
+            logger.error(bind + ' is already in use.')
             process.exit(1)
-            break;
+            break
         default:
             throw error
     }
-};
-
+}
+logger.info("Starting server...")
 const server = http.createServer(app)
 
 server.on('error', errorHandler)
 server.on('listening', () => {
     const address = server.address()
     const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port
-    console.log('Listening on ' + bind)
+    logger.info('Listening on ' + bind)
 });
 
 server.listen(port)

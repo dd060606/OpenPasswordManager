@@ -1,0 +1,75 @@
+.settings {
+    display: flex;
+    font-family: "Open Sans",sans-serif;
+    color: var(--text-theme);
+    background-color: var(--bg-theme);
+}
+.settings-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    
+}
+.line {
+    background-color: var(--line-theme);
+    height: 1px;
+    width: 90%;
+}
+.settings-content > section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    
+}
+.settings-content > section > p{
+    margin-bottom: 0px;
+}
+.settings-content > section > * {
+    margin-left: 50px;
+
+}
+.settings-content .appearance,.settings-content .language {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.settings-content .language select{
+    background-color: var(--bg-select-theme);
+    border: none;
+    width: 200px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 15px;
+    color: var(--text-theme);
+    outline: none;
+    margin-bottom: 5px;
+    border: 1px solid var(--bg-select-theme);
+    border-radius: 5px;
+    height: 30px;
+    margin-left: 10px;
+
+}
+.settings-content .language select:focus{
+    border: 1px solid #54c2f0;
+
+}
+
+
+.settings-content .appearance p, .settings-content .startup p, .settings-content .close p,  .settings-content .settings-switch{
+    margin-left: 20px;
+}
+.settings-content .appearance .appearance-select {
+    width: 150px;
+    margin-left: 20px;
+
+}
+.settings-content .appearance .appearance-select .radio-button {
+    color: #54c2f0;
+}
+
+@media all and (max-width: 310px) {
+    .settings-content > section > * {
+        margin-left: 10px;
+    }
+}

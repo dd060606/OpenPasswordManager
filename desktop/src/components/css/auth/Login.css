@@ -1,0 +1,205 @@
+body > #root> .auth-login {
+    height: 100vh;
+  }
+#nav-logo-login {
+    position: absolute;
+    left: 15px;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+#swal2-title,#swal2-content {
+    color: var(--text-theme);
+} 
+.auth-login {
+    display: flex;
+    flex-direction: row-reverse;
+    font-family:  "Open Sans", sans-serif;
+    background-color: var(--bg-theme);
+}
+.welcome-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    background-color: var(--blue-bg-theme);
+    width: 55%;
+}
+.welcome-login > h1, .welcome-login > h3  {
+    color: var(--text-theme)
+}
+.icon {
+    user-select: none;
+    -webkit-user-drag: none;
+}
+.welcome-login > .welcome {
+    font-size: 30Px;
+}
+.welcome-login > .signup-btn {
+        cursor: pointer;
+        border: 2px #54c2f0 solid;
+        border-radius: 5px;
+        background-color: var(--bg-2-theme);
+        color:#54c2f0;
+        font-family: "Open sans",sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        padding: 10px ;
+        transition: background-color 0.5s, color 0.5s;
+
+        width: 250px;
+        text-decoration: none;
+}
+.welcome-login > .signup-btn:hover {
+    background-color: rgba(223,223,223,0.2);
+    transition: background-color 0.5s, color 0.5s;
+}
+.login-form {
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    width: 45%;
+}
+.login-form > #nav-logo-login-responsive {
+    display: none;
+}
+.login-form > h2 {
+    margin-bottom: 25px;
+    color: var(--text-theme)
+}
+
+.login-form > .field {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-family:  "Open Sans", sans-serif;
+
+    width: 350px;
+    height: 35px;
+    background-color: var(--field-bg-theme);
+    border-radius: 5px;
+    
+}
+.login-form > .field > i{
+    color: var(--text-theme)
+
+}
+.login-form > .field > #email-input {
+    margin-right: 25px;
+}
+.login-form > .field > input {
+    width: 100%;
+    height: 35px;
+    border:none;
+    outline: none;
+    font-size: 17px;
+    background: transparent;
+    text-align: center;
+    color: var(--text-theme);
+}
+.login-form > .field > input:-webkit-autofill {
+    border: none;
+    border-radius: .3rem;
+    color: var(--text-theme);
+    background: var(--field-bg-theme);
+    caret-color: var(--text-theme);
+    -webkit-text-fill-color: var(--text-theme);
+    background-clip: text; 
+    box-shadow: 0 0 0 50px var(--field-bg-theme) inset; 
+    max-height: 33px;
+
+    border-radius: 0px;
+}
+ .login-form > .no-account {
+    color: var(--text-theme);
+    text-decoration: none;
+    white-space: nowrap;
+    display: none;
+    margin-top: 15px;
+
+}
+ .login-form > .no-account:hover {
+    text-decoration: underline var(--text-theme);
+}
+.login-form > .login-btn {
+    cursor: pointer;
+    font-family:  "Open Sans", sans-serif;
+    margin-top: 20px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: #54c2f0;
+    color:white;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px ;
+    transition: all 0.5s;
+    width: 250px;
+}
+.login-form > .login-btn:hover {
+    background-color: #4CB1DC;
+    transition: all 0.5s;
+}
+.field-icon {
+    margin-left: 10px;
+}
+.login-form > .login-another-account {
+    color: var(--text-theme);
+    font-size: 14px;
+    white-space: nowrap;
+}
+.login-form > .login-another-account:hover {
+    text-decoration: underline var(--text-theme);
+    cursor: pointer;
+}
+
+  .login-form > .email-text {
+    color: var(--text-theme)
+  }
+  @media all and (max-width: 1080px) {
+    .welcome-login {
+        display: none;
+    }
+
+    .auth-login { 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #nav-logo-login {
+        display: none;
+    }
+    .login-form > #nav-logo-login-responsive {
+        display: inline;
+    }
+    .login-form > .no-account {
+        display: inline;
+    }
+
+  }
+  @media all and (max-width: 370px) {
+    .login-form > .forgot-password, .login-form > .no-account {
+        font-size: 13px;
+    }
+    .login-form > h2 {
+        font-size: 19px;
+
+    }
+    .login-form > .field > input, .login-form > .field {
+        width: 275px;
+
+    }
+    .login-form > .email-text {
+        font-size: 14px;
+    }
+    .login-form > .login-btn {
+        width: 230px;
+    }
+
+  }
+  

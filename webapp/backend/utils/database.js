@@ -1,5 +1,6 @@
 require('dotenv').config()
 
+const logger = require("./logger")
 const mysql = require("mysql")
 const databaseHost = process.env.DB_HOST
 const databaseName = process.env.DB_NAME
@@ -18,10 +19,14 @@ const database = mysql.createConnection({
 
 
 module.exports.initDatabase = function () {
+    logger.info("Authenticating to database...")
     database.connect(function (err) {
-        if (err) throw err;
-        console.log("Connected to database!");
-    });
+        if (err) {
+            logger.error(err.sqlMessage)
+            throw err
+        }
+        logger.info("Connected to database!")
+    })
 
 
     database.query("CREATE TABLE IF NOT EXISTS `" + databaseName + "`.`" + process.env.DB_OPM_ACCOUNTS_TABLE + "` ( `id` INT NOT NULL AUTO_INCREMENT ,"
@@ -31,7 +36,10 @@ module.exports.initDatabase = function () {
         + " `firstname` VARCHAR(255) NOT NULL ,"
         + " `isVerified` BOOLEAN NOT NULL DEFAULT FALSE ,"
         + " PRIMARY KEY (`id`)) ENGINE = InnoDB;", function (err, result) {
-            if (err) throw err;
+            if (err) {
+                logger.error(err.sqlMessage)
+                throw err
+            }
         })
     database.query("CREATE TABLE IF NOT EXISTS `" + databaseName + "`.`" + process.env.DB_OPM_CREDENTIALS_TABLE + "` ( `id` INT NOT NULL AUTO_INCREMENT ,"
         + " `user_id` INT NOT NULL ,"
@@ -40,7 +48,10 @@ module.exports.initDatabase = function () {
         + " `username` TEXT NOT NULL ,"
         + " `password` TEXT NOT NULL ,"
         + " PRIMARY KEY (`id`)) ENGINE = InnoDB;", function (err, result) {
-            if (err) throw err;
+            if (err) {
+                logger.error(err.sqlMessage)
+                throw err
+            }
         })
 }
 

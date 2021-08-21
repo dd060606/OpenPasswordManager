@@ -1,6 +1,8 @@
 const fs = require("fs")
-const logsDir = './logs'
-let logNumber = 1
+const logsDir = "./logs"
+const latestLogPath = `${logsDir}/latest.log`
+
+
 
 
 exports.initLogger = () => {
@@ -10,14 +12,10 @@ exports.initLogger = () => {
     if (!fs.existsSync(logsDir)) {
         fs.mkdirSync(logsDir)
     }
-    fs.readdir(logsDir, (err, files) => {
-        while (files.includes(`log_${logNumber}.txt`)) {
-            logNumber++
-        }
-        fs.writeFile(`${logsDir}/log_${logNumber}.txt`, `# Log file ${logNumber} generated : ${time}\n`, function (err) {
-            if (err) throw err
-        })
-    })
+    if (!fs.existsSync(latestLogPath)) {
+        fs.writeFileSync(latestLogPath, `# Log file generated : ${time}\n`)
+    }
+
 }
 
 
@@ -26,10 +24,17 @@ exports.info = (message) => {
     let date = new Date()
     let time = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2) + " " + date.getHours()
         + ":" + date.getMinutes() + ":" + date.getSeconds()
-
     console.log(`[INFO] (${time}) ${message}`)
-
-    fs.appendFile(`${logsDir}/log_${logNumber}.txt`, `[INFO] (${time}) ${message}\n`, function (err) {
+    fs.appendFile(latestLogPath, `[INFO] (${time}) ${message}\n`, function (err) {
+        if (err) throw err
+    })
+}
+exports.error = (message) => {
+    let date = new Date()
+    let time = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2) + " " + date.getHours()
+        + ":" + date.getMinutes() + ":" + date.getSeconds()
+    console.error(`[ERROR] (${time}) ${message}`)
+    fs.appendFile(latestLogPath, `[ERROR] (${time}) ${message}\n`, function (err) {
         if (err) throw err
     })
 }

@@ -1,0 +1,53 @@
+appId: "openpasswordmanager"
+productName: "OpenPasswordManager"
+artifactName: "${productName}-setup-${version}.${ext}"
+
+asar: true
+compression: "maximum"
+extends: null
+
+publish:
+  provider: github
+
+files:
+  - "!{dist,.gitignore,.vscode,docs,dev-app-update.yml,.travis.yml,.nvmrc,.eslintrc.json,build.js}"
+
+# Windows Configuration
+win:
+  target:
+    - target: "nsis"
+      arch: "x64"
+  icon: "icons/icon.ico"
+
+# Windows Installer Configuration
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+  installerIcon: "icons/icon.ico"
+  installerHeaderIcon: "icons/icon.ico"
+
+# macOS Configuration
+mac:
+  target:
+    - target: "dmg"
+      arch:
+        - "x64"
+        - "arm64"
+  artifactName: "${productName}-setup-${version}-${arch}.${ext}"
+  category: "public.app-category.utilities"
+
+# Linux Configuration
+linux:
+  target: "AppImage"
+  maintainer: "dd_06"
+  vendor: "dd_06"
+  synopsis: "Open-source password manager"
+  description: "OpenPasswordManager is a passsword manager"
+  category: "Utility"
+  icon: "icons/icon.png"
+
+directories:
+  buildResources: "icons"
+  output: "dist"

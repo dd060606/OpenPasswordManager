@@ -360,8 +360,9 @@ class EditPasswordBox extends Component {
 
 
                     <div className="content" onClick={event => this.handleCloseGeneratePasswordBox(event)}>
-                        <span style={{ backgroundImage: `url(${this.props.credential.largeImageURL})` }} alt="" className="website-icon" />
-
+                        <img src={this.props.credential.largeImageURL} alt="" className="website-icon" onError={event => {
+                            event.target.src = `${process.env.PUBLIC_URL}/assets/images/unknown_145x96.png`
+                        }} />
                         <div className="fields">
                             <p className="field-name">{t("passwords.website-name")}</p>
                             <div className="field" style={{ border: websiteNameFieldFocused ? "1px #54c2f0 solid" : `1px ${isDarkTheme() ? "#212121" : "rgba(236, 236, 236, 0.8)"} solid` }}>
