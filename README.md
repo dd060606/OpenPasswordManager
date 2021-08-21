@@ -3,19 +3,10 @@
 
 </p>
 
-
-
-
-
 # OpenPasswordManager - Free cross-platform and open source password manager
-
-
-
-
 
 OpenPasswordManager is a browser and desktop password manager. The app can run either in browser, or as a desktop app.
 OpenPasswordManager use ReactJS for the frontend and ExpressJS for the backend.
-
 
 <details open="open">
   <summary>Table of Contents</summary>
@@ -34,8 +25,6 @@ OpenPasswordManager use ReactJS for the frontend and ExpressJS for the backend.
   </ol>
 </details>
 
-
-
 ## Getting Started
 
 ### Prerequisites
@@ -49,7 +38,8 @@ You need to install NodeJS and NPM and you also need to have a MySQL database
    git clone https://github.com/dd060606/OpenPasswordManager.git
    cd OpenPasswordManager
    ```
-3. Install frontend and backend dependencies
+2. Install frontend and backend dependencies
+
    ```sh
    cd /webapp/frontend
    npm i
@@ -57,31 +47,39 @@ You need to install NodeJS and NPM and you also need to have a MySQL database
    npm i
    ```
 
-4. Complete the config
-  
-    Rename `.env.example` in `webapp/frontend/` and in `webapp/backend` to `.env` and complete them.
+3. Complete the config
+
+   Rename `.env.example` in `webapp/frontend/` and in `webapp/backend` to `.env` and complete them.
 
 ### Start the website
-  1. Start the react website
-  ```sh
-   # In webapp/frontend
-   npm start
-   ```
-  2. Start the express server
-  ```sh
-   # In webapp/backend
-   node server
-   ```
+
+1. Start the react website
+
+```sh
+ # In webapp/frontend
+ npm start
+```
+
+2. Start the express server
+
+```sh
+ # In webapp/backend
+ node server
+```
 
 ## Features
-  - Passwords are securely encrypted with AES
-  - Credentials are stored in a database and accessible from your account
-  - Simple to use
-  - Light theme and dark theme
-  - Credentials sorting system
+
+- Passwords are securely encrypted with AES
+- Credentials are stored in a database and accessible from your account
+- Simple to use
+- Light theme and dark theme
+- Credentials sorting system
+- And more...
+
 ## To do
-  - A desktop app with Electron
-  - A react native app
+
+- A desktop app with Electron
+- A react native app
 
 ## License
 
