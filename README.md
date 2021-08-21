@@ -74,11 +74,12 @@ You need to install NodeJS and NPM and you also need to have a MySQL database
 - Simple to use
 - Light theme and dark theme
 - Credentials sorting system
+- Electron app for Windows, Linux and MacOS (in dev)
+- The electron app updates itself
 - And more...
 
 ## To do
 
-- A desktop app with Electron
 - A react native app
 
 ## License
