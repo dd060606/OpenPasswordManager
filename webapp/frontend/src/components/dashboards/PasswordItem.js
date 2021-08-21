@@ -15,12 +15,15 @@ const PasswordItem = ({ credential, index, onClick }) => {
         passwordItemBox.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
         passwordItemBox.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
 
-        let images = document.querySelectorAll('.password-item-box .password-info img')
-        images.forEach(image => {
-            if (!image.naturalHeight && !image.complete)
-                image.src = `${process.env.PUBLIC_URL}/assets/images/unknown_46x30.png`
+        setTimeout(() => {
+            let images = document.querySelectorAll('.password-item-box .password-info img')
+            images.forEach(image => {
+                if (!image.naturalHeight && !image.complete) {
+                    image.src = `${process.env.PUBLIC_URL}/assets/images/unknown_46x30.png`
+                }
 
-        })
+            })
+        }, 100)
     })
     return (<div className="password-item-box" >
         <div className="password-item" onClick={event => {
