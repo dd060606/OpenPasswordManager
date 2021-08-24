@@ -84,9 +84,9 @@ function createWindow() {
 
 
     exports.win = win
-
-
 }
+
+
 function initTray() {
     win.tray = new Tray(path.join(__dirname, "assets", "images", "logo_square.png"))
     const contextMenu = Menu.buildFromTemplate([
@@ -139,6 +139,7 @@ app.on("activate", () => {
     }
 })
 
+
 exports.openAppOnStartup = function () {
     if (!isDev) {
         autoLaunch.isEnabled().then((isEnabled) => {
@@ -166,6 +167,9 @@ function wasOpenedAtStartup() {
     }
 }
 
+
+
+exports.VERSION = app.getVersion()
 
 exports.SERVER_URL = "https://apis.dd06-dev.fr/opm"
 

@@ -3,21 +3,39 @@ const ConfigManager = require("./configmanager")
 const CryptoJS = require("crypto-js")
 const axios = require("axios")
 const logger = require("./logger")
+const offlineMode = require("./offlinemode")
 
-exports.loadCredentials = function () {
+exports.loadCredentials = async function () {
 
-    axios.get(`${main.SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${ConfigManager.getToken()}` } })
-        .then(async result => {
-            for (let i = 0; i < result.data.credentials.length; i++) {
-                result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
-                result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+    if (!ConfigManager.isOfflineMode()) {
+        axios.get(`${main.SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${ConfigManager.getToken()}` } })
+            .then(async result => {
+                for (let i = 0; i < result.data.credentials.length; i++) {
+                    result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+                    result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
 
-            }
-            main.win.webContents.send("loadCredentialsResult", { result: "success", credentials: sortCredentials(result.data.credentials) })
-        })
-        .catch(err => {
-            main.win.webContents.send("loadCredentialsResult", { result: "error", credentials: [], error: err.response ? err.response.data : undefined })
-        })
+                }
+                offlineMode.saveCredentials(result.data.credentials)
+
+
+                main.win.webContents.send("loadCredentialsResult", { result: "success", credentials: sortCredentials(result.data.credentials) })
+            })
+            .catch(err => {
+                main.win.webContents.send("loadCredentialsResult", { result: "error", credentials: [], error: err.response ? err.response.data : undefined })
+            })
+    }
+    else {
+        const credentials = await offlineMode.loadCredentials()
+        if (credentials) {
+            main.win.webContents.send("loadCredentialsResult", { result: "success", credentials: sortCredentials(credentials) })
+        }
+        else {
+            main.win.webContents.send("loadCredentialsResult", { result: "error", credentials: [], error: "offlineFileError" })
+            main.win.webContents.send("goToAuth")
+        }
+    }
+
+
 }
 exports.addCredentials = function (websiteName, password, username, url) {
     let encryptedPassword = CryptoJS.AES.encrypt(password, ConfigManager.getPassword()).toString()

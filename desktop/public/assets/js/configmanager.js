@@ -9,6 +9,7 @@ exports.getDataDirectory = function () {
     return dataPath
 }
 
+
 const DEFAULT_CONFIG = {
     auth: {
         email: ""
@@ -105,8 +106,12 @@ exports.setMinimizeOnClose = function (minimizeOnClose) {
 
 
 
+
+
 let token = null
 let password = ""
+let offlineMode = true
+
 exports.getToken = function () {
     return token
 }
@@ -120,4 +125,12 @@ exports.getPassword = function () {
 
 exports.setPassword = function (newPassword) {
     password = newPassword
+}
+
+exports.isOfflineMode = function () {
+    return offlineMode
+}
+
+exports.setOfflineMode = function (isOfflineMode) {
+    offlineMode = isOfflineMode
 }

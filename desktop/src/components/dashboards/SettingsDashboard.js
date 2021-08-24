@@ -27,7 +27,8 @@ class SettingsDashboard extends Component {
         isLoading: false,
         currentTheme: "light",
         launchAtStartup: true,
-        minimizeOnClose: true
+        minimizeOnClose: true,
+        version: ""
     }
     componentDidMount() {
         const { currentTheme } = this.state
@@ -39,7 +40,10 @@ class SettingsDashboard extends Component {
             saveTheme(currentTheme)
         }
 
-        this.setState({ launchAtStartup: window.ipc.sendSync("isLaunchAtStartup"), minimizeOnClose: window.ipc.sendSync("isMinimizeOnClose") })
+        this.setState({
+            launchAtStartup: window.ipc.sendSync("isLaunchAtStartup"),
+            minimizeOnClose: window.ipc.sendSync("isMinimizeOnClose"), version: window.ipc.sendSync("getVersion")
+        })
 
 
         this.handleThemeChange(getSavedTheme())
@@ -75,7 +79,7 @@ class SettingsDashboard extends Component {
 
     render() {
         const { t } = this.props
-        const { isLoading, currentTheme, launchAtStartup, minimizeOnClose } = this.state
+        const { isLoading, currentTheme, launchAtStartup, minimizeOnClose, version } = this.state
         return (
 
 
@@ -120,7 +124,9 @@ class SettingsDashboard extends Component {
                                 </div>
 
                             </section>
+
                             <span className="line" />
+                            <p>v{version}</p>
 
                         </div>
 

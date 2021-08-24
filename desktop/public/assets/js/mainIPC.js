@@ -6,14 +6,20 @@ const main = require("../../electron")
 const CryptoJS = require("crypto-js")
 const { autoUpdater } = require("electron-updater")
 const isDev = require("electron-is-dev")
-const { shell } = require("electron")
+const { shell, app } = require("electron")
+
 
 let isCheckedForUpdates = false
+let updateDownloaded = false
 
 exports.initMainIPC = function () {
 
+    //Utils
     ipc.on("openExternalLink", (event, link) => {
         shell.openExternal(link)
+    })
+    ipc.on("getVersion", event => {
+        event.returnValue = main.VERSION
     })
 
     //Themes
@@ -102,10 +108,10 @@ exports.initMainIPC = function () {
         if (process.platform === 'darwin') {
             autoUpdater.autoDownload = false
         }
-        autoUpdater.autoInstallOnAppQuit = true
         autoUpdater.allowPrerelease = true
         autoUpdater.on('update-downloaded', () => {
             isCheckedForUpdates = true
+            updateDownloaded = true
             main.win.webContents.send("updateFinished")
         })
         autoUpdater.on("update-available", () => {
@@ -133,4 +139,14 @@ exports.initMainIPC = function () {
     ipc.on("openReleasesLink", () => {
         shell.openExternal("https://github.com/dd060606/OpenPasswordManager/releases")
     })
+
+
+    app.on("before-quit", () => {
+        if (updateDownloaded) {
+            updateDownloaded = false
+            autoUpdater.quitAndInstall()
+        }
+    })
+
 }
+

@@ -78,8 +78,10 @@ class PasswordsDashboard extends Component {
                 let errorMessage = t("errors.unknown-error")
 
                 if (res.error) {
-
-                    if (res.error.type === "internal-error") {
+                    if (res.error === "offlineFileError") {
+                        //   errorMessage = t("errors.offline-error")
+                    }
+                    else if (res.error.type === "internal-error") {
                         errorMessage = t("errors.internal-error")
                     } else if (res.error.type === "invalid-token") {
                         this.props.history.push("/auth/login")
