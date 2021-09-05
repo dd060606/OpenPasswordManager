@@ -4,6 +4,7 @@ const CryptoJS = require("crypto-js")
 const axios = require("axios")
 const logger = require("./logger")
 const offlineMode = require("./offlinemode")
+const fs = require("fs")
 
 exports.loadCredentials = async function () {
 
@@ -30,8 +31,13 @@ exports.loadCredentials = async function () {
             main.win.webContents.send("loadCredentialsResult", { result: "success", credentials: sortCredentials(credentials) })
         }
         else {
+            fs.writeFileSync(offlineMode.getCredentialsFile(), CryptoJS.AES.encrypt("[]", ConfigManager.getPassword()).toString(), 'UTF-8', function (err) {
+                if (err) {
+                    logger.error(err.message)
+                    return
+                }
+            })
             main.win.webContents.send("loadCredentialsResult", { result: "error", credentials: [], error: "offlineFileError" })
-            main.win.webContents.send("goToAuth")
         }
     }
 

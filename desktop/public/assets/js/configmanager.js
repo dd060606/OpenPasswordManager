@@ -17,7 +17,8 @@ const DEFAULT_CONFIG = {
     theme: 0,
     credentialsSort: 2,
     launchAtStartup: true,
-    minimizeOnClose: true
+    minimizeOnClose: true,
+    offlineMode: false
 }
 const configPath = path.join(dataPath, 'config.json')
 
@@ -78,10 +79,10 @@ exports.getCredentialsSort = function () {
         return DEFAULT_CONFIG.credentialsSort
     }
 }
-
 exports.setCredentialsSort = function (credentialsSort) {
     config.credentialsSort = credentialsSort
 }
+
 exports.getEmail = function () {
     return config.auth.email ? config.auth.email : DEFAULT_CONFIG.auth.email
 }
@@ -89,6 +90,7 @@ exports.getEmail = function () {
 exports.setEmail = function (email) {
     config.auth.email = email
 }
+
 exports.isLaunchAtStartup = function () {
     return config.launchAtStartup === true || config.launchAtStartup === false ? config.launchAtStartup : DEFAULT_CONFIG.launchAtStartup
 }
@@ -103,6 +105,14 @@ exports.setMinimizeOnClose = function (minimizeOnClose) {
     config.minimizeOnClose = minimizeOnClose
 }
 
+exports.isOfflineMode = function () {
+    return config.offlineMode === true || config.offlineMode === false ? config.offlineMode : DEFAULT_CONFIG.offlineMode
+}
+
+exports.setOfflineMode = function (isOfflineMode) {
+    config.offlineMode = isOfflineMode
+}
+
 
 
 
@@ -110,7 +120,6 @@ exports.setMinimizeOnClose = function (minimizeOnClose) {
 
 let token = null
 let password = ""
-let offlineMode = true
 
 exports.getToken = function () {
     return token
@@ -127,10 +136,4 @@ exports.setPassword = function (newPassword) {
     password = newPassword
 }
 
-exports.isOfflineMode = function () {
-    return offlineMode
-}
 
-exports.setOfflineMode = function (isOfflineMode) {
-    offlineMode = isOfflineMode
-}

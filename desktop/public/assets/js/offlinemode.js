@@ -20,14 +20,13 @@ exports.saveCredentials = function (credentials) {
         }
         logger.log("Credentials are successfully saved into a file!")
     })
-
-
-
 }
 
 exports.loadCredentials = async function () {
     try {
         const data = await fsPromises.readFile(exports.getCredentialsFile(), { encoding: "utf8" })
+
+        //Problème 
         const decryptedCredentials = CryptoJS.AES.decrypt(data, ConfigManager.getPassword()).toString(CryptoJS.enc.Utf8)
         return JSON.parse(decryptedCredentials)
     } catch (err) {

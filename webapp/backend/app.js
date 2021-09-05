@@ -15,7 +15,7 @@ const app = express()
 logger.initLogger()
 authUtils.initDatabase()
 
-
+app.set('trust proxy', true)
 app.use(cors())
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')

@@ -15,15 +15,7 @@ const PasswordItem = ({ credential, index, onClick }) => {
         passwordItemBox.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
         passwordItemBox.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
 
-        setTimeout(() => {
-            let images = document.querySelectorAll('.password-item-box .password-info img')
-            images.forEach(image => {
-                if (!image.naturalHeight && !image.complete) {
-                    image.src = `${process.env.PUBLIC_URL}/assets/images/unknown_46x30.png`
-                }
 
-            })
-        }, 100)
     })
     return (<div className="password-item-box" >
         <div className="password-item" onClick={event => {
@@ -33,7 +25,9 @@ const PasswordItem = ({ credential, index, onClick }) => {
         }}>
             <div className="password-info">
                 <img src={credential.smallImageURL}
-                    alt="" className="website-icon" />
+                    alt="" className="website-icon" onError={event => {
+                        event.target.src = `${process.env.PUBLIC_URL}/assets/images/unknown_46x30.png`
+                    }} />
                 <div>
                     <p className="password-name">{credential.name}</p>
                     <p className="username-text">{credential.username}</p>

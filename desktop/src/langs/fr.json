@@ -19,7 +19,8 @@
     "account-not-exists": "Ce compte n'existe pas !",
     "wrong-password": "Mauvais mot de passe !",
     "invalid-credentials": "Mauvais identifiants !",
-    "enter-website-name": "Veuillez entrer le nom du site !"
+    "enter-website-name": "Veuillez entrer le nom du site !",
+    "credentials-file-error": "Impossible de charger le fichier des identifiants !"
   },
   "auth": {
     "new-on-opm": "Nouveau sur OpenPasswordManager ?",

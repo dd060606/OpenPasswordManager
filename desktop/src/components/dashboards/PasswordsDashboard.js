@@ -79,7 +79,7 @@ class PasswordsDashboard extends Component {
 
                 if (res.error) {
                     if (res.error === "offlineFileError") {
-                        //   errorMessage = t("errors.offline-error")
+                        errorMessage = t("errors.credentials-file-error")
                     }
                     else if (res.error.type === "internal-error") {
                         errorMessage = t("errors.internal-error")

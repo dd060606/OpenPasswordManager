@@ -11,9 +11,9 @@ exports.add = (req, res, next) => {
 
         db.query(insertCredentialsSQL, function (err, result) {
             if (err) {
-                return res.status(500).json(getJsonForInternalError())
+                return res.status(500).json(getJsonForInternalError(err.message))
             }
-            logger.info(`${req.headers['x-forwarded-for'] || req.connection.remoteAddress} created new credentials : ${req.body.name} (${req.userId})`)
+            logger.info(`${req.headers['x-real-ip'] || req.connection.remoteAddress} created new credentials : ${req.body.name} (${req.userId})`)
             return res.status(201).json({
                 result: "success",
                 type: "credentials-successfully-created",
@@ -33,9 +33,9 @@ exports.edit = (req, res, next) => {
 
         db.query(updateCredentialsSQL, function (err, result) {
             if (err) {
-                return res.status(500).json(getJsonForInternalError())
+                return res.status(500).json(getJsonForInternalError(err.message))
             }
-            logger.info(`${req.headers['x-forwarded-for'] || req.connection.remoteAddress} modified credentials : ${req.body.name} (${req.userId})`)
+            logger.info(`${req.headers['x-real-ip'] || req.connection.remoteAddress} modified credentials : ${req.body.name} (${req.userId})`)
 
             return res.status(200).json({
                 result: "success",
@@ -55,9 +55,9 @@ exports.delete = (req, res, next) => {
         const deleteCredentialSQL = `DELETE FROM \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` WHERE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\`.\`id\` = ${req.params.id}`
         db.query(deleteCredentialSQL, function (err, result) {
             if (err) {
-                return res.status(500).json(getJsonForInternalError())
+                return res.status(500).json(getJsonForInternalError(err.message))
             }
-            logger.info(`${req.headers['x-forwarded-for'] || req.connection.remoteAddress} deleted credentials : ${req.params.id} (${req.userId})`)
+            logger.info(`${req.headers['x-real-ip'] || req.connection.remoteAddress} deleted credentials : ${req.params.id} (${req.userId})`)
 
             return res.status(200).json({
                 result: "success",
@@ -74,7 +74,7 @@ exports.delete = (req, res, next) => {
 exports.getCredentials = (req, res, next) => {
     db.query(`SELECT * FROM \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` WHERE user_id = ${req.userId}`, function (err, result) {
         if (err) {
-            return res.status(500).json(getJsonForInternalError())
+            return res.status(500).json(getJsonForInternalError(err.message))
         }
         return res.status(200).json({
             result: "success",
@@ -91,7 +91,8 @@ function getJsonForArgumentsError() {
         message: "Error : Bad request arguments!"
     })
 }
-function getJsonForInternalError() {
+function getJsonForInternalError(message) {
+    logger.error(message)
     return ({
         result: "error",
         type: "internal-error",

@@ -75,7 +75,7 @@ exports.emailConfirmation = (req, res, next) => {
         const userId = decodedToken.userId
         db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE id = '${userId}'`, function (err, result) {
             if (err) {
-                return res.status(500).json(getJsonForInternalError())
+                return res.status(500).json(getJsonForInternalError(err))
             }
             if (result.length > 0) {
                 if (result[0].isVerified === 1) {
@@ -87,9 +87,9 @@ exports.emailConfirmation = (req, res, next) => {
                 }
                 db.query(`UPDATE \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` SET \`isVerified\` = '1' WHERE \`${process.env.DB_OPM_ACCOUNTS_TABLE}\`.\`id\` = ${userId};`, function (err2, result2) {
                     if (err) {
-                        return res.status(500).json(getJsonForInternalError())
+                        return res.status(500).json(getJsonForInternalError(err.message))
                     }
-                    logger.info(`${req.headers['x-forwarded-for'] || req.connection.remoteAddress} verified e-mail : ${result[0].email} (${result[0].id})`)
+                    logger.info(`${req.headers['x-real-ip'] || req.connection.remoteAddress} verified e-mail : ${result[0].email} (${result[0].id})`)
 
                     return res.status(200).json({
                         result: "success",
@@ -122,7 +122,7 @@ exports.isEmailConfirmed = (req, res, next) => {
         if (emailRegex.test(req.body.email)) {
             db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE email = '${req.body.email}'`, function (err, result) {
                 if (err) {
-                    return res.status(500).json(getJsonForInternalError())
+                    return res.status(500).json(getJsonForInternalError(err.message))
                 }
                 if (result.length === 0) {
                     return res.status(400).json({
@@ -149,4 +149,12 @@ exports.isEmailConfirmed = (req, res, next) => {
         return res.status(400).json(getJsonForArgumentsError())
 
     }
+}
+function getJsonForInternalError(message) {
+    logger.error(message)
+    return ({
+        result: "error",
+        type: "internal-error",
+        message: "Error : Internal server error!"
+    })
 }
