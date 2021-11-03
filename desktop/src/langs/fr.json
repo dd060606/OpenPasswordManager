@@ -20,7 +20,8 @@
     "wrong-password": "Mauvais mot de passe !",
     "invalid-credentials": "Mauvais identifiants !",
     "enter-website-name": "Veuillez entrer le nom du site !",
-    "credentials-file-error": "Impossible de charger le fichier des identifiants !"
+    "credentials-file-error": "Impossible de charger le fichier des identifiants !",
+    "unconfirmed-email": "Adresse e-mail non confirmée !"
   },
   "auth": {
     "new-on-opm": "Nouveau sur OpenPasswordManager ?",
@@ -39,7 +40,8 @@
     "account-confirmation": "Confirmation de votre compte",
     "account-successfully-activated": "Votre compte a été activé avec succès !",
     "confirm-email-to-continue": "Pour continuer, vous devez confirmer votre compte avec l'e-mail qui vous a été envoyé.",
-    "login-another-account": "Se connecter avec un autre compte"
+    "login-another-account": "Se connecter avec un autre compte",
+    "to-confirm-email": "pour confirmer votre adresse e-mail"
   },
   "account": {
     "my-account": "Mon compte",
@@ -108,8 +110,7 @@
     "downloading-update": "Téléchargement de la mise à jour",
     "update-available": "Mise à jour disponible",
     "new-update-available": "Une nouvelle mise à jour est disponible !",
-    "to-download-new-release": "pour télécharger la nouvelle version.",
-    "click-here": "Cliquez ici"
+    "to-download-new-release": "pour télécharger la nouvelle version."
   },
   "welcome-on": "Bienvenue sur",
   "continue": "Continuer",
@@ -122,5 +123,8 @@
   "copied": "Copié",
   "search": "Rechercher",
   "save": "Sauvegarder",
-  "success": "Succès"
+  "success": "Succès",
+  "offline-mode-enabled": "Mode hors-ligne activé",
+  "click-here": "Cliquez ici",
+  "go-to-offline-mode": "Connexion en mode hors ligne"
 }

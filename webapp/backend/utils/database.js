@@ -9,6 +9,7 @@ const databasePassword = process.env.DB_PASSWORD
 
 
 module.exports.tokenKey = process.env.AUTH_TOKEN_KEY
+
 const database = mysql.createPool({
     host: databaseHost,
     user: databaseUsername,

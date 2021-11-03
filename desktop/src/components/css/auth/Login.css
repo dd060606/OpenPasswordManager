@@ -161,6 +161,13 @@ body > #root> .auth-login {
   .login-form > .email-text {
     color: var(--text-theme)
   }
+  .email-link {
+    color: #0B6EE7;
+}
+.email-link:hover {
+    text-decoration: underline #0B6EE7;
+    cursor: pointer;
+}
   @media all and (max-width: 1080px) {
     .welcome-login {
         display: none;

@@ -18,8 +18,15 @@ exports.initMainIPC = function () {
     ipc.on("openExternalLink", (event, link) => {
         shell.openExternal(link)
     })
+    ipc.on("openEmailLink", () => {
+        shell.openExternal("https://opm-app.dd06-dev.fr/auth/login")
+    })
+
     ipc.on("getVersion", event => {
         event.returnValue = main.VERSION
+    })
+    ipc.on("isOfflineMode", event => {
+        event.returnValue = ConfigManager.isOfflineMode()
     })
 
     //Themes
@@ -76,6 +83,7 @@ exports.initMainIPC = function () {
     ipc.on("confirmPassword", (event, password) => auth.confirmPassword(password))
     ipc.on("isPasswordSaved", event => { event.returnValue = ConfigManager.getPassword() ? true : false })
     ipc.on("getAccountInfo", () => auth.getAccountInfo())
+    ipc.on("goToOfflineMode", (event, password) => auth.goToOfflineMode(password))
 
     //Credentials
     ipc.on("getCredentialsSort", (event) => {

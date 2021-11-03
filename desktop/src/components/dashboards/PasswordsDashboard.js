@@ -50,7 +50,8 @@ class PasswordsDashboard extends Component {
         enterPasswordType: "new",
         currentCredential: {},
         currentTheme: getSavedTheme(),
-        sortValue: 2
+        sortValue: 2,
+        offlineModeEnabled: false
 
     }
 
@@ -64,7 +65,7 @@ class PasswordsDashboard extends Component {
             const { t } = this.props
             if (res.result === "success") {
                 this.setState({
-                    isLoading: false, credentials: res.credentials
+                    isLoading: false, credentials: res.credentials, offlineModeEnabled: window.ipc.sendSync("isOfflineMode")
                 })
                 setTimeout(() => {
                     const myPasswords = document.querySelector(".my-passwords")
@@ -78,7 +79,7 @@ class PasswordsDashboard extends Component {
                 let errorMessage = t("errors.unknown-error")
 
                 if (res.error) {
-                    if (res.error === "offlineFileError") {
+                    if (res.error === "offline-file-error") {
                         errorMessage = t("errors.credentials-file-error")
                     }
                     else if (res.error.type === "internal-error") {
@@ -167,7 +168,7 @@ class PasswordsDashboard extends Component {
     }
 
     render() {
-        const { isLoading, credentials, search, enterPasswordType, currentCredential, sortValue } = this.state
+        const { isLoading, credentials, search, enterPasswordType, currentCredential, sortValue, offlineModeEnabled } = this.state
         const { t, classes } = this.props
 
         return (
@@ -179,6 +180,9 @@ class PasswordsDashboard extends Component {
                         <DashboardNav />
 
                         <div className="passwords-content">
+                            {offlineModeEnabled &&
+                                <span style={{ marginTop: 5 }}>{t("offline-mode-enabled")}</span>
+                            }
                             <nav>
                                 <button id="add-password-button" onClick={this.handleAddPassword}><i className="fas fa-plus" /> {t("passwords.add")}</button>
                                 <div className="search-bar">
@@ -229,8 +233,9 @@ class PasswordsDashboard extends Component {
                                 <AddPasswordBox reloadCredentials={credentials => this.setState({ credentials: credentials })} />
                                 <EditPasswordBox credential={currentCredential} />
                             </div>
-                        </div>
 
+
+                        </div>
                     </div>
                 }
             </>

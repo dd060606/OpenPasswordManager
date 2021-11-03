@@ -18,7 +18,7 @@ const DEFAULT_CONFIG = {
     credentialsSort: 2,
     launchAtStartup: true,
     minimizeOnClose: true,
-    offlineMode: false
+    credentialsSynchronized: true
 }
 const configPath = path.join(dataPath, 'config.json')
 
@@ -105,14 +105,15 @@ exports.setMinimizeOnClose = function (minimizeOnClose) {
     config.minimizeOnClose = minimizeOnClose
 }
 
-exports.isOfflineMode = function () {
-    return config.offlineMode === true || config.offlineMode === false ? config.offlineMode : DEFAULT_CONFIG.offlineMode
+
+
+exports.isCredentialsSynchronized = function () {
+    return config.credentialsSynchronized === true || config.credentialsSynchronized === false ? config.credentialsSynchronized : DEFAULT_CONFIG.credentialsSynchronized
 }
 
-exports.setOfflineMode = function (isOfflineMode) {
-    config.offlineMode = isOfflineMode
+exports.setCredentialsSynchronized = function (isCredentialsSynchronized) {
+    config.credentialsSynchronized = isCredentialsSynchronized
 }
-
 
 
 
@@ -120,6 +121,7 @@ exports.setOfflineMode = function (isOfflineMode) {
 
 let token = null
 let password = ""
+let offlineMode = false
 
 exports.getToken = function () {
     return token
@@ -136,4 +138,19 @@ exports.setPassword = function (newPassword) {
     password = newPassword
 }
 
+exports.isOfflineMode = function () {
+    if (offlineMode) {
+        exports.setCredentialsSynchronized(false)
+        exports.saveConfig()
+    }
+    return offlineMode
+}
+
+exports.setOfflineMode = function (isOfflineMode) {
+    if (isOfflineMode) {
+        exports.setCredentialsSynchronized(false)
+        exports.saveConfig()
+    }
+    offlineMode = isOfflineMode
+}
 
