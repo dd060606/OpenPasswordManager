@@ -21,7 +21,8 @@ exports.loadCredentials = async function () {
     finally {
         if (!ConfigManager.isOfflineMode()) {
             if (!ConfigManager.isCredentialsSynchronized()) {
-                await loadOfflineCredentials()
+                loadOfflineCredentials()
+                return
             }
             axios.get(`${main.SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${ConfigManager.getToken()}` } })
                 .then(async result => {
@@ -59,56 +60,58 @@ exports.loadCredentials = async function () {
 
 }
 function loadOfflineCredentials() {
-    return new Promise((resolve, reject) => {
-        axios.get(`${main.SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${ConfigManager.getToken()}` } })
-            .then(async result => {
+    axios.get(`${main.SERVER_URL}/api/credentials/`, { headers: { "Authorization": `Bearer ${ConfigManager.getToken()}` } })
+        .then(async result => {
+            try {
                 const credentials = await offlineMode.loadCredentials()
+
                 if (credentials) {
-                    try {
+                    let remoteIdList = []
 
-                        let remoteIdList = []
-
-                        for (let i = 0; i < result.data.credentials.length; i++) {
-                            remoteIdList.push(result.data.credentials[i].id)
-                            for (let j = 0; j < credentials.length; j++) {
-                                if (result.data.credentials[i].id === credentials[j].id) {
-                                    await axios.put(`${main.SERVER_URL}/api/credentials/edit/${result.data.credentials[i].id}`, {
-                                        username: credentials[j].username,
-                                        password: credentials[j].password,
-                                        name: credentials[j].name,
-                                        url: credentials[j].url.startsWith("http://") || credentials[j].url.startsWith("https://") ? credentials[j].url : `https://${credentials[j].url}`
-                                    }, { headers: { "Authorization": `Bearer ${ConfigManager.getToken()}` } })
-                                }
-                            }
-                        }
-
-                        for (let i = 0; i < credentials.length; i++) {
-                            if (!remoteIdList.includes(credentials[i].id)) {
-                                await axios.post(`${main.SERVER_URL}/api/credentials/add/`, {
-                                    username: credentials[i].username,
-                                    password: credentials[i].password,
-                                    name: credentials[i].name,
-                                    url: credentials[i].url ? credentials[i].url.startsWith("http://") || credentials[i].url.startsWith("https://") ? credentials[i].url : `https://${credentials[i].url}` : ""
+                    for (let i = 0; i < result.data.credentials.length; i++) {
+                        remoteIdList.push(result.data.credentials[i].id)
+                        for (let j = 0; j < credentials.length; j++) {
+                            if (result.data.credentials[i].id === credentials[j].id) {
+                                await axios.put(`${main.SERVER_URL}/api/credentials/edit/${result.data.credentials[i].id}`, {
+                                    username: credentials[j].username,
+                                    password: credentials[j].password,
+                                    name: credentials[j].name,
+                                    url: credentials[j].url.startsWith("http://") || credentials[j].url.startsWith("https://") ? credentials[j].url : `https://${credentials[j].url}`
                                 }, { headers: { "Authorization": `Bearer ${ConfigManager.getToken()}` } })
-
                             }
                         }
+                    }
+
+                    for (let i = 0; i < credentials.length; i++) {
+                        if (!remoteIdList.includes(credentials[i].id)) {
+                            await axios.post(`${main.SERVER_URL}/api/credentials/add/`, {
+                                username: credentials[i].username,
+                                password: credentials[i].password,
+                                name: credentials[i].name,
+                                url: credentials[i].url ? credentials[i].url.startsWith("http://") || credentials[i].url.startsWith("https://") ? credentials[i].url : `https://${credentials[i].url}` : ""
+                            }, { headers: { "Authorization": `Bearer ${ConfigManager.getToken()}` } })
+
+                        }
+                    }
 
 
-                    }
-                    catch (err) {
-                        reject(err.response ? err.response.data : err)
-                        return
-                    }
                 }
-                ConfigManager.setCredentialsSynchronized(true)
-                ConfigManager.saveConfig()
-                resolve()
-            })
-            .catch(err => {
-                reject(err.response ? err.response.data : err)
-            })
-    })
+
+            }
+            catch (err) {
+                logger.error(err.message)
+                return
+            }
+            ConfigManager.setCredentialsSynchronized(true)
+            ConfigManager.saveConfig()
+            exports.loadCredentials()
+
+
+
+        }).catch(err => {
+            logger.error(err.message)
+            main.win.webContents.send("loadCredentialsResult", { result: "error", credentials: [], error: err.response ? err.response.data : undefined })
+        })
 
 }
 exports.addCredentials = async function (websiteName, password, username, url) {
@@ -285,3 +288,4 @@ function extractRootDomain(url) {
     }
     return domain
 }
+

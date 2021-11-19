@@ -88,6 +88,7 @@ class PasswordsDashboard extends Component {
                         this.props.history.push("/auth/login")
                         return
                     }
+
                 }
                 Swal.fire({
                     title: t("errors.error"),
