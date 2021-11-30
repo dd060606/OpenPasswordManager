@@ -35,6 +35,8 @@ exports.loadCredentials = async function () {
                 })
                 .catch(err => {
                     main.win.webContents.send("loadCredentialsResult", { result: "error", credentials: [], error: err.response ? err.response.data : undefined })
+                    main.win.webContents.send("goToAuth")
+
                 })
         }
         else {

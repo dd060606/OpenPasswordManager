@@ -90,6 +90,7 @@ class PasswordsDashboard extends Component {
                     }
 
                 }
+
                 Swal.fire({
                     title: t("errors.error"),
                     text: errorMessage,
@@ -107,6 +108,9 @@ class PasswordsDashboard extends Component {
                 myPasswords.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
                 myPasswords.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
                 myPasswords.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
+
+
+
             }
         })
 
