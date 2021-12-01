@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next'
 import "./../i18n"
 import { isDarkTheme } from "./../utils/themes-utils"
 import { LinearProgress } from "@material-ui/core"
-
+import { withRouter } from "react-router-dom"
 
 class Updater extends Component {
 
@@ -21,9 +21,8 @@ class Updater extends Component {
         updaterContent.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
         updaterContent.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
         updaterContent.style.setProperty("--bg-bar-theme", isDarkTheme() ? "#333" : "#E9E9E9")
-
+        console.log("Updater mounted")
         this.setState({ updateText: t("updater.searching-for-updates") + "..." })
-
         window.ipc.send("checkForUpdates")
 
 
@@ -92,4 +91,4 @@ class Updater extends Component {
     }
 }
 
-export default withTranslation()(Updater)
+export default withTranslation()(withRouter(Updater))

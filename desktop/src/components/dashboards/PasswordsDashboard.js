@@ -13,7 +13,6 @@ import { InputLabel, MenuItem, Select, withStyles } from "@material-ui/core"
 import EditPasswordBox from "./modal_box/EditPasswordBox"
 import { getSavedTheme, isDarkTheme } from "../../utils/themes-utils"
 
-
 const styles = theme => ({
     select: {
         '&:before': {

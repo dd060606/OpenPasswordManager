@@ -3,9 +3,9 @@ import "../../css/dashboards/modal_box/ChangePasswordBox.css"
 import { withTranslation } from "react-i18next"
 import "../../../i18n"
 import { Component } from "react"
-import { withRouter } from "react-router-dom"
 import { isDarkTheme } from "../../../utils/themes-utils"
 import Swal from "sweetalert2"
+import { withRouter } from "react-router"
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*#?&_]{8,}$/
 

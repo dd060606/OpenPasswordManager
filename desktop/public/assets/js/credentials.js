@@ -126,7 +126,7 @@ exports.addCredentials = async function (websiteName, password, username, url) {
             name: websiteName,
             url: url ? url.startsWith("http://") || url.startsWith("https://") ? url : `https://${url}` : ""
         }, { headers: { "Authorization": `Bearer ${ConfigManager.getToken()}` } })
-            .then(result => {
+            .then(() => {
                 main.win.webContents.send("addCredentialsResult", "success")
 
             })

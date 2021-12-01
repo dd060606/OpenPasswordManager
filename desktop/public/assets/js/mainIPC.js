@@ -6,6 +6,7 @@ const main = require("../../electron")
 const CryptoJS = require("crypto-js")
 const { autoUpdater } = require("electron-updater")
 const isDev = require("electron-is-dev")
+const logger = require("./logger")
 const { shell, app } = require("electron")
 
 
@@ -106,9 +107,10 @@ exports.initMainIPC = function () {
         event.returnValue = isCheckedForUpdates
     })
     ipc.on("checkForUpdates", () => {
-
+        logger.log("Checking for updates...")
         if (isDev) {
             isCheckedForUpdates = true
+            logger.log("No updates found!")
             main.win.webContents.send("updateFinished")
             return
         }
@@ -120,19 +122,23 @@ exports.initMainIPC = function () {
         autoUpdater.on('update-downloaded', () => {
             isCheckedForUpdates = true
             updateDownloaded = true
+            logger.log("Updates finished!")
             main.win.webContents.send("updateFinished")
         })
         autoUpdater.on("update-available", () => {
             if (process.platform === "darwin") {
+                logger.log("Updates are available!")
                 main.win.webContents.send("updateAvailableMac")
             }
         })
         autoUpdater.on('update-not-available', () => {
             isCheckedForUpdates = true
+            logger.log("No updates found!")
             main.win.webContents.send("updateFinished")
         })
         autoUpdater.on('error', (err) => {
             isCheckedForUpdates = true
+            logger.error(err)
             main.win.webContents.send("updateError", err)
         })
         autoUpdater.on('download-progress', (progress) => {
@@ -140,8 +146,10 @@ exports.initMainIPC = function () {
         })
         autoUpdater.checkForUpdates().catch(err => {
             isCheckedForUpdates = true
+            logger.error(err)
             main.win.webContents.send("updateError", err)
         })
+
 
     })
     ipc.on("openReleasesLink", () => {

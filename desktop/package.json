@@ -1,7 +1,7 @@
 {
   "name": "open-password-manager",
   "productName": "OpenPasswordManager",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "OpenPasswordManager is a passsword manager",
   "main": "public/electron.js",
   "homepage": "./",
@@ -10,23 +10,23 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.12.3",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^12.0.0",
-    "@testing-library/user-event": "^13.2.1",
+    "@testing-library/jest-dom": "^5.15.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
     "auto-launch": "^5.0.5",
     "axios": "^0.24.0",
     "crypto-js": "^4.1.1",
     "electron-is-dev": "^2.0.0",
     "electron-localshortcut": "^3.2.1",
-    "electron-updater": "^4.3.9",
-    "i18next": "^20.4.0",
+    "electron-updater": "^4.6.1",
+    "i18next": "^21.5.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-i18next": "^11.11.4",
+    "react-i18next": "^11.14.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "sweetalert2": "10.16.6",
-    "web-vitals": "^2.1.0"
+    "web-vitals": "^2.1.2"
   },
   "scripts": {
     "electron": "wait-on tcp:3000 && electron .",
@@ -35,9 +35,9 @@
     "react-test": "react-scripts test --env=jsdom",
     "react-eject": "react-scripts eject",
     "electron-build": "electron-builder",
-    "release": "yarn run react-build && electron-builder --publish=always",
-    "build": "yarn run react-build && yarn run electron-build",
-    "start": "concurrently \"SET BROWSER=none&&yarn run react-start\" yarn:electron"
+    "release": "npm run react-build && electron-builder --publish=always",
+    "build": "npm run react-build && npm run electron-build",
+    "start": "concurrently \"SET BROWSER=none&&npm run react-start\" npm:electron"
   },
   "eslintConfig": {
     "extends": [
@@ -58,11 +58,10 @@
     ]
   },
   "devDependencies": {
-    "concurrently": "^6.2.1",
-    "electron": "^13.2.1",
-    "electron-builder": "^22.11.7",
-    "wait-on": "^6.0.0",
-    "yarn-upgrade-all": "^0.5.4"
+    "concurrently": "^6.4.0",
+    "electron": "^16.0.3",
+    "electron-builder": "^22.14.5",
+    "wait-on": "^6.0.0"
   },
   "repository": {
     "type": "git",
