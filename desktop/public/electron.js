@@ -120,8 +120,10 @@ function initTray() {
 }
 
 app.whenReady().then(() => {
+
     logger.log("Initializing app...")
     ConfigManager.load()
+    logger.init()
     initMainIPC()
     createWindow()
     initTray()
