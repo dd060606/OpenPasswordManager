@@ -9,7 +9,7 @@ import { withRouter } from "react-router"
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*#?&_]{8,}$/
 
-class EnterPasswordBox extends Component {
+class ChangePasswordBox extends Component {
 
 
     state = {
@@ -219,4 +219,4 @@ class EnterPasswordBox extends Component {
     }
 }
 
-export default withTranslation()(withRouter(EnterPasswordBox))
+export default withTranslation()(withRouter(ChangePasswordBox))

@@ -11,6 +11,8 @@ import { sendToAuthPage } from "../../../utils/auth-utils"
 import Checkbox from "@material-ui/core/Checkbox"
 import Slider from "@material-ui/core/Slider"
 import { isDarkTheme } from "../../../utils/themes-utils"
+import { extractRootDomain } from "../../../utils/credentials-utils"
+
 
 class EditPasswordBox extends Component {
 
@@ -115,12 +117,12 @@ class EditPasswordBox extends Component {
             .then(result => {
                 let finalCredentials = []
                 for (let i = 0; i < result.data.credentials.length; i++) {
-                    result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
-                    result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${this.extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+                    result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+                    result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
 
                     finalCredentials.push(result.data.credentials[i])
                 }
-                this.props.reloadCredentials(result.data.credentials)
+                this.props.reloadCredentials(finalCredentials)
                 this.setState({ isLoading: false })
             })
             .catch(err => {
@@ -132,34 +134,6 @@ class EditPasswordBox extends Component {
                 }
                 this.openErrorBox(errorMessage)
             })
-    }
-    extractHostname(url) {
-        var hostname;
-
-        if (url.indexOf("//") > -1) {
-            hostname = url.split('/')[2];
-        }
-        else {
-            hostname = url.split('/')[0];
-        }
-
-        hostname = hostname.split(':')[0];
-        hostname = hostname.split('?')[0];
-
-        return hostname;
-    }
-
-    extractRootDomain(url) {
-        var domain = this.extractHostname(url),
-            splitArr = domain.split('.'),
-            arrLen = splitArr.length;
-        if (arrLen > 2) {
-            domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
-            if (splitArr[arrLen - 2].length === 2 && splitArr[arrLen - 1].length === 2) {
-                domain = splitArr[arrLen - 3] + '.' + domain;
-            }
-        }
-        return domain;
     }
 
     handleSave = () => {
