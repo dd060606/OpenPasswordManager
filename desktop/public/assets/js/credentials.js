@@ -7,7 +7,7 @@ const offlineMode = require("./offlinemode")
 const fs = require("fs")
 
 exports.loadCredentials = async function () {
-
+    logger.log("Loading credentials...")
     try {
         if (ConfigManager.isOfflineMode()) {
             const res = await axios.head(`${main.SERVER_URL.substring(0, main.SERVER_URL.length - 4)}`)
@@ -17,6 +17,8 @@ exports.loadCredentials = async function () {
         }
     } catch (err) {
         ConfigManager.setOfflineMode(true)
+        logger.error("Error: Cannot reach the server: " + err.message)
+        logger.log("Offline mode is enabled")
     }
     finally {
         if (!ConfigManager.isOfflineMode()) {
@@ -31,9 +33,12 @@ exports.loadCredentials = async function () {
                         result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
                     }
                     offlineMode.saveCredentials(result.data.credentials)
+                    logger.log("Credentials loaded")
                     main.win.webContents.send("loadCredentialsResult", { result: "success", credentials: sortCredentials(result.data.credentials) })
+
                 })
                 .catch(err => {
+                    logger.error("Error while loading credentials: " + err.message)
                     main.win.webContents.send("loadCredentialsResult", { result: "error", credentials: [], error: err.response ? err.response.data : undefined })
                     main.win.webContents.send("goToAuth")
 
@@ -43,15 +48,17 @@ exports.loadCredentials = async function () {
 
             const credentials = await offlineMode.loadCredentials()
             if (credentials) {
+                logger.log("Offline credentials loaded")
                 main.win.webContents.send("loadCredentialsResult", { result: "success", credentials: sortCredentials(credentials) })
             }
             else {
                 fs.writeFileSync(offlineMode.getCredentialsFile(), CryptoJS.AES.encrypt("[]", ConfigManager.getPassword()).toString(), 'UTF-8', function (err) {
                     if (err) {
-                        logger.error(err.message)
+                        logger.error("Error while creating offline credentials file: " + err.message)
                         return
                     }
                 })
+                logger.error("Error : Cannot load offline credentials file")
                 main.win.webContents.send("loadCredentialsResult", { result: "error", credentials: [], error: "offline-file-error" })
             }
         }
@@ -66,7 +73,7 @@ function loadOfflineCredentials() {
         .then(async result => {
             try {
                 const credentials = await offlineMode.loadCredentials()
-
+                logger.log("Synchronizing offline credentials...")
                 if (credentials) {
                     let remoteIdList = []
 
@@ -101,7 +108,7 @@ function loadOfflineCredentials() {
 
             }
             catch (err) {
-                logger.error(err.message)
+                logger.error("Error while synchronizing offline credentials: " + err.message)
                 return
             }
             ConfigManager.setCredentialsSynchronized(true)
@@ -111,7 +118,7 @@ function loadOfflineCredentials() {
 
 
         }).catch(err => {
-            logger.error(err.message)
+            logger.error("Error while loading credentials: " + err.message)
             main.win.webContents.send("loadCredentialsResult", { result: "error", credentials: [], error: err.response ? err.response.data : undefined })
         })
 
@@ -127,10 +134,11 @@ exports.addCredentials = async function (websiteName, password, username, url) {
             url: url ? url.startsWith("http://") || url.startsWith("https://") ? url : `https://${url}` : ""
         }, { headers: { "Authorization": `Bearer ${ConfigManager.getToken()}` } })
             .then(() => {
+                logger.log(`Credential created : ${websiteName} - (${username})`)
                 main.win.webContents.send("addCredentialsResult", "success")
-
             })
             .catch(err => {
+                logger.error("Error while creating credential: " + err.message)
                 main.win.webContents.send("addCredentialsResult", "error", err.response ? err.response.data : undefined)
             })
     } else {
@@ -149,16 +157,18 @@ exports.addCredentials = async function (websiteName, password, username, url) {
                 smallImageURL: `https://d2erpoudwvue5y.cloudfront.net/_46x30/${extractRootDomain(url).replaceAll(".", "_")}@2x.png`,
                 largeImageURL: `https://d2erpoudwvue5y.cloudfront.net/_160x106/${extractRootDomain(url).replaceAll(".", "_")}@2x.png`
             })
+            logger.log(`Offline credential created : ${websiteName} - '${username})`)
             main.win.webContents.send("addCredentialsResult", "success")
             offlineMode.saveCredentials(credentials)
         }
         else {
             fs.writeFileSync(offlineMode.getCredentialsFile(), CryptoJS.AES.encrypt("[]", ConfigManager.getPassword()).toString(), 'UTF-8', function (err) {
                 if (err) {
-                    logger.error(err.message)
+                    logger.error("Error while creating offline credentials file: " + err.message)
                     return
                 }
             })
+            logger.error("Error: Cannot load offline credentials file")
             main.win.webContents.send("loadCredentialsResult", { result: "error", credentials: [], error: "offlineFileError" })
         }
     }
@@ -175,10 +185,12 @@ exports.saveCredentials = async function (id, websiteName, password, username, u
             url: url.startsWith("http://") || url.startsWith("https://") ? url : `https://${url}`
         }, { headers: { "Authorization": `Bearer ${ConfigManager.getToken()}` } })
             .then(() => {
+                logger.log(`Credential edited : (${id}) - ${websiteName} - (${username})`)
                 main.win.webContents.send("saveCredentialsResult", { result: "success" })
 
             })
             .catch(err => {
+                logger.error("Error while editing credential: " + err.message)
                 main.win.webContents.send("saveCredentialsResult", { result: "error", error: err.response ? err.response.data : undefined })
 
             })
@@ -199,15 +211,17 @@ exports.saveCredentials = async function (id, websiteName, password, username, u
                 }
 
             }
+            logger.log(`Offline credential edited : (${id}) - ${websiteName} - (${username})`)
             main.win.webContents.send("saveCredentialsResult", { result: "success" })
         }
         else {
             fs.writeFileSync(offlineMode.getCredentialsFile(), CryptoJS.AES.encrypt("[]", ConfigManager.getPassword()).toString(), 'UTF-8', function (err) {
                 if (err) {
-                    logger.error(err.message)
+                    logger.error("Error while creating offline credentials file: " + err.message)
                     return
                 }
             })
+            logger.error("Error: Cannot load offline credentials file")
             main.win.webContents.send("loadCredentialsResult", { result: "error", credentials: [], error: "offlineFileError" })
         }
     }
@@ -217,10 +231,12 @@ exports.deleteCredentials = async function (id) {
 
         axios.delete(`${main.SERVER_URL}/api/credentials/delete/${id}`, { headers: { "Authorization": `Bearer ${ConfigManager.getToken()}` } })
             .then(() => {
+                logger.log(`Credential deleted : (${id})`)
                 main.win.webContents.send("deleteCredentialsResult", { result: "success" })
 
             })
             .catch(err => {
+                logger.error("Error while deleting credential: " + err.message)
                 main.win.webContents.send("deleteCredentialsResult", { result: "error", error: err.response ? err.response.data : undefined })
             })
     }
@@ -236,15 +252,17 @@ exports.deleteCredentials = async function (id) {
                     }
                 }
             }
+            logger.log(`Offline credential deleted : (${id})`)
             main.win.webContents.send("deleteCredentialsResult", { result: "success" })
         }
         else {
             fs.writeFileSync(offlineMode.getCredentialsFile(), CryptoJS.AES.encrypt("[]", ConfigManager.getPassword()).toString(), 'UTF-8', function (err) {
                 if (err) {
-                    logger.error(err.message)
+                    logger.error("Error while creating offline credentials file: " + err.message)
                     return
                 }
             })
+            logger.error("Error: Cannot load offline credentials file")
             main.win.webContents.send("loadCredentialsResult", { result: "error", credentials: [], error: "offlineFileError" })
         }
     }

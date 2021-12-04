@@ -97,6 +97,7 @@ class PasswordsDashboard extends Component {
                     confirmButtonColor: "#54c2f0",
                     background: isDarkTheme() ? " #333" : "white",
                 })
+                this.props.history.push("/auth/login")
                 this.setState({ isLoading: false })
 
                 const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")

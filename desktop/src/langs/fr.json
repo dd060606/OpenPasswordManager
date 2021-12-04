@@ -110,7 +110,9 @@
     "downloading-update": "Téléchargement de la mise à jour",
     "update-available": "Mise à jour disponible",
     "new-update-available": "Une nouvelle mise à jour est disponible !",
-    "to-download-new-release": "pour télécharger la nouvelle version."
+    "to-download-new-release": "pour télécharger la nouvelle version.",
+    "download-finished": "Téléchargement terminé",
+    "install-updates": "Voulez vous installer la mise à jour ?"
   },
   "welcome-on": "Bienvenue sur",
   "continue": "Continuer",

@@ -52,6 +52,7 @@ function createWindow() {
     if (wasOpenedAtStartup()) {
         win.hide()
     }
+
     win.loadURL(
         isDev
             ? "http://localhost:3000"
@@ -119,6 +120,7 @@ function initTray() {
 }
 
 app.whenReady().then(() => {
+    logger.log("Initializing app...")
     ConfigManager.load()
     initMainIPC()
     createWindow()

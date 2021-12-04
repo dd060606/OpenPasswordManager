@@ -96,7 +96,7 @@ exports.goToOfflineMode = async function (password) {
     }
     ConfigManager.setPassword(password)
     ConfigManager.setOfflineMode(true)
-
+    logger.log("Offline mode is enabled!")
     main.win.webContents.send("loginSuccess")
 
 }
@@ -119,10 +119,13 @@ exports.changePassword = function (currentPassword, newPassword) {
         .then(() => {
             ConfigManager.setPassword(newPassword)
             main.win.webContents.send("changePasswordResult", { result: "success" })
+            logger.log("Password successfully modified")
 
         })
         .catch(err => {
             main.win.webContents.send("changePasswordResult", { result: "error", error: err.response ? err.response.data : undefined })
+            logger.error("Error while changing password: " + err.message)
+
         })
 }
 exports.confirmPassword = function (password) {

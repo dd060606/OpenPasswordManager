@@ -28,7 +28,7 @@ exports.loadCredentials = async function () {
         const decryptedCredentials = CryptoJS.AES.decrypt(data, ConfigManager.getPassword()).toString(CryptoJS.enc.Utf8)
         return JSON.parse(decryptedCredentials)
     } catch (err) {
-        logger.error(err.message)
+        logger.error("Error while decrypting offline credentials: " + err.message)
         return false
     }
 }

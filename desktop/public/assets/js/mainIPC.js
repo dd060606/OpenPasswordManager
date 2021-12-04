@@ -7,11 +7,10 @@ const CryptoJS = require("crypto-js")
 const { autoUpdater } = require("electron-updater")
 const isDev = require("electron-is-dev")
 const logger = require("./logger")
-const { shell, app } = require("electron")
+const { shell } = require("electron")
 
 
 let isCheckedForUpdates = false
-let updateDownloaded = false
 
 exports.initMainIPC = function () {
 
@@ -25,6 +24,9 @@ exports.initMainIPC = function () {
 
     ipc.on("getVersion", event => {
         event.returnValue = main.VERSION
+    })
+    ipc.on("isDev", event => {
+        event.returnValue = isDev
     })
     ipc.on("isOfflineMode", event => {
         event.returnValue = ConfigManager.isOfflineMode()
@@ -106,12 +108,15 @@ exports.initMainIPC = function () {
     ipc.on("isCheckedForUpdates", event => {
         event.returnValue = isCheckedForUpdates
     })
+    ipc.on("installUpdates", () => {
+        autoUpdater.quitAndInstall()
+    })
     ipc.on("checkForUpdates", () => {
         logger.log("Checking for updates...")
         if (isDev) {
             isCheckedForUpdates = true
             logger.log("No updates found!")
-            main.win.webContents.send("updateFinished")
+            main.win.webContents.send("updateFinished", false)
             return
         }
 
@@ -121,9 +126,8 @@ exports.initMainIPC = function () {
         autoUpdater.allowPrerelease = true
         autoUpdater.on('update-downloaded', () => {
             isCheckedForUpdates = true
-            updateDownloaded = true
             logger.log("Updates finished!")
-            main.win.webContents.send("updateFinished")
+            main.win.webContents.send("updateFinished", true)
         })
         autoUpdater.on("update-available", () => {
             if (process.platform === "darwin") {
@@ -134,7 +138,7 @@ exports.initMainIPC = function () {
         autoUpdater.on('update-not-available', () => {
             isCheckedForUpdates = true
             logger.log("No updates found!")
-            main.win.webContents.send("updateFinished")
+            main.win.webContents.send("updateFinished", false)
         })
         autoUpdater.on('error', (err) => {
             isCheckedForUpdates = true
@@ -157,12 +161,7 @@ exports.initMainIPC = function () {
     })
 
 
-    app.on("before-quit", () => {
-        if (updateDownloaded) {
-            updateDownloaded = false
-            autoUpdater.quitAndInstall()
-        }
-    })
+
 
 }
 

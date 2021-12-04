@@ -28,7 +28,8 @@ class SettingsDashboard extends Component {
         currentTheme: "light",
         launchAtStartup: true,
         minimizeOnClose: true,
-        version: ""
+        version: "",
+        isDev: false
     }
     componentDidMount() {
         const { currentTheme } = this.state
@@ -42,7 +43,9 @@ class SettingsDashboard extends Component {
 
         this.setState({
             launchAtStartup: window.ipc.sendSync("isLaunchAtStartup"),
-            minimizeOnClose: window.ipc.sendSync("isMinimizeOnClose"), version: window.ipc.sendSync("getVersion")
+            minimizeOnClose: window.ipc.sendSync("isMinimizeOnClose"),
+            version: window.ipc.sendSync("getVersion"),
+            isDev: window.ipc.sendSync("isDev")
         })
 
 
@@ -79,7 +82,7 @@ class SettingsDashboard extends Component {
 
     render() {
         const { t } = this.props
-        const { isLoading, currentTheme, launchAtStartup, minimizeOnClose, version } = this.state
+        const { isLoading, currentTheme, launchAtStartup, minimizeOnClose, version, isDev } = this.state
         return (
 
 
@@ -126,7 +129,7 @@ class SettingsDashboard extends Component {
                             </section>
 
                             <span className="line" />
-                            <p>v{version}</p>
+                            <p>v{version}{isDev ? "-DEV" : ""}</p>
 
                         </div>
 
