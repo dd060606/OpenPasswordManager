@@ -20,7 +20,7 @@ exports.signup = (req, res, next) => {
 
         db.query(`SELECT id FROM ${process.env.DB_OPM_ACCOUNTS_TABLE} WHERE email = '${req.body.email}'`, function (err, result) {
             if (err) {
-                return res.status(500).json(getJsonForInternalError())
+                return res.status(500).json(getJsonForInternalError(err.message))
             }
             if (result.length === 0) {
                 return signupAccount(req, res)
@@ -55,7 +55,7 @@ function signupAccount(req, res) {
 
             db.query(insertAccountSQL, function (err, result) {
                 if (err) {
-                    return res.status(500).json(getJsonForInternalError())
+                    return res.status(500).json(getJsonForInternalError(err.message))
                 }
 
                 if (req.body.lang) {
@@ -74,7 +74,7 @@ function signupAccount(req, res) {
                 }
 
 
-                logger.info(`New account created : ${req.body.email} - ${req.body.lastname} ${req.body.firstname} from ${(req.headers['x-forwarded-for'] || req.connection.remoteAddress)}`)
+                logger.info(`New account created : ${req.body.email} - ${req.body.lastname} ${req.body.firstname} from ${(req.headers['x-real-ip'] || req.connection.remoteAddress)}`)
                 return res.status(201).json({
                     result: "success",
                     type: "account-successfully-created",
@@ -83,7 +83,7 @@ function signupAccount(req, res) {
                 })
             })
         })
-        .catch(error => res.status(500).json(getJsonForInternalError()))
+        .catch(error => res.status(500).json(getJsonForInternalError(error.message)))
 
 
 }
@@ -93,7 +93,7 @@ exports.login = (req, res, next) => {
 
         db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE email = \"${req.body.email}\"`, function (err, result) {
             if (err) {
-                return res.status(500).json(getJsonForInternalError())
+                return res.status(500).json(getJsonForInternalError(err.message))
             }
             if (result.length === 0) {
                 return res.status(401).json({
@@ -113,7 +113,7 @@ exports.login = (req, res, next) => {
                             })
 
                         }
-                        logger.info(`${req.headers['x-forwarded-for'] || req.connection.remoteAddress} logged to ${req.body.email} (${result[0].id})`)
+                        logger.info(`${req.headers['x-real-ip'] || req.connection.remoteAddress} logged to ${req.body.email} (${result[0].id})`)
 
                         if (result[0].isVerified === 1) {
                             return res.status(200).json({
@@ -135,7 +135,7 @@ exports.login = (req, res, next) => {
 
 
                     })
-                    .catch(() => res.status(500).json(getJsonForInternalError()))
+                    .catch(err => res.status(500).json(getJsonForInternalError(err.message)))
             }
 
         })
@@ -151,7 +151,7 @@ exports.changePassword = (req, res, next) => {
 
         db.query(`SELECT password FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE id = \"${req.userId}\"`, function (err, result) {
             if (err) {
-                return res.status(500).json(getJsonForInternalError())
+                return res.status(500).json(getJsonForInternalError(err.message))
             }
 
             bcyrpt.compare(req.body.currentPassword, result[0].password)
@@ -169,11 +169,11 @@ exports.changePassword = (req, res, next) => {
 
                             db.query(changePasswordSQL, function (err2) {
                                 if (err2) {
-                                    return res.status(500).json(getJsonForInternalError())
+                                    return res.status(500).json(getJsonForInternalError(err2.message))
                                 }
                                 db.query(`SELECT * FROM \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` WHERE user_id = ${req.userId}`, function (err3, result2) {
                                     if (err3) {
-                                        return res.status(500).json(getJsonForInternalError())
+                                        return res.status(500).json(getJsonForInternalError(err3.message))
                                     }
 
                                     for (let i = 0; i < result2.length; i++) {
@@ -181,11 +181,11 @@ exports.changePassword = (req, res, next) => {
                                         const encryptedPassword = CryptoJS.AES.encrypt(decryptedPassword, req.body.newPassword).toString()
                                         db.query(`UPDATE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` SET \`password\` = '${encryptedPassword}' WHERE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\`.\`id\` = ${result2[i].id};`, function (err4) {
                                             if (err4) {
-                                                return res.status(500).json(getJsonForInternalError())
+                                                return res.status(500).json(getJsonForInternalError(err4.message))
                                             }
                                         })
                                     }
-                                    logger.info(`Password modified : (${req.userId}) from ${req.headers["x-forwarded-for"] || req.connection.remoteAddress}`)
+                                    logger.info(`Password modified : (${req.userId}) from ${req.headers["x-real-ip"] || req.connection.remoteAddress}`)
                                     return res.status(201).json({
                                         result: "success",
                                         type: "password-successfully-modified",
@@ -196,9 +196,9 @@ exports.changePassword = (req, res, next) => {
 
                             })
                         })
-                        .catch(error => res.status(500).json(getJsonForInternalError()))
+                        .catch(error => res.status(500).json(getJsonForInternalError(error.message)))
                 })
-                .catch(() => res.status(500).json(getJsonForInternalError()))
+                .catch(err => res.status(500).json(getJsonForInternalError(err.message)))
         })
 
 
@@ -213,7 +213,7 @@ exports.getInfo = (req, res, next) => {
     db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE id = "${req.userId}"`, function (err, result) {
 
         if (err) {
-            return res.status(500).json(getJsonForInternalError())
+            return res.status(500).json(getJsonForInternalError(err.message))
         }
         if (result.length === 0) {
             return res.status(400).json({
@@ -245,7 +245,8 @@ function getJsonForArgumentsError() {
         message: "Error : Bad request arguments!"
     })
 }
-function getJsonForInternalError() {
+function getJsonForInternalError(message) {
+    logger.error(message)
     return ({
         result: "error",
         type: "internal-error",

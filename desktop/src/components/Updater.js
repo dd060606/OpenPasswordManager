@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next'
 import "./../i18n"
 import { isDarkTheme } from "./../utils/themes-utils"
 import { LinearProgress } from "@material-ui/core"
-
+import { withRouter } from "react-router-dom"
 
 class Updater extends Component {
 
@@ -21,9 +21,7 @@ class Updater extends Component {
         updaterContent.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
         updaterContent.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
         updaterContent.style.setProperty("--bg-bar-theme", isDarkTheme() ? "#333" : "#E9E9E9")
-
         this.setState({ updateText: t("updater.searching-for-updates") + "..." })
-
         window.ipc.send("checkForUpdates")
 
 
@@ -34,14 +32,40 @@ class Updater extends Component {
         window.ipc.receive("updateError", (errorMessage) => {
             this.openErrorBox(errorMessage)
         })
-        window.ipc.receive("updateFinished", () => {
-            this.props.history.push("/")
+        window.ipc.receive("updateFinished", (askToInstallUpdates) => {
+            if (askToInstallUpdates) {
+                Swal.fire({
+                    title: t("updater.download-finished"),
+                    text: t("updater.install-updates"),
+                    icon: "question",
+                    iconColor: "#54c2f0",
+                    confirmButtonColor: "#54c2f0",
+                    confirmButtonText: t("confirm"),
+                    cancelButtonText: t("cancel"),
+                    showCancelButton: true,
+                    background: isDarkTheme() ? " #333" : "white"
+                }
+                ).then(res => {
+                    if (res.isConfirmed) {
+                        window.ipc.send("installUpdates")
+
+                    }
+                    this.props.history.push("/auth/login")
+
+                })
+                const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+                swal2.forEach(element => {
+                    element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                })
+            }
+            else {
+                this.props.history.push("/")
+            }
         })
         window.ipc.receive("updateAvailableMac", () => {
-            const { t } = this.props
             Swal.fire({
                 title: t("updater.update-available"),
-                html: `${t("updater.new-update-available")}<br /><span class='update-link'>${t("updater.click-here")}</span> ${t("updater.to-download-new-release")}`,
+                html: `${t("updater.new-update-available")}<br /><span class='update-link'>${t("click-here")}</span> ${t("updater.to-download-new-release")}`,
                 icon: "info",
                 confirmButtonColor: "#54c2f0",
                 background: isDarkTheme() ? " #333" : "white"
@@ -49,8 +73,6 @@ class Updater extends Component {
             ).then(() => {
                 this.props.history.push("/")
             })
-
-
             const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
             swal2.forEach(element => {
                 element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
@@ -92,4 +114,4 @@ class Updater extends Component {
     }
 }
 
-export default withTranslation()(Updater)
+export default withTranslation()(withRouter(Updater))

@@ -38,27 +38,41 @@ class Login extends Component {
         window.ipc.receive("loginError", err => {
             const { t } = this.props
 
-            const { email } = this.state
-
             if (err) {
-
-                if (err.type === "internal-error") {
-                    this.openErrorBox(t("errors.internal-error"))
+                if (err === "wrong-password") {
+                    this.openErrorBox(t("errors.wrong-password"))
+                }
+                else if (err.type === "internal-error") {
+                    this.openErrorBox(t("errors.internal-error"), true)
                 } else if (err.type === "invalid-credentials") {
                     this.openErrorBox(t("errors.invalid-credentials"))
                 }
                 else if (err.type === "email-not-verified") {
-                    this.props.history.push({
-                        pathname: '/auth/email/confirmation',
-                        state: { redirectedAfterLogin: true, email: email }
+                    Swal.fire({
+                        title: t("errors.error"),
+                        html: `${t("errors.unconfirmed-email")}<br /><span class='email-link'>${t("click-here")}</span> ${t("auth.to-confirm-email")}`,
+                        icon: "error",
+                        confirmButtonColor: "#54c2f0",
+                        background: isDarkTheme() ? " #333" : "white"
+                    }
+                    ).then(() => {
+                        this.setState({ isConnecting: false })
+                    })
+                    const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
+                    swal2.forEach(element => {
+                        element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
+                    })
+                    const emailLink = document.querySelector(".email-link")
+                    emailLink.addEventListener("click", function () {
+                        window.ipc.send("openEmailLink")
                     })
                 }
                 else {
-                    this.openErrorBox(t("errors.unknown-error"))
+                    this.openErrorBox(t("errors.unknown-error"), true)
                 }
             }
             else {
-                this.openErrorBox(t("errors.unknown-error"))
+                this.openErrorBox(t("errors.unknown-error"), true)
             }
         })
         window.ipc.receive("goToAuth", () => this.props.history.push("/auth/login"))
@@ -77,18 +91,42 @@ class Login extends Component {
         this.setState({ password: event.target.value, isPasswordValid: event.target.value === "" ? true : passwordRegex.test(event.target.value) })
     }
 
-    openErrorBox(message) {
+    openErrorBox(message, askOfflineMode = false) {
+        const { password } = this.state
         const { t } = this.props
-        Swal.fire({
-            title: t("errors.error"),
-            text: message,
-            icon: "error",
-            confirmButtonColor: "#54c2f0",
-            background: isDarkTheme() ? " #333" : "white"
+        if (askOfflineMode) {
+            Swal.fire({
+                title: t("errors.error"),
+                text: message,
+                icon: "error",
+                confirmButtonColor: "#54c2f0",
+                showCancelButton: true,
+                cancelButtonText: t("cancel"),
+                confirmButtonText: t("go-to-offline-mode"),
+                background: isDarkTheme() ? " #333" : "white"
+            }
+            ).then(result => {
+                if (result.isConfirmed) {
+                    window.ipc.send("goToOfflineMode", password)
+                }
+                else {
+                    this.setState({ isConnecting: false })
+
+                }
+            })
         }
-        ).then(() => {
-            this.setState({ isConnecting: false })
-        })
+        else {
+            Swal.fire({
+                title: t("errors.error"),
+                text: message,
+                icon: "error",
+                confirmButtonColor: "#54c2f0",
+                background: isDarkTheme() ? " #333" : "white"
+            }
+            ).then(() => {
+                this.setState({ isConnecting: false })
+            })
+        }
         const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
         swal2.forEach(element => {
             element.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")

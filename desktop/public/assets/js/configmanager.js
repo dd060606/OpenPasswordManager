@@ -9,6 +9,7 @@ exports.getDataDirectory = function () {
     return dataPath
 }
 
+
 const DEFAULT_CONFIG = {
     auth: {
         email: ""
@@ -16,7 +17,8 @@ const DEFAULT_CONFIG = {
     theme: 0,
     credentialsSort: 2,
     launchAtStartup: true,
-    minimizeOnClose: true
+    minimizeOnClose: true,
+    credentialsSynchronized: true
 }
 const configPath = path.join(dataPath, 'config.json')
 
@@ -77,10 +79,10 @@ exports.getCredentialsSort = function () {
         return DEFAULT_CONFIG.credentialsSort
     }
 }
-
 exports.setCredentialsSort = function (credentialsSort) {
     config.credentialsSort = credentialsSort
 }
+
 exports.getEmail = function () {
     return config.auth.email ? config.auth.email : DEFAULT_CONFIG.auth.email
 }
@@ -88,6 +90,7 @@ exports.getEmail = function () {
 exports.setEmail = function (email) {
     config.auth.email = email
 }
+
 exports.isLaunchAtStartup = function () {
     return config.launchAtStartup === true || config.launchAtStartup === false ? config.launchAtStartup : DEFAULT_CONFIG.launchAtStartup
 }
@@ -104,9 +107,22 @@ exports.setMinimizeOnClose = function (minimizeOnClose) {
 
 
 
+exports.isCredentialsSynchronized = function () {
+    return config.credentialsSynchronized === true || config.credentialsSynchronized === false ? config.credentialsSynchronized : DEFAULT_CONFIG.credentialsSynchronized
+}
+
+exports.setCredentialsSynchronized = function (isCredentialsSynchronized) {
+    config.credentialsSynchronized = isCredentialsSynchronized
+}
+
+
+
+
 
 let token = null
 let password = ""
+let offlineMode = false
+
 exports.getToken = function () {
     return token
 }
@@ -121,3 +137,20 @@ exports.getPassword = function () {
 exports.setPassword = function (newPassword) {
     password = newPassword
 }
+
+exports.isOfflineMode = function () {
+    if (offlineMode) {
+        exports.setCredentialsSynchronized(false)
+        exports.saveConfig()
+    }
+    return offlineMode
+}
+
+exports.setOfflineMode = function (isOfflineMode) {
+    if (isOfflineMode) {
+        exports.setCredentialsSynchronized(false)
+        exports.saveConfig()
+    }
+    offlineMode = isOfflineMode
+}
+

@@ -19,7 +19,9 @@
     "account-not-exists": "Account not exists!",
     "wrong-password": "Wrong password !",
     "invalid-credentials": "Invalid credentials!",
-    "enter-website-name": "Please enter a website name!"
+    "enter-website-name": "Please enter a website name!",
+    "credentials-file-error": "Error while loading credentials file!",
+    "unconfirmed-email": "Unconfirmed e-mail!"
   },
   "auth": {
     "new-on-opm": "New on OpenPasswordManager?",
@@ -38,7 +40,8 @@
     "account-confirmation": "Account confirmation",
     "account-successfully-activated": "Account successfully activated!",
     "confirm-email-to-continue": "To continue, you must confirm your account with e-mail that was sent.",
-    "login-another-account": "Login with another account"
+    "login-another-account": "Login with another account",
+    "to-confirm-email": "to confirm your e-mail"
   },
   "account": {
     "my-account": "My account",
@@ -108,7 +111,8 @@
     "update-available": "Update available",
     "new-update-available": "A new update is available!",
     "to-download-new-release": "to download the new release.",
-    "click-here": "Click here"
+    "download-finished": "Download finished",
+    "install-updates": "Do you want to install updates?"
   },
   "welcome-on": "Welcome on",
   "continue": "Continue",
@@ -121,5 +125,8 @@
   "copied": "Copied",
   "search": "Search",
   "save": "Save",
-  "success": "Success"
+  "success": "Success",
+  "offline-mode-enabled": "Offline mode enabled",
+  "click-here": "Click here",
+  "go-to-offline-mode": "Go to offline mode"
 }

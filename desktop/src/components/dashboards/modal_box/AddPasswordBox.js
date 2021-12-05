@@ -4,10 +4,10 @@ import { withTranslation } from "react-i18next"
 import "../../../i18n"
 import { Component } from "react"
 import Swal from "sweetalert2"
-import { withRouter } from "react-router-dom"
 import Checkbox from "@material-ui/core/Checkbox"
 import Slider from "@material-ui/core/Slider"
 import { isDarkTheme } from "../../../utils/themes-utils"
+import { withRouter } from "react-router-dom"
 
 class AddPasswordBox extends Component {
 
@@ -294,7 +294,8 @@ class AddPasswordBox extends Component {
 
                                                     <Checkbox style={{
                                                         color: "#54c2f0",
-                                                        transform: "scale(1.2)"
+                                                        transform: "scale(1.2)",
+                                                        backgroundColor: "transparent"
                                                     }} checked={uppercaseEnabled} onClick={this.handleUppercasesCheckboxClicked} />
                                                     <p onClick={this.handleUppercasesCheckboxClicked} >{t("generator.uppercases")}</p>
 
@@ -304,7 +305,8 @@ class AddPasswordBox extends Component {
 
                                                     <Checkbox style={{
                                                         color: "#54c2f0",
-                                                        transform: "scale(1.2)"
+                                                        transform: "scale(1.2)",
+                                                        backgroundColor: "transparent"
 
                                                     }} checked={lowercasesEnabled} onClick={this.handleLowercasesCheckboxClicked} />
                                                     <p onClick={this.handleLowercasesCheckboxClicked} >{t("generator.lowercases")}</p>
@@ -317,7 +319,8 @@ class AddPasswordBox extends Component {
 
                                                     <Checkbox style={{
                                                         color: "#54c2f0",
-                                                        transform: "scale(1.2)"
+                                                        transform: "scale(1.2)",
+                                                        backgroundColor: "transparent"
                                                     }} checked={numbersEnabled} onClick={this.handleNumbersCheckboxClicked} />
                                                     <p onClick={this.handleNumbersCheckboxClicked} >{t("generator.numbers")}</p>
 
@@ -326,7 +329,8 @@ class AddPasswordBox extends Component {
 
                                                     <Checkbox style={{
                                                         color: "#54c2f0",
-                                                        transform: "scale(1.2)"
+                                                        transform: "scale(1.2)",
+                                                        backgroundColor: "transparent"
                                                     }} checked={symbolsEnabled} onClick={this.handleSymbolsCheckboxClicked} />
                                                     <p onClick={this.handleSymbolsCheckboxClicked} >{t("generator.symbols")}</p>
 

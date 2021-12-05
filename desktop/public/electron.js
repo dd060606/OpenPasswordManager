@@ -52,6 +52,7 @@ function createWindow() {
     if (wasOpenedAtStartup()) {
         win.hide()
     }
+
     win.loadURL(
         isDev
             ? "http://localhost:3000"
@@ -84,9 +85,9 @@ function createWindow() {
 
 
     exports.win = win
-
-
 }
+
+
 function initTray() {
     win.tray = new Tray(path.join(__dirname, "assets", "images", "logo_square.png"))
     const contextMenu = Menu.buildFromTemplate([
@@ -119,7 +120,10 @@ function initTray() {
 }
 
 app.whenReady().then(() => {
+
+    logger.log("Initializing app...")
     ConfigManager.load()
+    logger.init()
     initMainIPC()
     createWindow()
     initTray()
@@ -138,6 +142,7 @@ app.on("activate", () => {
         createWindow()
     }
 })
+
 
 exports.openAppOnStartup = function () {
     if (!isDev) {
@@ -166,6 +171,9 @@ function wasOpenedAtStartup() {
     }
 }
 
+
+
+exports.VERSION = app.getVersion()
 
 exports.SERVER_URL = "https://apis.dd06-dev.fr/opm"
 

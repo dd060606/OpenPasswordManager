@@ -4,7 +4,6 @@ import { withTranslation } from "react-i18next"
 import "../../../i18n"
 import { Component } from "react"
 import Swal from "sweetalert2"
-import { withRouter } from "react-router-dom"
 import { isDarkTheme } from "../../../utils/themes-utils"
 
 
@@ -159,4 +158,4 @@ class EnterPasswordBox extends Component {
     }
 }
 
-export default withTranslation()(withRouter(EnterPasswordBox))
+export default withTranslation()(EnterPasswordBox)

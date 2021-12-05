@@ -2,8 +2,7 @@ import { Component } from "react"
 import { withTranslation } from 'react-i18next'
 import "../i18n"
 import Loading from "./Loading"
-import { Redirect } from 'react-router-dom'
-
+import { Redirect, withRouter } from 'react-router-dom'
 import "./css/App.css"
 
 class App extends Component {
@@ -41,4 +40,6 @@ class App extends Component {
     }
 }
 
-export default withTranslation()(App)
+
+
+export default withTranslation()(withRouter(App))

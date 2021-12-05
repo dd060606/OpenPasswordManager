@@ -6,14 +6,30 @@ const main = require("../../electron")
 const CryptoJS = require("crypto-js")
 const { autoUpdater } = require("electron-updater")
 const isDev = require("electron-is-dev")
+const logger = require("./logger")
 const { shell } = require("electron")
+
 
 let isCheckedForUpdates = false
 
 exports.initMainIPC = function () {
 
+    //Utils
     ipc.on("openExternalLink", (event, link) => {
         shell.openExternal(link)
+    })
+    ipc.on("openEmailLink", () => {
+        shell.openExternal("https://opm-app.dd06-dev.fr/auth/login")
+    })
+
+    ipc.on("getVersion", event => {
+        event.returnValue = main.VERSION
+    })
+    ipc.on("isDev", event => {
+        event.returnValue = isDev
+    })
+    ipc.on("isOfflineMode", event => {
+        event.returnValue = ConfigManager.isOfflineMode()
     })
 
     //Themes
@@ -70,6 +86,7 @@ exports.initMainIPC = function () {
     ipc.on("confirmPassword", (event, password) => auth.confirmPassword(password))
     ipc.on("isPasswordSaved", event => { event.returnValue = ConfigManager.getPassword() ? true : false })
     ipc.on("getAccountInfo", () => auth.getAccountInfo())
+    ipc.on("goToOfflineMode", (event, password) => auth.goToOfflineMode(password))
 
     //Credentials
     ipc.on("getCredentialsSort", (event) => {
@@ -91,34 +108,41 @@ exports.initMainIPC = function () {
     ipc.on("isCheckedForUpdates", event => {
         event.returnValue = isCheckedForUpdates
     })
+    ipc.on("installUpdates", () => {
+        autoUpdater.quitAndInstall()
+    })
     ipc.on("checkForUpdates", () => {
-
+        logger.log("Checking for updates...")
         if (isDev) {
             isCheckedForUpdates = true
-            main.win.webContents.send("updateFinished")
+            logger.log("No updates found!")
+            main.win.webContents.send("updateFinished", false)
             return
         }
 
         if (process.platform === 'darwin') {
             autoUpdater.autoDownload = false
         }
-        autoUpdater.autoInstallOnAppQuit = true
         autoUpdater.allowPrerelease = true
         autoUpdater.on('update-downloaded', () => {
             isCheckedForUpdates = true
-            main.win.webContents.send("updateFinished")
+            logger.log("Updates finished!")
+            main.win.webContents.send("updateFinished", true)
         })
         autoUpdater.on("update-available", () => {
             if (process.platform === "darwin") {
+                logger.log("Updates are available!")
                 main.win.webContents.send("updateAvailableMac")
             }
         })
         autoUpdater.on('update-not-available', () => {
             isCheckedForUpdates = true
-            main.win.webContents.send("updateFinished")
+            logger.log("No updates found!")
+            main.win.webContents.send("updateFinished", false)
         })
         autoUpdater.on('error', (err) => {
             isCheckedForUpdates = true
+            logger.error(err)
             main.win.webContents.send("updateError", err)
         })
         autoUpdater.on('download-progress', (progress) => {
@@ -126,11 +150,18 @@ exports.initMainIPC = function () {
         })
         autoUpdater.checkForUpdates().catch(err => {
             isCheckedForUpdates = true
+            logger.error(err)
             main.win.webContents.send("updateError", err)
         })
+
 
     })
     ipc.on("openReleasesLink", () => {
         shell.openExternal("https://github.com/dd060606/OpenPasswordManager/releases")
     })
+
+
+
+
 }
+

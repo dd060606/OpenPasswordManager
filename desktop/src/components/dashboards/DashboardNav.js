@@ -2,11 +2,10 @@ import { Component } from "react"
 import "../css/dashboards/DashboardNav.css"
 import { withTranslation } from 'react-i18next'
 import "../../i18n"
-import { withRouter } from "react-router"
 import React, { useState } from 'react';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTranslation } from "react-i18next"
-import { NavLink } from "react-router-dom"
+import { NavLink, withRouter } from "react-router-dom"
 import { isDarkTheme } from "../../utils/themes-utils"
 
 class DashboardNav extends Component {

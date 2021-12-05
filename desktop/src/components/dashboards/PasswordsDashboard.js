@@ -13,7 +13,6 @@ import { InputLabel, MenuItem, Select, withStyles } from "@material-ui/core"
 import EditPasswordBox from "./modal_box/EditPasswordBox"
 import { getSavedTheme, isDarkTheme } from "../../utils/themes-utils"
 
-
 const styles = theme => ({
     select: {
         '&:before': {
@@ -50,7 +49,8 @@ class PasswordsDashboard extends Component {
         enterPasswordType: "new",
         currentCredential: {},
         currentTheme: getSavedTheme(),
-        sortValue: 2
+        sortValue: 2,
+        offlineModeEnabled: false
 
     }
 
@@ -64,7 +64,7 @@ class PasswordsDashboard extends Component {
             const { t } = this.props
             if (res.result === "success") {
                 this.setState({
-                    isLoading: false, credentials: res.credentials
+                    isLoading: false, credentials: res.credentials, offlineModeEnabled: window.ipc.sendSync("isOfflineMode")
                 })
                 setTimeout(() => {
                     const myPasswords = document.querySelector(".my-passwords")
@@ -78,14 +78,18 @@ class PasswordsDashboard extends Component {
                 let errorMessage = t("errors.unknown-error")
 
                 if (res.error) {
-
-                    if (res.error.type === "internal-error") {
+                    if (res.error === "offline-file-error") {
+                        errorMessage = t("errors.credentials-file-error")
+                    }
+                    else if (res.error.type === "internal-error") {
                         errorMessage = t("errors.internal-error")
                     } else if (res.error.type === "invalid-token") {
                         this.props.history.push("/auth/login")
                         return
                     }
+
                 }
+
                 Swal.fire({
                     title: t("errors.error"),
                     text: errorMessage,
@@ -93,6 +97,7 @@ class PasswordsDashboard extends Component {
                     confirmButtonColor: "#54c2f0",
                     background: isDarkTheme() ? " #333" : "white",
                 })
+                this.props.history.push("/auth/login")
                 this.setState({ isLoading: false })
 
                 const swal2 = document.querySelectorAll("#swal2-title, #swal2-content")
@@ -103,6 +108,9 @@ class PasswordsDashboard extends Component {
                 myPasswords.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
                 myPasswords.style.setProperty("--bg-theme", isDarkTheme() ? "#212121" : "white")
                 myPasswords.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
+
+
+
             }
         })
 
@@ -165,7 +173,7 @@ class PasswordsDashboard extends Component {
     }
 
     render() {
-        const { isLoading, credentials, search, enterPasswordType, currentCredential, sortValue } = this.state
+        const { isLoading, credentials, search, enterPasswordType, currentCredential, sortValue, offlineModeEnabled } = this.state
         const { t, classes } = this.props
 
         return (
@@ -177,6 +185,9 @@ class PasswordsDashboard extends Component {
                         <DashboardNav />
 
                         <div className="passwords-content">
+                            {offlineModeEnabled &&
+                                <span style={{ marginTop: 5 }}>{t("offline-mode-enabled")}</span>
+                            }
                             <nav>
                                 <button id="add-password-button" onClick={this.handleAddPassword}><i className="fas fa-plus" /> {t("passwords.add")}</button>
                                 <div className="search-bar">
@@ -227,8 +238,9 @@ class PasswordsDashboard extends Component {
                                 <AddPasswordBox reloadCredentials={credentials => this.setState({ credentials: credentials })} />
                                 <EditPasswordBox credential={currentCredential} />
                             </div>
-                        </div>
 
+
+                        </div>
                     </div>
                 }
             </>

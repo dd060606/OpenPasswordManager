@@ -253,7 +253,9 @@ class GeneratorDashboard extends Component {
 
                                         <Checkbox style={{
                                             color: "#54c2f0",
-                                            transform: "scale(1.5)"
+                                            transform: "scale(1.5)",
+                                            backgroundColor: "transparent"
+
                                         }} checked={uppercaseEnabled} onClick={this.handleUppercasesCheckboxClicked} />
                                         <p onClick={this.handleUppercasesCheckboxClicked} >{t("generator.uppercases")}</p>
 
@@ -263,9 +265,11 @@ class GeneratorDashboard extends Component {
 
                                         <Checkbox style={{
                                             color: "#54c2f0",
-                                            transform: "scale(1.5)"
+                                            transform: "scale(1.5)",
+                                            backgroundColor: "transparent"
 
-                                        }} checked={lowercasesEnabled} onClick={this.handleLowercasesCheckboxClicked} />
+
+                                        }} disableRipple checked={lowercasesEnabled} onClick={this.handleLowercasesCheckboxClicked} />
                                         <p onClick={this.handleLowercasesCheckboxClicked} >{t("generator.lowercases")}</p>
 
                                     </div>
@@ -276,7 +280,8 @@ class GeneratorDashboard extends Component {
 
                                         <Checkbox style={{
                                             color: "#54c2f0",
-                                            transform: "scale(1.5)"
+                                            transform: "scale(1.5)",
+                                            backgroundColor: "transparent"
                                         }} checked={numbersEnabled} onClick={this.handleNumbersCheckboxClicked} />
                                         <p onClick={this.handleNumbersCheckboxClicked} >{t("generator.numbers")}</p>
 
@@ -285,7 +290,8 @@ class GeneratorDashboard extends Component {
 
                                         <Checkbox style={{
                                             color: "#54c2f0",
-                                            transform: "scale(1.5)"
+                                            transform: "scale(1.5)",
+                                            backgroundColor: "transparent"
                                         }} checked={symbolsEnabled} onClick={this.handleSymbolsCheckboxClicked} />
                                         <p onClick={this.handleSymbolsCheckboxClicked} >{t("generator.symbols")}</p>
 
