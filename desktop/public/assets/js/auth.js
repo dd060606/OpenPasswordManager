@@ -78,7 +78,6 @@ exports.login = function (email, password) {
     })
         .catch(err => {
             logger.error("Error while logging in: " + err.message)
-            logger.log(`${main.SERVER_URL}/api/auth/login`)
             main.win.webContents.send("loginError", err.response ? err.response.data : undefined)
         })
 
