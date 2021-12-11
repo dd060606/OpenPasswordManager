@@ -1,7 +1,7 @@
 {
   "name": "open-password-manager",
   "productName": "OpenPasswordManager",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "OpenPasswordManager is a passsword manager",
   "main": "public/electron.js",
   "homepage": "./",
