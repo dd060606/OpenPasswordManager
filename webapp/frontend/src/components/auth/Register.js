@@ -289,7 +289,10 @@ class Register extends Component {
 
                     </div>
 
-                    <button className="register-btn" onClick={this.handleRegister} disabled={isConnecting}
+                    <button className="register-btn" onClick={event => {
+                        event.preventDefault()
+                        this.handleRegister()
+                    }} disabled={isConnecting}
                         style={{ width: isConnecting ? "50px" : "" }}>{isConnecting ? <i className="fad fa-spinner-third fa-spin"></i> : t("auth.signup")}
                     </button>
 
