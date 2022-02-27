@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Text, View, Button } from "react-native";
+import { Text, View, Button, Image } from "react-native";
 
 import type { LoginProps } from "../../App";
 
@@ -12,6 +12,10 @@ class LoginScreen extends Component<LoginProps, State> {
   render() {
     return (
       <View style={styles.container}>
+        <Image
+          style={styles.logo}
+          source={require("../../../assets/logo.png")}
+        />
         <Text>Login screen</Text>
         <Button
           title="Go to register"

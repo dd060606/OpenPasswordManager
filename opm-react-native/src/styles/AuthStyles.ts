@@ -5,7 +5,11 @@ const loginStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F5FCFF",
+    backgroundColor: "#fff",
+  },
+  logo: {
+    width: 250,
+    height: 100,
   },
 });
 
@@ -14,7 +18,7 @@ const registerStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F5FCFF",
+    backgroundColor: "#fff",
   },
 });
 
