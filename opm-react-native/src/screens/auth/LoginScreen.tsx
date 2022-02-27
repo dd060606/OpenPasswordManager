@@ -1,22 +1,36 @@
 import { Component } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Text, View, Button, Image } from "react-native";
+import { View, Button, Image } from "react-native";
+import { withTranslation, WithTranslation } from "react-i18next";
+
+import { Text } from "../../components/OPMComponents";
+import { Input } from "../../components/Input";
 
 import type { LoginProps } from "../../App";
 
-import { loginStyles as styles } from "../../styles/AuthStyles";
+import { loginStyles as styles, commonStyles } from "../../styles/AuthStyles";
 
-type State = {};
+type State = {
+  email: string;
+  password: string;
+};
 
-class LoginScreen extends Component<LoginProps, State> {
+class LoginScreen extends Component<LoginProps & WithTranslation, State> {
+  state = {
+    email: "",
+    password: "",
+  };
   render() {
+    const { email, password } = this.state;
+    const { t } = this.props;
     return (
-      <View style={styles.container}>
+      <View style={commonStyles.container}>
         <Image
-          style={styles.logo}
+          style={commonStyles.logo}
           source={require("../../../assets/logo.png")}
         />
-        <Text>Login screen</Text>
+        <Text style={commonStyles.title}>{t("auth.login")}</Text>
+        <Input placeholder={t("auth.email")} isValid={true} value={email} />
         <Button
           title="Go to register"
           onPress={() => this.props.navigation.navigate("Register")}
@@ -27,4 +41,4 @@ class LoginScreen extends Component<LoginProps, State> {
   }
 }
 
-export default LoginScreen;
+export default withTranslation()(LoginScreen);

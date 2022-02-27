@@ -1,0 +1,7 @@
+{
+  "auth": {
+    "login": "Connexion",
+    "signup": "S'inscrire",
+    "email": "Adresse e-mail"
+  }
+}

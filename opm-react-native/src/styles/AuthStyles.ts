@@ -1,25 +1,27 @@
 import { StyleSheet } from "react-native";
 
-const loginStyles = StyleSheet.create({
+const commonStyles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
+    display: "flex",
+    height: "100%",
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#fff",
   },
   logo: {
     width: 250,
     height: 100,
+    position: "absolute",
+    top: 100,
+  },
+  title: {
+    fontSize: 35,
+    fontFamily: "OpenSansBold",
   },
 });
 
-const registerStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-  },
-});
+const loginStyles = StyleSheet.create({});
 
-export { loginStyles, registerStyles };
+const registerStyles = StyleSheet.create({});
+
+export { loginStyles, registerStyles, commonStyles };

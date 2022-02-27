@@ -1,18 +1,26 @@
 import { Component } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { View, Button } from "react-native";
+import { withTranslation, WithTranslation } from "react-i18next";
+
+import { Text } from "../../components/OPMComponents";
 
 import type { RegisterProps } from "../../App";
 
-import { registerStyles as styles } from "../../styles/AuthStyles";
+import {
+  registerStyles as styles,
+  commonStyles,
+} from "../../styles/AuthStyles";
 
 type State = {};
 
-class RegisterScreen extends Component<RegisterProps, State> {
+class RegisterScreen extends Component<RegisterProps & WithTranslation, State> {
   render() {
+    const { t } = this.props;
+
     return (
-      <View style={styles.container}>
-        <Text>Register screen</Text>
+      <View style={commonStyles.container}>
+        <Text style={commonStyles.title}>{t("auth.signup")}</Text>
         <Button
           title="Go to Login"
           onPress={() => this.props.navigation.navigate("Login")}
@@ -23,4 +31,4 @@ class RegisterScreen extends Component<RegisterProps, State> {
   }
 }
 
-export default RegisterScreen;
+export default withTranslation()(RegisterScreen);

@@ -1,8 +1,10 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { useState, useEffect } from "react";
 import { registerRootComponent } from "expo";
+import AppLoading from "expo-app-loading";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import * as Font from "expo-font";
 
 import "./i18n";
 
@@ -22,7 +24,24 @@ type RegisterProps = NativeStackScreenProps<RootStackParamList, "Register">;
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
+function App() {
+  const [dataLoaded, setDataLoaded] = useState(false);
+  if (!dataLoaded) {
+    return (
+      <AppLoading
+        startAsync={async () =>
+          Font.loadAsync({
+            OpenSans: require("../assets/fonts/OpenSans-Regular.ttf"),
+            OpenSansBold: require("../assets/fonts/OpenSans-Bold.ttf"),
+            OpenSansItalic: require("../assets/fonts/OpenSans-Italic.ttf"),
+            OSSemiBold: require("../assets/fonts/OpenSans-SemiBold.ttf"),
+          })
+        }
+        onFinish={() => setDataLoaded(true)}
+        onError={console.warn}
+      />
+    );
+  }
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
@@ -44,3 +63,4 @@ export default function App() {
 registerRootComponent(App);
 
 export type { LoginProps, RegisterProps };
+export default App;

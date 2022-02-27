@@ -17,9 +17,11 @@ const locale =
     ? NativeModules.SettingsManager.settings.AppleLocale
     : NativeModules.I18nManager.localeIdentifier;
 i18n
+
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
+    compatibilityJSON: "v3",
     lng: locale.substring(0, 2),
     fallbackLng: "en", // use en if detected lng is not available
 
