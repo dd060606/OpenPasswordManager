@@ -2,6 +2,7 @@
   "auth": {
     "login": "Connexion",
     "signup": "S'inscrire",
-    "email": "Adresse e-mail"
+    "email": "Adresse e-mail",
+    "password": "Mot de passe"
   }
 }
