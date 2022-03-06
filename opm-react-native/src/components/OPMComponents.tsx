@@ -11,6 +11,7 @@ import { useState } from "react";
 type StyledButtonType = {
   textStyle?: object;
   style?: object;
+  JSX?: JSX.Element;
 };
 
 function Text(props: TextProps): JSX.Element {
@@ -20,7 +21,7 @@ function Text(props: TextProps): JSX.Element {
 }
 
 function Button(props: ButtonProps & StyledButtonType): JSX.Element {
-  const { onPress, title, style, textStyle } = props;
+  const { onPress, title, style, textStyle, JSX } = props;
   const [pressed, setPressed] = useState(false);
 
   return (
@@ -34,17 +35,21 @@ function Button(props: ButtonProps & StyledButtonType): JSX.Element {
       onPressOut={() => setPressed(false)}
       onPressIn={() => setPressed(true)}
     >
-      <Text style={{ ...styles.buttonText, ...textStyle }}>{title}</Text>
+      {JSX && JSX}
+      {!JSX && (
+        <Text style={{ ...styles.buttonText, ...textStyle }}>{title}</Text>
+      )}
     </Pressable>
   );
 }
 
 function StyledButton(props: ButtonProps & StyledButtonType): JSX.Element {
-  const { onPress, title, style, textStyle } = props;
+  const { onPress, title, style, textStyle, JSX } = props;
 
   return (
     <Pressable style={style} onPress={onPress}>
-      <Text style={textStyle}>{title}</Text>
+      {JSX && JSX}
+      {!JSX && <Text style={textStyle}>{title}</Text>}
     </Pressable>
   );
 }

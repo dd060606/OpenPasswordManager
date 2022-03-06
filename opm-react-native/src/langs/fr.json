@@ -1,7 +1,9 @@
 {
   "auth": {
     "errors": {
-      "complete-all-fields": "Veuillez compléter tous les champs !"
+      "complete-all-fields": "Veuillez compléter tous les champs !",
+      "invalid-email": "Adresse email invalide !",
+      "invalid-password": "Mot de passe invalide !"
     },
     "login": "Connexion",
     "signup": "S'inscrire",

@@ -1,7 +1,9 @@
 {
   "auth": {
     "errors": {
-      "complete-all-fields": "Please complete all fields!"
+      "complete-all-fields": "Please complete all fields!",
+      "invalid-email": "Invalid email!",
+      "invalid-password": "Invalid password!"
     },
     "login": "Login",
     "signup": "Signup",

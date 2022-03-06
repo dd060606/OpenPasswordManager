@@ -6,6 +6,7 @@ import {
   Platform,
   Modal,
   View,
+  ActivityIndicator,
 } from "react-native";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { getIconFromName, getImageFromName } from "../../utils/ImageUtils";
@@ -24,7 +25,11 @@ type State = {
     email: boolean;
     password: boolean;
   };
-  errorModalVisible: boolean;
+  errorModal: {
+    visible: boolean;
+    message: string;
+  };
+  isAuthenticating: boolean;
 };
 
 const emailRegex =
@@ -39,7 +44,11 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
       email: true,
       password: true,
     },
-    errorModalVisible: false,
+    errorModal: {
+      visible: false,
+      message: "",
+    },
+    isAuthenticating: false,
   };
 
   handleChangeEmail(newEmail: string) {
@@ -61,10 +70,39 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
       },
     });
   }
-  handleLogin = () => {};
+
+  openErrorModal = (message: string): void => {
+    this.setState({
+      errorModal: {
+        message: message,
+        visible: true,
+      },
+    });
+  };
+
+  //Arrow fx for binding
+  handleLogin = (): void => {
+    const { email, password, isAuthenticating } = this.state;
+    const { t } = this.props;
+
+    if (isAuthenticating) {
+      return;
+    }
+
+    if (email === "" || password === "") {
+      this.openErrorModal(t("auth.errors.complete-all-fields"));
+    } else if (!emailRegex.test(email)) {
+      this.openErrorModal(t("auth.errors.invalid-email"));
+    } else if (!passwordRegex.test(password)) {
+      this.openErrorModal(t("auth.errors.invalid-password"));
+    } else {
+      this.setState({ isAuthenticating: true });
+    }
+  };
 
   render() {
-    const { email, password, fieldsValid, errorModalVisible } = this.state;
+    const { email, password, fieldsValid, errorModal, isAuthenticating } =
+      this.state;
     const { t } = this.props;
     return (
       <KeyboardAvoidingView
@@ -96,13 +134,21 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
           icon={getIconFromName("key")}
         />
 
-        <Button title={t("auth.login")} onPress={this.handleLogin} />
+        <Button
+          title={t("auth.login")}
+          onPress={this.handleLogin}
+          JSX={
+            isAuthenticating ? (
+              <ActivityIndicator size={25} color="#fff" />
+            ) : undefined
+          }
+        />
         <Modal
           animationType="fade"
           transparent={true}
-          visible={errorModalVisible}
+          visible={errorModal.visible}
           onRequestClose={() => {
-            this.setState({ errorModalVisible: false });
+            this.setState({ errorModal: { ...errorModal, visible: false } });
           }}
         >
           <View style={commonStyles.centeredView}>
@@ -113,11 +159,13 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
               />
               <Text style={commonStyles.title}>{t("error")}</Text>
 
-              <Text style={commonStyles.modalText}>
-                {t("auth.errors.complete-all-fields")}
-              </Text>
+              <Text style={commonStyles.modalText}>{errorModal.message}</Text>
               <Button
-                onPress={() => this.setState({ errorModalVisible: false })}
+                onPress={() =>
+                  this.setState({
+                    errorModal: { ...errorModal, visible: false },
+                  })
+                }
                 style={commonStyles.modalButton}
                 textStyle={commonStyles.modalButtonText}
                 title={t("ok")}
