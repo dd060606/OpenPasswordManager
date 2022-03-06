@@ -1,16 +1,16 @@
 import { Component } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
-  View,
-  Button,
   Image,
   KeyboardAvoidingView,
   Platform,
+  Modal,
+  View,
 } from "react-native";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { getIconFromName, getImageFromName } from "../../utils/ImageUtils";
 
-import { Text } from "../../components/OPMComponents";
+import { Text, Button, StyledButton } from "../../components/OPMComponents";
 import { Input } from "../../components/Input";
 
 import type { LoginProps } from "../../App";
@@ -24,6 +24,7 @@ type State = {
     email: boolean;
     password: boolean;
   };
+  errorModalVisible: boolean;
 };
 
 const emailRegex =
@@ -38,6 +39,7 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
       email: true,
       password: true,
     },
+    errorModalVisible: false,
   };
 
   handleChangeEmail(newEmail: string) {
@@ -59,9 +61,10 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
       },
     });
   }
+  handleLogin = () => {};
 
   render() {
-    const { email, password, fieldsValid } = this.state;
+    const { email, password, fieldsValid, errorModalVisible } = this.state;
     const { t } = this.props;
     return (
       <KeyboardAvoidingView
@@ -93,10 +96,35 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
           icon={getIconFromName("key")}
         />
 
-        <Button
-          title="Go to register"
-          onPress={() => this.props.navigation.navigate("Register")}
-        />
+        <Button title={t("auth.login")} onPress={this.handleLogin} />
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={errorModalVisible}
+          onRequestClose={() => {
+            this.setState({ errorModalVisible: false });
+          }}
+        >
+          <View style={commonStyles.centeredView}>
+            <View style={commonStyles.modalView}>
+              <Image
+                style={commonStyles.modalImg}
+                source={getIconFromName("error")}
+              />
+              <Text style={commonStyles.title}>{t("error")}</Text>
+
+              <Text style={commonStyles.modalText}>
+                {t("auth.errors.complete-all-fields")}
+              </Text>
+              <Button
+                onPress={() => this.setState({ errorModalVisible: false })}
+                style={commonStyles.modalButton}
+                textStyle={commonStyles.modalButtonText}
+                title={t("ok")}
+              />
+            </View>
+          </View>
+        </Modal>
         <StatusBar style="auto" />
       </KeyboardAvoidingView>
     );

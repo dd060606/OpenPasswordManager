@@ -24,6 +24,7 @@ class Input extends Component<TextInputProps & InputProps, State> {
     isFocused: false,
     isTextVisible: this.props.password === undefined,
   };
+
   render() {
     const { isFocused, isTextVisible } = this.state;
     const { isValid, icon, password } = this.props;
@@ -89,12 +90,11 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   input: {
-    justifyContent: "center",
     flex: 1,
+    textAlign: "center",
     fontSize: 19,
     fontFamily: "OpenSans",
     backgroundColor: "transparent",
-    textAlign: "center",
     width: "100%",
     height: "100%",
   },

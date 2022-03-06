@@ -16,6 +16,7 @@ const images: Images = {
     email: require("../../assets/icons/email.png"),
     eye: require("../../assets/icons/eye.png"),
     eyeSlash: require("../../assets/icons/eye-slash.png"),
+    error: require("../../assets/icons/error.png"),
   },
 };
 

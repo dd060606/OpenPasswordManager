@@ -1,8 +1,13 @@
 {
   "auth": {
+    "errors": {
+      "complete-all-fields": "Veuillez compléter tous les champs !"
+    },
     "login": "Connexion",
     "signup": "S'inscrire",
     "email": "Adresse e-mail",
     "password": "Mot de passe"
-  }
+  },
+  "ok": "OK",
+  "error": "Erreur"
 }
