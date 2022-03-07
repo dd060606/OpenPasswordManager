@@ -3,7 +3,10 @@
     "errors": {
       "complete-all-fields": "Veuillez compléter tous les champs !",
       "invalid-email": "Adresse email invalide !",
-      "invalid-password": "Mot de passe invalide !"
+      "invalid-password": "Mot de passe invalide !",
+      "unknown-error": "Erreur inconnue !",
+      "invalid-credentials": "Mauvais identifiants !",
+      "internal-error": "Erreur du serveur !"
     },
     "login": "Connexion",
     "signup": "S'inscrire",

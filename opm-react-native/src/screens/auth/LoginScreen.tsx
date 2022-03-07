@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { getIconFromName, getImageFromName } from "../../utils/ImageUtils";
+import type { AxiosError, AxiosResponse } from "../../utils/Types";
 
 import { Text, Button, StyledButton } from "../../components/OPMComponents";
 import { Input } from "../../components/Input";
@@ -17,6 +18,9 @@ import { Input } from "../../components/Input";
 import type { LoginProps } from "../../App";
 
 import { loginStyles as styles, commonStyles } from "../../styles/AuthStyles";
+
+import { API_URL } from "@env";
+import axios from "axios";
 
 type State = {
   email: string;
@@ -77,6 +81,7 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
         message: message,
         visible: true,
       },
+      isAuthenticating: false,
     });
   };
 
@@ -88,6 +93,7 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
     if (isAuthenticating) {
       return;
     }
+    this.setState({ isAuthenticating: true });
 
     if (email === "" || password === "") {
       this.openErrorModal(t("auth.errors.complete-all-fields"));
@@ -96,7 +102,30 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
     } else if (!passwordRegex.test(password)) {
       this.openErrorModal(t("auth.errors.invalid-password"));
     } else {
-      this.setState({ isAuthenticating: true });
+      axios
+        .post(`${API_URL}/api/auth/login`, { email: email, password: password })
+        .then((res: AxiosResponse) => {
+          console.log(res.data.result);
+        })
+        .catch((err: AxiosError) => {
+          if (err.response && err.response.data) {
+            if (err.response.data.type === "internal-error") {
+              this.openErrorModal(t("auth.errors.internal-error"));
+            } else if (err.response.data.type === "invalid-credentials") {
+              this.openErrorModal(t("auth.errors.invalid-credentials"));
+            } else if (err.response.data.type === "email-not-verified") {
+              /*this.props.history.push({
+                pathname: "/auth/email/confirmation",
+                state: { redirectedAfterLogin: true, email: email },
+              });
+              */
+            } else {
+              this.openErrorModal(t("auth.errors.unknown-error"));
+            }
+          } else {
+            this.openErrorModal(t("auth.errors.unknown-error"));
+          }
+        });
     }
   };
 
