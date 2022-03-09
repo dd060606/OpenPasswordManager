@@ -1,7 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import translationEN from "./langs/en.json";
-import translationFR from "./langs/fr.json";
+import translationEN from "@app/langs/en.json";
+import translationFR from "@app/langs/fr.json";
 import { NativeModules, Platform } from "react-native";
 
 const resources = {

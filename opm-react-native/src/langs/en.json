@@ -6,12 +6,23 @@
       "invalid-password": "Invalid password!",
       "unknown-error": "Unknown error!",
       "invalid-credentials": "Invalid credentials!",
-      "internal-error": "Internal server error!"
+      "internal-error": "Internal server error!",
+      "email-not-verified": "Email not verified!",
+      "invalid-names": "Invalid firstname or lastname!",
+      "password-confirmation-not-match": "Password confirmation doesn't match!",
+      "email-already-exists": "Email already exists!"
     },
     "login": "Login",
     "signup": "Signup",
     "email": "E-mail",
-    "password": "Password"
+    "password": "Password",
+    "lastname": "Lastname",
+    "firstname": "Firstname",
+    "confirm-password": "Confirm password",
+    "no-account": "You don't have an account? Sign up",
+    "already-have-account": "Already have an account? Sign in",
+    "confirm-email-to-continue": "Confirm your email to continue",
+    "resend-email": "Resend email"
   },
   "ok": "OK",
   "error": "Error"

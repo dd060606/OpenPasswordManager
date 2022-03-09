@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Component } from "react";
-import { getIconFromName } from "../utils/ImageUtils";
+import { getIconFromName } from "@app/utils/ImageUtils";
 
 type State = {
   isFocused: boolean;
@@ -17,6 +17,7 @@ type InputProps = {
   isValid: boolean;
   icon?: number;
   password?: boolean;
+  smallInput?: boolean;
 };
 
 class Input extends Component<TextInputProps & InputProps, State> {
@@ -27,7 +28,7 @@ class Input extends Component<TextInputProps & InputProps, State> {
 
   render() {
     const { isFocused, isTextVisible } = this.state;
-    const { isValid, icon, password } = this.props;
+    const { isValid, icon, password, smallInput } = this.props;
 
     return (
       <View
@@ -38,6 +39,7 @@ class Input extends Component<TextInputProps & InputProps, State> {
               ? styles.inputFocused
               : styles.invalidInput
             : {}),
+          ...(smallInput ? { width: "49%" } : {}),
         }}
       >
         {icon !== undefined && (
@@ -83,16 +85,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderColor: "rgba(236, 236, 236, 0.8)",
     borderRadius: 5,
-    width: "80%",
+    width: "90%",
     height: 40,
     borderWidth: 1,
     backgroundColor: "rgba(236, 236, 236, 0.8)",
-    marginTop: 25,
+    marginTop: 20,
   },
   input: {
     flex: 1,
     textAlign: "center",
-    fontSize: 19,
+    fontSize: 18,
     fontFamily: "OpenSans",
     backgroundColor: "transparent",
     width: "100%",
@@ -105,7 +107,6 @@ const styles = StyleSheet.create({
     borderColor: "#F42D0E",
   },
 });
-
 const withIconStyles = StyleSheet.create({
   icon: {
     width: 32,
@@ -123,4 +124,4 @@ const withIconStyles = StyleSheet.create({
   },
 });
 
-export { Input };
+export default Input;

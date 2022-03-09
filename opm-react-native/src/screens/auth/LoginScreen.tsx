@@ -9,15 +9,16 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { getIconFromName, getImageFromName } from "../../utils/ImageUtils";
-import type { AxiosError, AxiosResponse } from "../../utils/Types";
+import { getIconFromName, getImageFromName } from "@app/utils/ImageUtils";
+import type { AxiosError, AxiosResponse } from "@app/utils/Types";
 
-import { Text, Button, StyledButton } from "../../components/OPMComponents";
-import { Input } from "../../components/Input";
+import { Text, Button, StyledButton } from "@app/components/OPMComponents";
+import Input from "@app/components/Input";
+import { getToken, setToken } from "@app/utils/Config";
 
-import type { LoginProps } from "../../App";
+import type { LoginProps } from "App";
 
-import { loginStyles as styles, commonStyles } from "../../styles/AuthStyles";
+import { loginStyles as styles, commonStyles } from "@app/styles/AuthStyles";
 
 import { API_URL } from "@env";
 import axios from "axios";
@@ -75,7 +76,7 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
     });
   }
 
-  openErrorModal = (message: string): void => {
+  openErrorModal = (message: string) => {
     this.setState({
       errorModal: {
         message: message,
@@ -86,7 +87,7 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
   };
 
   //Arrow fx for binding
-  handleLogin = (): void => {
+  handleLogin = () => {
     const { email, password, isAuthenticating } = this.state;
     const { t } = this.props;
 
@@ -95,17 +96,27 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
     }
     this.setState({ isAuthenticating: true });
 
-    if (email === "" || password === "") {
+    let emailWithoutSpaces: string = email.replace(/\s/g, "");
+
+    if (emailWithoutSpaces === "" || password === "") {
       this.openErrorModal(t("auth.errors.complete-all-fields"));
-    } else if (!emailRegex.test(email)) {
+    } else if (!emailRegex.test(emailWithoutSpaces)) {
       this.openErrorModal(t("auth.errors.invalid-email"));
     } else if (!passwordRegex.test(password)) {
       this.openErrorModal(t("auth.errors.invalid-password"));
     } else {
       axios
-        .post(`${API_URL}/api/auth/login`, { email: email, password: password })
+        .post(`${API_URL}/api/auth/login`, {
+          email: emailWithoutSpaces,
+          password: password,
+        })
         .then((res: AxiosResponse) => {
-          console.log(res.data.result);
+          if (res.data.token) {
+            setToken(res.data.token);
+            this.props.navigation.navigate("Home");
+          } else {
+            this.setState({ isAuthenticating: false });
+          }
         })
         .catch((err: AxiosError) => {
           if (err.response && err.response.data) {
@@ -114,11 +125,7 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
             } else if (err.response.data.type === "invalid-credentials") {
               this.openErrorModal(t("auth.errors.invalid-credentials"));
             } else if (err.response.data.type === "email-not-verified") {
-              /*this.props.history.push({
-                pathname: "/auth/email/confirmation",
-                state: { redirectedAfterLogin: true, email: email },
-              });
-              */
+              this.openErrorModal(t("auth.errors.email-not-verified"));
             } else {
               this.openErrorModal(t("auth.errors.unknown-error"));
             }
@@ -150,6 +157,7 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
           autoCorrect={false}
           autoCompleteType="email"
           keyboardType="email-address"
+          caretHidden={false}
           icon={getIconFromName("email")}
         />
         <Input
@@ -171,6 +179,12 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
               <ActivityIndicator size={25} color="#fff" />
             ) : undefined
           }
+        />
+
+        <StyledButton
+          title={t("auth.no-account")}
+          onPress={() => this.props.navigation.navigate("Register")}
+          textStyle={commonStyles.link}
         />
         <Modal
           animationType="fade"

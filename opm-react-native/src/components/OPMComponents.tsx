@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans",
   },
   button: {
-    margin: 10,
+    margin: 15,
     justifyContent: "center",
     alignItems: "center",
     paddingLeft: 19,

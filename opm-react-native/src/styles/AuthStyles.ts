@@ -62,10 +62,22 @@ const commonStyles = StyleSheet.create({
     textAlign: "center",
     marginTop: 10,
   },
+  link: {
+    marginTop: 15,
+    fontSize: 16,
+  },
 });
 
 const loginStyles = StyleSheet.create({});
 
-const registerStyles = StyleSheet.create({});
+const registerStyles = StyleSheet.create({
+  nameContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    height: 30,
+    marginBottom: 25,
+    width: "90%",
+  },
+});
 
 export { loginStyles, registerStyles, commonStyles };
