@@ -25,6 +25,8 @@
     "resend-email": "Resend email"
   },
   "my-passwords": "My passwords",
+  "settings": "Settings",
+  "my-account": "My account",
   "ok": "OK",
   "error": "Error"
 }

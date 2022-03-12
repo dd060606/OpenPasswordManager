@@ -24,7 +24,10 @@ type State = {
 };
 
 type NavMenuProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, "Home">;
+  navigation: NativeStackNavigationProp<
+    RootStackParamList,
+    "Home" | "Settings" | "Account"
+  >;
 };
 
 class NavMenu extends Component<NavMenuProps & WithTranslation, State> {
@@ -90,7 +93,10 @@ function NavButton(props: NavButtonProps): JSX.Element {
 
 type MenuProps = {
   closeMenu: () => void;
-  navigation: NativeStackNavigationProp<RootStackParamList, "Home">;
+  navigation: NativeStackNavigationProp<
+    RootStackParamList,
+    "Home" | "Settings" | "Account"
+  >;
 };
 function Menu(props: MenuProps): JSX.Element {
   const { t } = useTranslation();
@@ -105,6 +111,20 @@ function Menu(props: MenuProps): JSX.Element {
           navigation={props.navigation}
           closeMenu={props.closeMenu}
         />
+        <MenuLink
+          text={t("settings")}
+          navLink={"Settings"}
+          iconName={"settings"}
+          navigation={props.navigation}
+          closeMenu={props.closeMenu}
+        />
+        <MenuLink
+          text={t("my-account")}
+          navLink={"Account"}
+          iconName={"account"}
+          navigation={props.navigation}
+          closeMenu={props.closeMenu}
+        />
       </View>
     </View>
   );
@@ -113,9 +133,12 @@ function Menu(props: MenuProps): JSX.Element {
 type MenuLinkProps = {
   iconName?: string;
   text: string;
-  navLink: "Home";
+  navLink: "Home" | "Settings" | "Account";
   closeMenu: () => void;
-  navigation: NativeStackNavigationProp<RootStackParamList, "Home">;
+  navigation: NativeStackNavigationProp<
+    RootStackParamList,
+    "Home" | "Settings" | "Account"
+  >;
 };
 function MenuLink(props: PressableProps & MenuLinkProps): JSX.Element {
   return (
@@ -123,8 +146,8 @@ function MenuLink(props: PressableProps & MenuLinkProps): JSX.Element {
       {...props}
       style={styles.menuLink}
       onPress={() => {
-        props.closeMenu();
         props.navigation.navigate(props.navLink);
+        props.closeMenu();
       }}
     >
       {props.iconName && (

@@ -10,6 +10,7 @@ type Images = {
 const images: Images = {
   images: {
     logo: require("../../assets/logo.png"),
+    icon: require("../../assets/icon.png"),
   },
   icons: {
     key: require("../../assets/icons/key.png"),
@@ -19,6 +20,8 @@ const images: Images = {
     error: require("../../assets/icons/error.png"),
     name: require("../../assets/icons/name.png"),
     lock: require("../../assets/icons/lock.png"),
+    settings: require("../../assets/icons/settings.png"),
+    account: require("../../assets/icons/account.png"),
   },
 };
 

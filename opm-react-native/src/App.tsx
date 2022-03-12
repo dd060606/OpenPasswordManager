@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import * as Font from "expo-font";
 
-import "./i18n";
+import "@app/i18n";
 
 //Screens
 import LoginScreen from "@app/screens/auth/LoginScreen";
@@ -14,16 +14,22 @@ import RegisterScreen from "@app/screens/auth/RegisterScreen";
 import HomeScreen from "@app/screens/HomeScreen";
 
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import SettingsScreen from "@app/screens/SettingsScreen";
+import AccountScreen from "@app/screens/AccountScreen";
 
 type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   Home: undefined;
+  Account: undefined;
+  Settings: undefined;
 };
 
 type LoginProps = NativeStackScreenProps<RootStackParamList, "Login">;
 type RegisterProps = NativeStackScreenProps<RootStackParamList, "Register">;
 type HomeProps = NativeStackScreenProps<RootStackParamList, "Home">;
+type SettingsProps = NativeStackScreenProps<RootStackParamList, "Settings">;
+type AccountProps = NativeStackScreenProps<RootStackParamList, "Account">;
 
 const Stack = createNativeStackNavigator();
 
@@ -63,6 +69,16 @@ function App() {
           component={HomeScreen}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Account"
+          component={AccountScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -70,5 +86,12 @@ function App() {
 
 registerRootComponent(App);
 
-export type { RootStackParamList, LoginProps, RegisterProps, HomeProps };
+export type {
+  RootStackParamList,
+  LoginProps,
+  RegisterProps,
+  HomeProps,
+  SettingsProps,
+  AccountProps,
+};
 export default App;

@@ -25,6 +25,8 @@
     "resend-email": "Envoyer l'email à nouveau"
   },
   "my-passwords": "Mes mots de passe",
+  "settings": "Paramètres",
+  "my-account": "Mon compte",
   "ok": "OK",
   "error": "Erreur"
 }

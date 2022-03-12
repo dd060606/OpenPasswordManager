@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "center",
     alignItems: "center",
+    marginVertical: 10,
   },
   menuLinkText: {
     fontSize: 25,

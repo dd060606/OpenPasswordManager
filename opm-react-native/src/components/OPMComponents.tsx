@@ -47,8 +47,15 @@ function Button(props: ButtonProps & StyledButtonType): JSX.Element {
   );
 }
 
-function SafeAreaView(props: ViewProps): JSX.Element {
-  return <RNSafeAreaView {...props} style={styles.safeArea} />;
+function SafeAreaView(props: ViewProps & { style?: object }): JSX.Element {
+  return (
+    <RNSafeAreaView
+      {...props}
+      style={
+        props.style ? { ...props.style, ...styles.safeArea } : styles.safeArea
+      }
+    />
+  );
 }
 
 function StyledButton(props: ButtonProps & StyledButtonType): JSX.Element {
