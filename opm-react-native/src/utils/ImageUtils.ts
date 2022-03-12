@@ -18,6 +18,7 @@ const images: Images = {
     eyeSlash: require("../../assets/icons/eye-slash.png"),
     error: require("../../assets/icons/error.png"),
     name: require("../../assets/icons/name.png"),
+    lock: require("../../assets/icons/lock.png"),
   },
 };
 

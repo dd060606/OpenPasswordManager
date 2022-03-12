@@ -80,4 +80,24 @@ const registerStyles = StyleSheet.create({
   },
 });
 
-export { loginStyles, registerStyles, commonStyles };
+const emailConfirmationStyles = StyleSheet.create({
+  emailText: {
+    marginTop: 10,
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  confirmEmailText: {
+    marginTop: 8,
+    fontSize: 17,
+    textAlign: "center",
+  },
+  sendEmailText: {
+    marginTop: 8,
+    fontSize: 17,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "black",
+  },
+});
+
+export { loginStyles, registerStyles, commonStyles, emailConfirmationStyles };

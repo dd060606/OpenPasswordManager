@@ -47,7 +47,7 @@ function App() {
   }
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Login"
           component={LoginScreen}
@@ -70,5 +70,5 @@ function App() {
 
 registerRootComponent(App);
 
-export type { LoginProps, RegisterProps, HomeProps };
+export type { RootStackParamList, LoginProps, RegisterProps, HomeProps };
 export default App;

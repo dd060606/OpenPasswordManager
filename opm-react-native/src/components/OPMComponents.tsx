@@ -4,6 +4,10 @@ import {
   TextProps,
   Pressable,
   ButtonProps,
+  SafeAreaView as RNSafeAreaView,
+  ViewProps,
+  Platform,
+  StatusBar,
 } from "react-native";
 
 import { useState } from "react";
@@ -43,6 +47,10 @@ function Button(props: ButtonProps & StyledButtonType): JSX.Element {
   );
 }
 
+function SafeAreaView(props: ViewProps): JSX.Element {
+  return <RNSafeAreaView {...props} style={styles.safeArea} />;
+}
+
 function StyledButton(props: ButtonProps & StyledButtonType): JSX.Element {
   const { onPress, title, style, textStyle, JSX } = props;
 
@@ -78,6 +86,12 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     color: "white",
   },
+  safeArea: {
+    flex: 1,
+    paddingTop:
+      Platform.OS === "android" ? (StatusBar.currentHeight as number) + 13 : 0,
+    backgroundColor: "white",
+  },
 });
 
-export { Text, Button, StyledButton };
+export { Text, Button, StyledButton, SafeAreaView };

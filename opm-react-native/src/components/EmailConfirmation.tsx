@@ -1,7 +1,7 @@
 import { Component } from "react";
 
-import { StyleSheet } from "react-native";
 import { Text, StyledButton } from "@app/components/OPMComponents";
+import { emailConfirmationStyles as styles } from "@app/styles/AuthStyles";
 
 import { withTranslation, WithTranslation } from "react-i18next";
 import axios from "axios";
@@ -55,25 +55,5 @@ class EmailConfirmation extends Component<Props & WithTranslation, State> {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  emailText: {
-    marginTop: 10,
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  confirmEmailText: {
-    marginTop: 8,
-    fontSize: 17,
-    textAlign: "center",
-  },
-  sendEmailText: {
-    marginTop: 8,
-    fontSize: 17,
-    textAlign: "center",
-    fontWeight: "bold",
-    color: "black",
-  },
-});
 
 export default withTranslation()(EmailConfirmation);
