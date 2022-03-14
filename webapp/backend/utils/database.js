@@ -30,7 +30,7 @@ module.exports.initDatabase = function () {
         + " `isVerified` BOOLEAN NOT NULL DEFAULT FALSE ,"
         + " PRIMARY KEY (`id`)) ENGINE = InnoDB;", function (err, result) {
             if (err) {
-                logger.error(err.sqlMessage)
+                logger.error(err)
                 throw err
             }
             logger.info("Connected to database!")

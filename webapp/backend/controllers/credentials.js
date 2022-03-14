@@ -6,10 +6,10 @@ const logger = require("../utils/logger")
 exports.add = (req, res, next) => {
 
     if (req.body.name) {
-        const insertCredentialsSQL = `INSERT INTO \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` (\`id\`, \`user_id\`, \`name\`, \`url\`, \`username\`, \`password\`) VALUES (NULL, '${req.userId}', '${req.body.name}', '${req.body.url}', '${req.body.username}', '${req.body.password}');`
+        const insertCredentialsSQL = `INSERT INTO \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` (\`id\`, \`user_id\`, \`name\`, \`url\`, \`username\`, \`password\`) VALUES (NULL, ?, ?, ?, ?, ?);`
 
 
-        db.query(insertCredentialsSQL, function (err, result) {
+        db.query(insertCredentialsSQL, [req.userId, req.body.name, req.body.url, req.body.username, req.body.password], function (err, result) {
             if (err) {
                 return res.status(500).json(getJsonForInternalError(err.message))
             }
@@ -29,11 +29,14 @@ exports.add = (req, res, next) => {
 exports.edit = (req, res, next) => {
 
     if (req.body.name && req.params.id) {
-        const updateCredentialsSQL = `UPDATE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` SET \`name\` = '${req.body.name}', \`url\` = '${req.body.url}', \`username\` = '${req.body.username}', \`password\` = '${req.body.password}' WHERE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\`.\`id\` = ${req.params.id};`
+        const updateCredentialsSQL = `UPDATE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` SET \`name\` = ?, \`url\` = ?, \`username\` = ?, \`password\` = ? WHERE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\`.\`id\` = ? AND \`${process.env.DB_OPM_CREDENTIALS_TABLE}\`.\`user_id\` = ?;`
 
-        db.query(updateCredentialsSQL, function (err, result) {
+        db.query(updateCredentialsSQL, [req.body.name, req.body.url, req.body.username, req.body.password, req.params.id, req.userId], function (err, result) {
             if (err) {
                 return res.status(500).json(getJsonForInternalError(err.message))
+            }
+            if (result.affectedRows === 0) {
+                return res.status(401).json(getJsonForUnauthorized(`${req.headers['x-real-ip'] || req.connection.remoteAddress} tried to edit credentials : ${req.params.id} (${req.userId})`))
             }
             logger.info(`${req.headers['x-real-ip'] || req.connection.remoteAddress} modified credentials : ${req.body.name} (${req.userId})`)
 
@@ -52,10 +55,13 @@ exports.edit = (req, res, next) => {
 }
 exports.delete = (req, res, next) => {
     if (req.params.id) {
-        const deleteCredentialSQL = `DELETE FROM \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` WHERE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\`.\`id\` = ${req.params.id}`
-        db.query(deleteCredentialSQL, function (err, result) {
+        const deleteCredentialSQL = `DELETE FROM \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` WHERE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\`.\`id\` = ? AND \`${process.env.DB_OPM_CREDENTIALS_TABLE}\`.\`user_id\` = ?;`
+        db.query(deleteCredentialSQL, [req.params.id, req.userId], function (err, result) {
             if (err) {
                 return res.status(500).json(getJsonForInternalError(err.message))
+            }
+            if (result.affectedRows === 0) {
+                return res.status(401).json(getJsonForUnauthorized(`${req.headers['x-real-ip'] || req.connection.remoteAddress} tried to remove credentials : ${req.params.id} (${req.userId})`))
             }
             logger.info(`${req.headers['x-real-ip'] || req.connection.remoteAddress} deleted credentials : ${req.params.id} (${req.userId})`)
 
@@ -72,7 +78,7 @@ exports.delete = (req, res, next) => {
     }
 }
 exports.getCredentials = (req, res, next) => {
-    db.query(`SELECT * FROM \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` WHERE user_id = ${req.userId}`, function (err, result) {
+    db.query(`SELECT * FROM \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` WHERE user_id = ?`, [req.userId], function (err, result) {
         if (err) {
             return res.status(500).json(getJsonForInternalError(err.message))
         }
@@ -97,5 +103,13 @@ function getJsonForInternalError(message) {
         result: "error",
         type: "internal-error",
         message: "Error : Internal server error!"
+    })
+}
+function getJsonForUnauthorized(message) {
+    logger.warn(message)
+    return ({
+        result: "error",
+        type: "unauthorized-error",
+        message: "Error : Access unauthorized!"
     })
 }

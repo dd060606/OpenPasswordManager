@@ -18,7 +18,7 @@ exports.signup = (req, res, next) => {
 
     if (validateSignup(req)) {
 
-        db.query(`SELECT id FROM ${process.env.DB_OPM_ACCOUNTS_TABLE} WHERE email = '${req.body.email}'`, function (err, result) {
+        db.query(`SELECT id FROM ${process.env.DB_OPM_ACCOUNTS_TABLE} WHERE email = ?`, [req.body.email], function (err, result) {
             if (err) {
                 return res.status(500).json(getJsonForInternalError(err.message))
             }
@@ -49,11 +49,11 @@ function signupAccount(req, res) {
         .then(hash => {
 
             const insertAccountSQL = `INSERT INTO \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` (\`id\`, \`email\`, \`password\`, \`lastname\`, \`firstname\`, \`isVerified\`)`
-                + `VALUES (NULL, '${req.body.email}', '${hash}', '${req.body.lastname}', '${req.body.firstname}', '0');`
+                + `VALUES (NULL, ?, ?, ?, ?, '0');`
 
 
 
-            db.query(insertAccountSQL, function (err, result) {
+            db.query(insertAccountSQL, [req.body.email, hash, req.body.lastname, req.body.firstname], function (err, result) {
                 if (err) {
                     return res.status(500).json(getJsonForInternalError(err.message))
                 }
@@ -91,7 +91,7 @@ exports.login = (req, res, next) => {
 
     if (validateLogin(req)) {
 
-        db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE email = \"${req.body.email}\"`, function (err, result) {
+        db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE email = ?`, [req.body.email], function (err, result) {
             if (err) {
                 return res.status(500).json(getJsonForInternalError(err.message))
             }
@@ -149,7 +149,7 @@ exports.login = (req, res, next) => {
 exports.changePassword = (req, res, next) => {
     if (validateChangePassword(req)) {
 
-        db.query(`SELECT password FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE id = \"${req.userId}\"`, function (err, result) {
+        db.query(`SELECT password FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE id = ?`, [req.userId], function (err, result) {
             if (err) {
                 return res.status(500).json(getJsonForInternalError(err.message))
             }
@@ -165,13 +165,13 @@ exports.changePassword = (req, res, next) => {
                     }
                     bcyrpt.hash(req.body.newPassword, 10)
                         .then(hash => {
-                            const changePasswordSQL = `UPDATE \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` SET \`password\` = '${hash}' WHERE \`${process.env.DB_OPM_ACCOUNTS_TABLE}\`.\`id\` = ${req.userId};`
+                            const changePasswordSQL = `UPDATE \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` SET \`password\` = ? WHERE \`${process.env.DB_OPM_ACCOUNTS_TABLE}\`.\`id\` = ?;`
 
-                            db.query(changePasswordSQL, function (err2) {
+                            db.query(changePasswordSQL, [hash, req.userId], function (err2) {
                                 if (err2) {
                                     return res.status(500).json(getJsonForInternalError(err2.message))
                                 }
-                                db.query(`SELECT * FROM \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` WHERE user_id = ${req.userId}`, function (err3, result2) {
+                                db.query(`SELECT * FROM \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` WHERE user_id = ?`, [req.userId], function (err3, result2) {
                                     if (err3) {
                                         return res.status(500).json(getJsonForInternalError(err3.message))
                                     }
@@ -179,7 +179,7 @@ exports.changePassword = (req, res, next) => {
                                     for (let i = 0; i < result2.length; i++) {
                                         const decryptedPassword = CryptoJS.AES.decrypt(result2[i].password, req.body.currentPassword).toString(CryptoJS.enc.Utf8)
                                         const encryptedPassword = CryptoJS.AES.encrypt(decryptedPassword, req.body.newPassword).toString()
-                                        db.query(`UPDATE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` SET \`password\` = '${encryptedPassword}' WHERE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\`.\`id\` = ${result2[i].id};`, function (err4) {
+                                        db.query(`UPDATE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` SET \`password\` = ? WHERE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\`.\`id\` = ?;`, [encryptedPassword, result2[i].id], function (err4) {
                                             if (err4) {
                                                 return res.status(500).json(getJsonForInternalError(err4.message))
                                             }
@@ -210,7 +210,7 @@ exports.changePassword = (req, res, next) => {
 
 
 exports.getInfo = (req, res, next) => {
-    db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE id = "${req.userId}"`, function (err, result) {
+    db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE id = ?`, [req.userId], function (err, result) {
 
         if (err) {
             return res.status(500).json(getJsonForInternalError(err.message))
