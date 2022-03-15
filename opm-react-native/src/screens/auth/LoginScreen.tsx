@@ -10,15 +10,19 @@ import {
 } from "react-native";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { getIconFromName, getImageFromName } from "@app/utils/ImageUtils";
-import type { AxiosError, AxiosResponse } from "@app/utils/Types";
+import type { AxiosAuthResponse, AxiosError } from "@app/utils/Types";
 
 import { Text, Button, StyledButton } from "@app/components/OPMComponents";
 import Input from "@app/components/Input";
-import { getToken, setToken } from "@app/utils/Config";
+import { setToken } from "@app/utils/Config";
 
 import type { LoginProps } from "App";
 
-import { loginStyles as styles, commonStyles } from "@app/styles/AuthStyles";
+import {
+  loginStyles as styles,
+  authCommonStyles,
+} from "@app/styles/AuthStyles";
+import { commonStyles } from "@app/styles/CommonStyles";
 
 import { API_URL } from "@env";
 import axios from "axios";
@@ -110,7 +114,7 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
           email: emailWithoutSpaces,
           password: password,
         })
-        .then((res: AxiosResponse) => {
+        .then((res: AxiosAuthResponse) => {
           if (res.data.token) {
             setToken(res.data.token);
             this.props.navigation.navigate("Home");
@@ -121,16 +125,16 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
         .catch((err: AxiosError) => {
           if (err.response && err.response.data) {
             if (err.response.data.type === "internal-error") {
-              this.openErrorModal(t("auth.errors.internal-error"));
+              this.openErrorModal(t("errors.internal-error"));
             } else if (err.response.data.type === "invalid-credentials") {
               this.openErrorModal(t("auth.errors.invalid-credentials"));
             } else if (err.response.data.type === "email-not-verified") {
               this.openErrorModal(t("auth.errors.email-not-verified"));
             } else {
-              this.openErrorModal(t("auth.errors.unknown-error"));
+              this.openErrorModal(t("errors.unknown-error"));
             }
           } else {
-            this.openErrorModal(t("auth.errors.unknown-error"));
+            this.openErrorModal(t("errors.unknown-error"));
           }
         });
     }
@@ -142,13 +146,16 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
     const { t } = this.props;
     return (
       <KeyboardAvoidingView
-        style={commonStyles.container}
+        style={authCommonStyles.container}
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS == "ios" ? 0 : 20}
         enabled={Platform.OS === "ios" ? true : false}
       >
-        <Image style={commonStyles.logo} source={getImageFromName("logo")} />
-        <Text style={commonStyles.title}>{t("auth.login")}</Text>
+        <Image
+          style={authCommonStyles.logo}
+          source={getImageFromName("logo")}
+        />
+        <Text style={authCommonStyles.title}>{t("auth.login")}</Text>
         <Input
           placeholder={t("auth.email")}
           isValid={fieldsValid.email}
@@ -184,7 +191,7 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
         <StyledButton
           title={t("auth.no-account")}
           onPress={() => this.props.navigation.navigate("Register")}
-          textStyle={commonStyles.link}
+          textStyle={authCommonStyles.link}
         />
         <Modal
           animationType="fade"
@@ -200,7 +207,7 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
                 style={commonStyles.modalImg}
                 source={getIconFromName("error")}
               />
-              <Text style={commonStyles.title}>{t("error")}</Text>
+              <Text style={authCommonStyles.title}>{t("error")}</Text>
 
               <Text style={commonStyles.modalText}>{errorModal.message}</Text>
               <Button

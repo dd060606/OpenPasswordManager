@@ -1,12 +1,14 @@
 {
+  "errors": {
+    "unknown-error": "Unknown error!",
+    "internal-error": "Internal server error!"
+  },
   "auth": {
     "errors": {
       "complete-all-fields": "Please complete all fields!",
       "invalid-email": "Invalid email!",
       "invalid-password": "Invalid password!",
-      "unknown-error": "Unknown error!",
       "invalid-credentials": "Invalid credentials!",
-      "internal-error": "Internal server error!",
       "email-not-verified": "Email not verified!",
       "invalid-names": "Invalid firstname or lastname!",
       "password-confirmation-not-match": "Password confirmation doesn't match!",

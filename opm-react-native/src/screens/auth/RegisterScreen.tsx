@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import axios from "axios";
-import { AxiosError, AxiosResponse } from "@app/utils/Types";
+import { AxiosError, AxiosAuthResponse } from "@app/utils/Types";
 import { API_URL } from "@env";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { getIconFromName, getImageFromName } from "@app/utils/ImageUtils";
@@ -22,7 +22,11 @@ import type { RegisterProps } from "App";
 
 import i18n from "@app/i18n";
 
-import { registerStyles as styles, commonStyles } from "@app/styles/AuthStyles";
+import {
+  registerStyles as styles,
+  authCommonStyles,
+} from "@app/styles/AuthStyles";
+import { commonStyles } from "@app/styles/CommonStyles";
 import { setToken } from "@app/utils/Config";
 
 type State = {
@@ -186,7 +190,7 @@ class RegisterScreen extends Component<RegisterProps & WithTranslation, State> {
           const interval = setInterval(() => {
             axios
               .post(`${API_URL}/api/auth/email/validated`, { email: email })
-              .then((res: AxiosResponse) => {
+              .then((res: AxiosAuthResponse) => {
                 if (res.data.value === true) {
                   clearInterval(interval);
                   axios
@@ -194,7 +198,7 @@ class RegisterScreen extends Component<RegisterProps & WithTranslation, State> {
                       email: email,
                       password: password,
                     })
-                    .then((res: AxiosResponse) => {
+                    .then((res: AxiosAuthResponse) => {
                       if (res.data.result === "success") {
                         setToken(res.data.token ? res.data.token : "");
 
@@ -212,15 +216,15 @@ class RegisterScreen extends Component<RegisterProps & WithTranslation, State> {
           if (error.response && error.response.data) {
             if (error.response.data.result === "error") {
               if (error.response.data.type === "internal-error") {
-                this.openErrorModal(t("auth.errors.internal-error"));
+                this.openErrorModal(t("errors.internal-error"));
               } else if (error.response.data.type === "email-already-exists") {
                 this.openErrorModal(t("auth.errors.email-already-exists"));
               } else {
-                this.openErrorModal(t("auth.errors.unknown-error"));
+                this.openErrorModal(t("errors.unknown-error"));
               }
             }
           } else {
-            this.openErrorModal(t("auth.errors.unknown-error"));
+            this.openErrorModal(t("errors.unknown-error"));
           }
           this.setState({ isAuthenticating: false });
         });
@@ -242,13 +246,16 @@ class RegisterScreen extends Component<RegisterProps & WithTranslation, State> {
     const { t } = this.props;
     return (
       <KeyboardAvoidingView
-        style={commonStyles.container}
+        style={authCommonStyles.container}
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS == "ios" ? 0 : 20}
         enabled={Platform.OS === "ios" ? true : false}
       >
-        <Image style={commonStyles.logo} source={getImageFromName("logo")} />
-        <Text style={commonStyles.title}>{t("auth.signup")}</Text>
+        <Image
+          style={authCommonStyles.logo}
+          source={getImageFromName("logo")}
+        />
+        <Text style={authCommonStyles.title}>{t("auth.signup")}</Text>
 
         {!emailConfirmationEnabled && (
           <>
@@ -317,7 +324,7 @@ class RegisterScreen extends Component<RegisterProps & WithTranslation, State> {
             <StyledButton
               title={t("auth.already-have-account")}
               onPress={() => this.props.navigation.navigate("Login")}
-              textStyle={commonStyles.link}
+              textStyle={authCommonStyles.link}
             />
             <Modal
               animationType="fade"
@@ -335,7 +342,7 @@ class RegisterScreen extends Component<RegisterProps & WithTranslation, State> {
                     style={commonStyles.modalImg}
                     source={getIconFromName("error")}
                   />
-                  <Text style={commonStyles.title}>{t("error")}</Text>
+                  <Text style={authCommonStyles.title}>{t("error")}</Text>
 
                   <Text style={commonStyles.modalText}>
                     {errorModal.message}

@@ -1,12 +1,14 @@
 {
+  "errors": {
+    "unknown-error": "Erreur inconnue !",
+    "internal-error": "Erreur du serveur !"
+  },
   "auth": {
     "errors": {
       "complete-all-fields": "Veuillez compléter tous les champs !",
       "invalid-email": "Adresse email invalide !",
       "invalid-password": "Mot de passe invalide !",
-      "unknown-error": "Erreur inconnue !",
       "invalid-credentials": "Mauvais identifiants !",
-      "internal-error": "Erreur du serveur !",
       "email-not-verified": "Adresse email non vérifiée !",
       "invalid-names": "Nom ou prénom invalides !",
       "password-confirmation-not-match": "Les mots de passe ne correspondent pas !",
