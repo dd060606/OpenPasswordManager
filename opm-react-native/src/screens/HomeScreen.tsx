@@ -17,10 +17,12 @@ import {
 } from "@app/utils/Types";
 import { getIconFromName } from "@app/utils/ImageUtils";
 import { commonStyles } from "@app/styles/CommonStyles";
+import CredentialsElement from "@app/components/CredentialsElement";
+import { extractRootDomain } from "@app/utils/Utils";
 
 type State = {
   isLoading: boolean;
-  credentials: Credentials;
+  credentials: Credentials[] | null;
   errorModal: {
     message: string;
     visible: boolean;
@@ -30,7 +32,7 @@ type State = {
 class HomeScreen extends Component<HomeProps & WithTranslation, State> {
   state = {
     isLoading: true,
-    credentials: [{}],
+    credentials: null,
     errorModal: {
       message: "",
       visible: false,
@@ -39,22 +41,39 @@ class HomeScreen extends Component<HomeProps & WithTranslation, State> {
 
   componentDidMount() {
     const { t } = this.props;
-
     if (isTokenValid()) {
       axios
         .get(`${API_URL}/api/credentials/`, {
-          headers: { Authorization: `Bearer ${getToken()}a` },
+          headers: { Authorization: `Bearer ${getToken()}` },
         })
         .then((result: AxiosCredentialsResponse) => {
+          let finalCredentials: Credentials[] = [];
+          for (let i = 0; i < result.data.credentials.length; i++) {
+            if (result.data.credentials[i]) {
+              let newCredentials: Credentials = result.data.credentials[
+                i
+              ] as Credentials;
+
+              let domain = extractRootDomain(newCredentials.url);
+              domain = domain.replace(/\./g, "_");
+              console.log(domain);
+
+              newCredentials.sImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${domain}@2x.png`;
+              newCredentials.lImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${domain}@2x.png`;
+
+              finalCredentials.push(newCredentials);
+            }
+          }
           this.setState({
             isLoading: false,
-            credentials: result.data.credentials,
+            credentials: finalCredentials,
           });
         })
         .catch((err: AxiosError) => {
-          if (err.response.data.type === "internal-error") {
+          console.log(err);
+          if (err?.response?.data?.type === "internal-error") {
             this.openErrorModal(t("errors.internal-error"));
-          } else if (err.response.data.type === "invalid-token") {
+          } else if (err?.response?.data?.type === "invalid-token") {
             this.props.navigation.replace("Login");
           } else {
             this.openErrorModal(t("errors.unknown-error"));
@@ -75,13 +94,14 @@ class HomeScreen extends Component<HomeProps & WithTranslation, State> {
     });
   };
   render() {
-    const { isLoading, errorModal } = this.state;
+    const { isLoading, errorModal, credentials } = this.state;
     const { t } = this.props;
     return (
       <SafeAreaView>
         {!isLoading ? (
           <NavMenu navigation={this.props.navigation}>
             <Text>Home</Text>
+            {credentials && <CredentialsElement credentials={credentials[0]} />}
             <Modal
               animationType="fade"
               transparent={true}

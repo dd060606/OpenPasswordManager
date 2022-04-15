@@ -1,13 +1,13 @@
-type Credentials =
-  | {
-      id: number;
-      name: string;
-      password: string;
-      url: string;
-      user_id: number;
-      username: string;
-    }[]
-  | {}[];
+type Credentials = {
+  id: number;
+  name: string;
+  password: string;
+  url: string;
+  user_id: number;
+  username: string;
+  sImageURL: string;
+  lImageURL: string;
+};
 
 type AxiosError = {
   response: {
@@ -33,7 +33,7 @@ type AxiosAuthResponse = AxiosResponse & {
 
 type AxiosCredentialsResponse = {
   data: {
-    credentials: Credentials;
+    credentials: Credentials[];
   };
 };
 

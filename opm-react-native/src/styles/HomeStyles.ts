@@ -31,4 +31,22 @@ const loadingStyles = StyleSheet.create({
   },
 });
 
-export { homeStyles, loadingStyles };
+const credentialsElementStyles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    flexDirection: "row",
+    width: "100%",
+    height: 50,
+    backgroundColor: "red",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  logo: {
+    width: 46,
+    height: 30,
+  },
+});
+
+export { homeStyles, loadingStyles, credentialsElementStyles };

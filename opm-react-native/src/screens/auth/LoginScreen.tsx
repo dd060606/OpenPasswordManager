@@ -115,7 +115,7 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
           password: password,
         })
         .then((res: AxiosAuthResponse) => {
-          if (res.data.token) {
+          if (res.data && res.data.token) {
             setToken(res.data.token);
             this.props.navigation.navigate("Home");
           } else {
@@ -123,16 +123,12 @@ class LoginScreen extends Component<LoginProps & WithTranslation, State> {
           }
         })
         .catch((err: AxiosError) => {
-          if (err.response && err.response.data) {
-            if (err.response.data.type === "internal-error") {
-              this.openErrorModal(t("errors.internal-error"));
-            } else if (err.response.data.type === "invalid-credentials") {
-              this.openErrorModal(t("auth.errors.invalid-credentials"));
-            } else if (err.response.data.type === "email-not-verified") {
-              this.openErrorModal(t("auth.errors.email-not-verified"));
-            } else {
-              this.openErrorModal(t("errors.unknown-error"));
-            }
+          if (err?.response?.data?.type === "internal-error") {
+            this.openErrorModal(t("errors.internal-error"));
+          } else if (err?.response?.data?.type === "invalid-credentials") {
+            this.openErrorModal(t("auth.errors.invalid-credentials"));
+          } else if (err?.response?.data?.type === "email-not-verified") {
+            this.openErrorModal(t("auth.errors.email-not-verified"));
           } else {
             this.openErrorModal(t("errors.unknown-error"));
           }
