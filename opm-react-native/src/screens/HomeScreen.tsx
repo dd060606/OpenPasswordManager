@@ -56,8 +56,6 @@ class HomeScreen extends Component<HomeProps & WithTranslation, State> {
 
               let domain = extractRootDomain(newCredentials.url);
               domain = domain.replace(/\./g, "_");
-              console.log(domain);
-
               newCredentials.sImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${domain}@2x.png`;
               newCredentials.lImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${domain}@2x.png`;
 
