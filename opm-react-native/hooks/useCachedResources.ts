@@ -14,7 +14,10 @@ export default function useCachedResources() {
         // Load fonts
         await Font.loadAsync({
           ...FontAwesome.font,
-          "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
+          OpenSans: require("../assets/fonts/OpenSans-Regular.ttf"),
+          OpenSansBold: require("../assets/fonts/OpenSans-Bold.ttf"),
+          OpenSansItalic: require("../assets/fonts/OpenSans-Italic.ttf"),
+          OSSemiBold: require("../assets/fonts/OpenSans-SemiBold.ttf"),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
