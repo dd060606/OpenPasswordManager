@@ -26,7 +26,7 @@ const PasswordItem = ({ credential, index, onClick }) => {
             <div className="password-info">
                 <img src={credential.smallImageURL}
                     alt="" className="website-icon" onError={event => {
-                        event.target.src = `${process.env.PUBLIC_URL}/assets/images/unknown_46x30.png`
+                        event.target.src = `${process.env.PUBLIC_URL}/assets/images/unknown_small.png`
                     }} />
                 <div>
                     <p className="password-name">{credential.name}</p>
