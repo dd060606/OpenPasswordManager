@@ -3,6 +3,8 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
+import "react-native-gesture-handler";
+
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
@@ -14,17 +16,18 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
 
-import Colors from "../constants/Colors";
-import useColorScheme from "../hooks/useColorScheme";
-import ModalScreen from "../screens/ModalScreen";
-import NotFoundScreen from "../screens/NotFoundScreen";
-import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
-import { RootStackParamList } from "../types/types";
+import Colors from "app/constants/Colors";
+import useColorScheme from "app/hooks/useColorScheme";
+import ModalScreen from "app/screens/ModalScreen";
+import NotFoundScreen from "app/screens/NotFoundScreen";
+import TabOneScreen from "app/screens/TabOneScreen";
+import TabTwoScreen from "app/screens/TabTwoScreen";
+import { RootStackParamList } from "app/types/types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
-import LoginScreen from "../screens/auth/LoginScreen";
-import RegisterScreen from "../screens/auth/RegisterScreen";
+import LoginScreen from "app/screens/auth/LoginScreen";
+import RegisterScreen from "app/screens/auth/RegisterScreen";
+import HomeScreen from "app/screens/HomeScreen";
 
 export default function Navigation({
   colorScheme,
@@ -60,13 +63,14 @@ function RootNavigator() {
         component={RegisterScreen}
         options={{ headerShown: false }}
       />
-      {/*
-      
       <Stack.Screen
         name="Home"
         component={HomeScreen}
         options={{ headerShown: false }}
       />
+      {/*
+      
+
       <Stack.Screen
         name="Settings"
         component={SettingsScreen}

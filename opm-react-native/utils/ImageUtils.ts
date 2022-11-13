@@ -6,9 +6,9 @@ type Images = {
 
 const images: Images = {
   images: {
-    logo: require("../assets/images/logo.png"),
-    icon: require("../assets/images/icon.png"),
-    error: require("../assets/images/error.png"),
+    logo: require("app/assets/images/logo.png"),
+    icon: require("app/assets/images/icon.png"),
+    error: require("app/assets/images/error.png"),
   },
 };
 

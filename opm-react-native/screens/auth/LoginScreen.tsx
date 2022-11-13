@@ -9,24 +9,24 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { getImageFromName } from "../../utils/ImageUtils";
+import { getImageFromName } from "app/utils/ImageUtils";
 
-import { setToken } from "../../utils/Config";
+import { setToken } from "app/utils/Config";
 
 import type {
   RootStackScreenProps,
   AxiosAuthResponse,
   AxiosError,
-} from "../../types/types";
+} from "app/types/types";
 
-import { authCommonStyles } from "../../styles/AuthStyles";
-import { commonStyles } from "../../styles/CommonStyles";
-import { Text, Button, StyledButton } from "../../components/OPMComponents";
-import Input from "../../components/Input";
+import { authCommonStyles } from "app/styles/AuthStyles";
+import { commonStyles } from "app/styles/CommonStyles";
+import { Text, Button, StyledButton } from "app/components/OPMComponents";
+import Input from "app/components/Input";
 
-import { API_URL } from "../../config.json";
+import { API_URL } from "app/config.json";
 import axios from "axios";
-import { Stack } from "../../navigation/index";
+import { Stack } from "app/navigation/index";
 
 type State = {
   email: string;

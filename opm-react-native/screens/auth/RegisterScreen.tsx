@@ -13,23 +13,23 @@ import type {
   AxiosError,
   AxiosAuthResponse,
   RootStackScreenProps,
-} from "../../types/types";
-import { API_URL } from "../../config.json";
+} from "app/types/types";
+import { API_URL } from "app/config.json";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { getImageFromName } from "../../utils/ImageUtils";
+import { getImageFromName } from "app/utils/ImageUtils";
 
-import { Text, Button, StyledButton } from "../../components/OPMComponents";
-import Input from "../../components/Input";
-import EmailConfirmation from "../../components/EmailConfirmation";
+import { Text, Button, StyledButton } from "app/components/OPMComponents";
+import Input from "app/components/Input";
+import EmailConfirmation from "app/components/EmailConfirmation";
 
-import i18n from "../../i18n";
+import i18n from "app/i18n";
 
 import {
   registerStyles as styles,
   authCommonStyles,
-} from "../../styles/AuthStyles";
-import { commonStyles } from "../../styles/CommonStyles";
-import { setToken } from "../../utils/Config";
+} from "app/styles/AuthStyles";
+import { commonStyles } from "app/styles/CommonStyles";
+import { setToken } from "app/utils/Config";
 
 type State = {
   email: string;

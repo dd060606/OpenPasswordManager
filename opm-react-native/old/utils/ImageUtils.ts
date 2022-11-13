@@ -9,8 +9,8 @@ type Images = {
 
 const images: Images = {
   images: {
-    logo: require("../../assets/logo.png"),
-    icon: require("../../assets/icon.png"),
+    logo: require("../../assets/images/logo.png"),
+    icon: require("../../assets/images/icon.png"),
   },
   icons: {
     key: require("../../assets/icons/key.png"),

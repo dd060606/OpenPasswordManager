@@ -9,12 +9,12 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { getIconFromName, getImageFromName } from "@app/utils/ImageUtils";
-import type { AxiosAuthResponse, AxiosError } from "@app/utils/Types";
+import { getIconFromName, getImageFromName } from "app/utils/ImageUtils";
+import type { AxiosAuthResponse, AxiosError } from "app/utils/Types";
 
-import { Text, Button, StyledButton } from "@app/components/OPMComponents";
-import Input from "@app/components/Input";
-import { setToken } from "@app/utils/Config";
+import { Text, Button, StyledButton } from "app/components/OPMComponents";
+import Input from "app/components/Input";
+import { setToken } from "app/utils/Config";
 
 import type { LoginProps } from "App";
 
