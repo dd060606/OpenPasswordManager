@@ -167,6 +167,7 @@ class LoginScreen extends Component<
           onChangeText={(text) => this.handleChangeEmail(text)}
           autoCorrect={false}
           icon={"user"}
+          keyboardType={"email-address"}
         />
         <Input
           placeholder={t("auth.password")}

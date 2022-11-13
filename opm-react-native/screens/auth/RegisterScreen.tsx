@@ -294,6 +294,7 @@ class RegisterScreen extends Component<
               value={email}
               onChangeText={(text) => this.handleChangeEmail(text)}
               icon={"user"}
+              keyboardType={"email-address"}
             />
             <Input
               placeholder={t("auth.password")}

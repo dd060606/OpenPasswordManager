@@ -7,7 +7,7 @@ import { SafeAreaView, Text } from "app/components/OPMComponents";
 type State = {};
 
 class HomeScreen extends Component<
-  RootStackScreenProps<"Home"> & WithTranslation,
+  RootStackScreenProps<"Passwords"> & WithTranslation,
   State
 > {
   state = {};

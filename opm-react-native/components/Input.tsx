@@ -61,6 +61,11 @@ class Input extends Component<TextInputProps & InputProps, State> {
           onFocus={() => this.setState({ isFocused: true })}
           onBlur={() => this.setState({ isFocused: false })}
           secureTextEntry={!isTextVisible}
+          placeholder={
+            isFocused || this.props.value !== ""
+              ? undefined
+              : this.props.placeholder
+          }
         />
         {password !== undefined && (
           <TouchableOpacity

@@ -6,7 +6,7 @@ import { emailConfirmationStyles as styles } from "../styles/AuthStyles";
 import { withTranslation, WithTranslation } from "react-i18next";
 import axios from "axios";
 import i18n from "../i18n";
-import { API_URL } from "@env";
+import { API_URL } from "app/config.json";
 
 type Props = {
   email: string;

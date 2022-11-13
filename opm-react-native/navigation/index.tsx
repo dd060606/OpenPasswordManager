@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import "react-native-gesture-handler";
+//import "react-native-gesture-handler";
 
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -24,10 +24,10 @@ import TabOneScreen from "app/screens/TabOneScreen";
 import TabTwoScreen from "app/screens/TabTwoScreen";
 import { RootStackParamList } from "app/types/types";
 import LinkingConfiguration from "./LinkingConfiguration";
-
+import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import LoginScreen from "app/screens/auth/LoginScreen";
 import RegisterScreen from "app/screens/auth/RegisterScreen";
-import HomeScreen from "app/screens/HomeScreen";
+import HomeScreen from "app/screens/PasswordsScreen";
 
 export default function Navigation({
   colorScheme,
@@ -49,6 +49,7 @@ export default function Navigation({
  * https://reactnavigation.org/docs/modal
  */
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator();
 
 function RootNavigator() {
   return (
@@ -65,9 +66,49 @@ function RootNavigator() {
       />
       <Stack.Screen
         name="Home"
-        component={HomeScreen}
+        component={() => {
+          return (
+            <Tab.Navigator
+              screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                  if (route.name === "Passwords") {
+                    return (
+                      <MaterialIcons
+                        name="lock-outline"
+                        size={size}
+                        color={color}
+                      />
+                    );
+                  } else if (route.name === "Settings") {
+                    return (
+                      <Ionicons
+                        name="settings-outline"
+                        size={size}
+                        color={color}
+                      />
+                    );
+                  }
+                },
+                tabBarActiveTintColor: "#54c2f0",
+                tabBarInactiveTintColor: "gray",
+              })}
+            >
+              <Tab.Screen
+                name="Passwords"
+                component={HomeScreen}
+                options={{ headerShown: false }}
+              />
+              <Tab.Screen
+                name="Settings"
+                component={HomeScreen}
+                options={{ headerShown: false }}
+              />
+            </Tab.Navigator>
+          );
+        }}
         options={{ headerShown: false }}
       />
+
       {/*
       
 
