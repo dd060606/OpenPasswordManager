@@ -15,7 +15,6 @@ export type RootStackParamList = {
   NotFound: undefined;
   Login: RootStackScreenProps<"Login">;
   Register: RootStackScreenProps<"Register">;
-  Home: RootStackScreenProps<"Home">;
   Passwords: RootStackScreenProps<"Passwords">;
   Settings: RootStackScreenProps<"Settings">;
   Account: RootStackScreenProps<"Account">;

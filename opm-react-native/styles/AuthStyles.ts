@@ -1,3 +1,4 @@
+import { useThemeColor } from "app/components/OPMComponents";
 import { StyleSheet } from "react-native";
 
 const authCommonStyles = StyleSheet.create({
@@ -6,7 +7,6 @@ const authCommonStyles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fff",
   },
   logo: {
     width: 230,

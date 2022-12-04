@@ -4,8 +4,6 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  Modal,
-  View,
   ActivityIndicator,
 } from "react-native";
 import { withTranslation, WithTranslation } from "react-i18next";
@@ -20,8 +18,13 @@ import type {
 } from "app/types/types";
 
 import { authCommonStyles } from "app/styles/AuthStyles";
-import { commonStyles } from "app/styles/CommonStyles";
-import { Text, Button, StyledButton } from "app/components/OPMComponents";
+import {
+  Text,
+  Button,
+  StyledButton,
+  SafeAreaView,
+} from "app/components/OPMComponents";
+import { ErrorModal } from "app/components/Modals";
 import Input from "app/components/Input";
 
 import { API_URL } from "app/config.json";
@@ -63,7 +66,9 @@ class LoginScreen extends Component<
     },
     isAuthenticating: false,
   };
-
+  componentWillUnmount() {
+    this.setState({ isAuthenticating: false, password: "" });
+  }
   handleChangeEmail(newEmail: string) {
     this.setState({
       email: newEmail,
@@ -121,9 +126,9 @@ class LoginScreen extends Component<
         .then((res: AxiosAuthResponse) => {
           if (res.data && res.data.token) {
             setToken(res.data.token);
-            this.props.navigation.navigate(
-              "Home",
-              {} as RootStackScreenProps<"Home">
+            this.props.navigation.replace(
+              "Passwords",
+              {} as RootStackScreenProps<"Passwords">
             );
           } else {
             this.setState({ isAuthenticating: false });
@@ -149,89 +154,68 @@ class LoginScreen extends Component<
       this.state;
     const { t } = this.props;
     return (
-      <KeyboardAvoidingView
-        style={authCommonStyles.container}
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS == "ios" ? 0 : 20}
-        enabled={Platform.OS === "ios" ? true : false}
-      >
-        <Image
-          style={authCommonStyles.logo}
-          source={getImageFromName("logo")}
-        />
-        <Text style={authCommonStyles.title}>{t("auth.login")}</Text>
-        <Input
-          placeholder={t("auth.email")}
-          isValid={fieldsValid.email}
-          value={email}
-          onChangeText={(text) => this.handleChangeEmail(text)}
-          autoCorrect={false}
-          icon={"user"}
-          keyboardType={"email-address"}
-        />
-        <Input
-          placeholder={t("auth.password")}
-          isValid={fieldsValid.password}
-          value={password}
-          onChangeText={(text) => this.handleChangePassword(text)}
-          autoCorrect={false}
-          password={true}
-          icon={"lock"}
-        />
-
-        <Button
-          title={t("auth.login")}
-          onPress={this.handleLogin}
-          JSX={
-            isAuthenticating ? (
-              <ActivityIndicator size={25} color="#fff" />
-            ) : undefined
-          }
-        />
-
-        <StyledButton
-          title={t("auth.no-account")}
-          onPress={() =>
-            this.props.navigation.navigate(
-              "Register",
-              {} as RootStackScreenProps<"Register">
-            )
-          }
-          textStyle={authCommonStyles.link}
-        />
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={errorModal.visible}
-          onRequestClose={() => {
-            this.setState({ errorModal: { ...errorModal, visible: false } });
-          }}
+      <SafeAreaView>
+        <KeyboardAvoidingView
+          style={authCommonStyles.container}
+          behavior={Platform.OS == "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS == "ios" ? 0 : 20}
+          enabled={Platform.OS === "ios" ? true : false}
         >
-          <View style={commonStyles.centeredView}>
-            <View style={commonStyles.modalView}>
-              <Image
-                style={commonStyles.modalImg}
-                source={getImageFromName("error")}
-              />
+          <Image
+            style={authCommonStyles.logo}
+            source={getImageFromName("logo")}
+          />
+          <Text style={authCommonStyles.title}>{t("auth.login")}</Text>
+          <Input
+            placeholder={t("auth.email")}
+            isValid={fieldsValid.email}
+            value={email}
+            onChangeText={(text) => this.handleChangeEmail(text)}
+            autoCorrect={false}
+            icon={"user"}
+            keyboardType={"email-address"}
+          />
+          <Input
+            placeholder={t("auth.password")}
+            isValid={fieldsValid.password}
+            value={password}
+            onChangeText={(text) => this.handleChangePassword(text)}
+            autoCorrect={false}
+            password={true}
+            icon={"lock"}
+          />
 
-              <Text style={commonStyles.modalTitle}>{t("error")}</Text>
+          <Button
+            title={t("auth.login")}
+            onPress={this.handleLogin}
+            JSX={
+              isAuthenticating ? (
+                <ActivityIndicator size={25} color="#fff" />
+              ) : undefined
+            }
+          />
 
-              <Text style={commonStyles.modalText}>{errorModal.message}</Text>
-              <Button
-                onPress={() =>
-                  this.setState({
-                    errorModal: { ...errorModal, visible: false },
-                  })
-                }
-                style={commonStyles.modalButton}
-                textStyle={commonStyles.modalButtonText}
-                title={t("ok")}
-              />
-            </View>
-          </View>
-        </Modal>
-        <StatusBar style="auto" />
-      </KeyboardAvoidingView>
+          <StyledButton
+            title={t("auth.no-account")}
+            onPress={() =>
+              this.props.navigation.navigate(
+                "Register",
+                {} as RootStackScreenProps<"Register">
+              )
+            }
+            textStyle={authCommonStyles.link}
+          />
+          <ErrorModal
+            visible={errorModal.visible}
+            message={errorModal.message}
+            setVisible={(visible) =>
+              this.setState({ errorModal: { ...errorModal, visible: visible } })
+            }
+          />
+
+          <StatusBar style="auto" />
+        </KeyboardAvoidingView>
+      </SafeAreaView>
     );
   }
 }

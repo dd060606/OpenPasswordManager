@@ -3,16 +3,13 @@ import {
   StyleSheet,
   TextInputProps,
   View,
-  Image,
   TouchableOpacity,
 } from "react-native";
-import { Component } from "react";
+import { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 
-type State = {
-  isFocused: boolean;
-  isTextVisible: boolean;
-};
+import { ThemeProps, useThemeColor } from "./OPMComponents";
+
 type InputProps = {
   isValid: boolean;
   icon?: string;
@@ -20,68 +17,58 @@ type InputProps = {
   smallInput?: boolean;
 };
 
-class Input extends Component<TextInputProps & InputProps, State> {
-  state = {
-    isFocused: false,
-    isTextVisible: this.props.password === undefined,
-  };
+const Input = (props: TextInputProps & InputProps & ThemeProps) => {
+  const [focused, setFocused] = useState(false);
+  const [textVisible, setTextVisible] = useState(props.password === undefined);
+  const { isValid, icon, password, smallInput, lightColor, darkColor } = props;
+  const iconStyle = [
+    withIconStyles.icon,
+    { color: useThemeColor({ light: lightColor, dark: darkColor }, "text") },
+  ];
 
-  render() {
-    const { isFocused, isTextVisible } = this.state;
-    const { isValid, icon, password, smallInput } = this.props;
-
-    return (
-      <View
-        style={{
-          ...styles.container,
-          ...(isFocused
-            ? isValid
-              ? styles.inputFocused
-              : styles.invalidInput
-            : {}),
-          ...(smallInput ? { width: "49%" } : {}),
-        }}
-      >
-        {icon !== undefined && (
+  return (
+    <View
+      style={{
+        ...styles.container,
+        ...(focused
+          ? isValid
+            ? styles.inputFocused
+            : styles.invalidInput
+          : {}),
+        ...(smallInput ? { width: "49%" } : {}),
+      }}
+    >
+      {icon !== undefined && (
+        <FontAwesome size={30} style={iconStyle} name={icon as any} />
+      )}
+      <TextInput
+        {...props}
+        style={
+          password
+            ? withIconStyles.passwordInput
+            : icon
+            ? withIconStyles.input
+            : styles.input
+        }
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        secureTextEntry={!textVisible}
+        placeholder={
+          focused || props.value !== "" ? undefined : props.placeholder
+        }
+      />
+      {password !== undefined && (
+        <TouchableOpacity onPress={() => setTextVisible(!textVisible)}>
           <FontAwesome
+            style={iconStyle}
+            name={textVisible ? "eye" : "eye-slash"}
             size={30}
-            style={withIconStyles.icon}
-            name={icon as any}
           />
-        )}
-        <TextInput
-          {...this.props}
-          style={
-            password
-              ? withIconStyles.passwordInput
-              : icon
-              ? withIconStyles.input
-              : styles.input
-          }
-          onFocus={() => this.setState({ isFocused: true })}
-          onBlur={() => this.setState({ isFocused: false })}
-          secureTextEntry={!isTextVisible}
-          placeholder={
-            isFocused || this.props.value !== ""
-              ? undefined
-              : this.props.placeholder
-          }
-        />
-        {password !== undefined && (
-          <TouchableOpacity
-            onPress={() => this.setState({ isTextVisible: !isTextVisible })}
-          >
-            <FontAwesome
-              style={withIconStyles.icon}
-              name={isTextVisible ? "eye" : "eye-slash"}
-              size={30}
-            />
-          </TouchableOpacity>
-        )}
-      </View>
-    );
-  }
-}
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

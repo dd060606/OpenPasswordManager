@@ -207,14 +207,14 @@ class RegisterScreen extends Component<
                       if (res.data.result === "success") {
                         setToken(res.data.token ? res.data.token : "");
 
-                        this.props.navigation.navigate(
-                          "Home",
-                          {} as RootStackScreenProps<"Home">
+                        this.props.navigation.replace(
+                          "Passwords",
+                          {} as RootStackScreenProps<"Passwords">
                         );
                       }
                     })
                     .catch(() => {
-                      this.props.navigation.navigate(
+                      this.props.navigation.replace(
                         "Login",
                         {} as RootStackScreenProps<"Login">
                       );
@@ -326,7 +326,7 @@ class RegisterScreen extends Component<
             <StyledButton
               title={t("auth.already-have-account")}
               onPress={() =>
-                this.props.navigation.navigate(
+                this.props.navigation.replace(
                   "Login",
                   {} as RootStackScreenProps<"Login">
                 )

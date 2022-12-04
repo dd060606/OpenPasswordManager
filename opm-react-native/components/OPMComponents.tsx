@@ -1,16 +1,39 @@
 import {
   Text as RNText,
   StyleSheet,
-  TextProps,
   Pressable,
   ButtonProps,
   SafeAreaView as RNSafeAreaView,
-  ViewProps,
+  View as RNView,
   Platform,
   StatusBar,
 } from "react-native";
 
 import { useState } from "react";
+
+import Colors from "../constants/Colors";
+import useColorScheme from "../hooks/useColorScheme";
+
+export function useThemeColor(
+  props: { light?: string; dark?: string },
+  colorName: keyof typeof Colors.light & keyof typeof Colors.dark
+) {
+  const theme = useColorScheme();
+  const colorFromProps = props[theme];
+
+  if (colorFromProps) {
+    return colorFromProps;
+  } else {
+    return Colors[theme][colorName];
+  }
+}
+
+export type ThemeProps = {
+  lightColor?: string;
+  darkColor?: string;
+};
+export type TextProps = ThemeProps & RNText["props"];
+export type ViewProps = ThemeProps & RNView["props"];
 
 type StyledButtonType = {
   textStyle?: object;
@@ -18,13 +41,22 @@ type StyledButtonType = {
   JSX?: JSX.Element;
 };
 
-function Text(props: TextProps): JSX.Element {
-  return (
-    <RNText {...props} style={{ ...styles.text, ...(props.style as object) }} />
+export function Text(props: TextProps): JSX.Element {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
+  return <RNText style={[styles.text, { color }, style]} {...otherProps} />;
+}
+export function View(props: ViewProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "background"
   );
+
+  return <RNView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
 
-function Button(props: ButtonProps & StyledButtonType): JSX.Element {
+export function Button(props: ButtonProps & StyledButtonType): JSX.Element {
   const { onPress, title, style, textStyle, JSX } = props;
   const [pressed, setPressed] = useState(false);
 
@@ -47,18 +79,23 @@ function Button(props: ButtonProps & StyledButtonType): JSX.Element {
   );
 }
 
-function SafeAreaView(props: ViewProps & { style?: object }): JSX.Element {
+export function SafeAreaView(props: ViewProps): JSX.Element {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "background"
+  );
   return (
     <RNSafeAreaView
-      {...props}
-      style={
-        props.style ? { ...props.style, ...styles.safeArea } : styles.safeArea
-      }
+      style={[style, styles.safeArea, { backgroundColor }]}
+      {...otherProps}
     />
   );
 }
 
-function StyledButton(props: ButtonProps & StyledButtonType): JSX.Element {
+export function StyledButton(
+  props: ButtonProps & StyledButtonType
+): JSX.Element {
   const { onPress, title, style, textStyle, JSX } = props;
 
   return (
@@ -97,8 +134,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop:
       Platform.OS === "android" ? (StatusBar.currentHeight as number) + 13 : 0,
-    backgroundColor: "white",
+    backgroundColor: "transparent",
   },
 });
-
-export { Text, Button, StyledButton, SafeAreaView };

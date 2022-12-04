@@ -27,7 +27,8 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import LoginScreen from "app/screens/auth/LoginScreen";
 import RegisterScreen from "app/screens/auth/RegisterScreen";
-import HomeScreen from "app/screens/PasswordsScreen";
+import PasswordsScreen from "app/screens/PasswordsScreen";
+import { useTranslation } from "react-i18next";
 
 export default function Navigation({
   colorScheme,
@@ -65,47 +66,8 @@ function RootNavigator() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Home"
-        component={() => {
-          return (
-            <Tab.Navigator
-              screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
-                  if (route.name === "Passwords") {
-                    return (
-                      <MaterialIcons
-                        name="lock-outline"
-                        size={size}
-                        color={color}
-                      />
-                    );
-                  } else if (route.name === "Settings") {
-                    return (
-                      <Ionicons
-                        name="settings-outline"
-                        size={size}
-                        color={color}
-                      />
-                    );
-                  }
-                },
-                tabBarActiveTintColor: "#54c2f0",
-                tabBarInactiveTintColor: "gray",
-              })}
-            >
-              <Tab.Screen
-                name="Passwords"
-                component={HomeScreen}
-                options={{ headerShown: false }}
-              />
-              <Tab.Screen
-                name="Settings"
-                component={HomeScreen}
-                options={{ headerShown: false }}
-              />
-            </Tab.Navigator>
-          );
-        }}
+        name="Passwords"
+        component={TabNavigator}
         options={{ headerShown: false }}
       />
 
@@ -130,6 +92,40 @@ function RootNavigator() {
     </Stack.Navigator>
   );
 }
+
+const TabNavigator = () => {
+  const { t } = useTranslation();
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          if (route.name === "Passwords") {
+            return (
+              <MaterialIcons name="lock-outline" size={size} color={color} />
+            );
+          } else if (route.name === "Settings") {
+            return (
+              <Ionicons name="settings-outline" size={size} color={color} />
+            );
+          }
+        },
+        tabBarActiveTintColor: "#54c2f0",
+        tabBarInactiveTintColor: "gray",
+      })}
+    >
+      <Tab.Screen
+        name="Passwords"
+        component={PasswordsScreen}
+        options={{ headerShown: false, tabBarLabel: t("passwords") }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={PasswordsScreen}
+        options={{ headerShown: false, tabBarLabel: t("settings") }}
+      />
+    </Tab.Navigator>
+  );
+};
 
 /*
 
