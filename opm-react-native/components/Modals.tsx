@@ -2,7 +2,12 @@ import { commonStyles } from "app/styles/CommonStyles";
 import { getImageFromName } from "app/utils/ImageUtils";
 import { useTranslation } from "react-i18next";
 import { Modal, Image, View } from "react-native";
-import { Button, Text } from "./OPMComponents";
+import {
+  Button,
+  useThemeColor,
+  View as ThemedView,
+  Text,
+} from "./OPMComponents";
 
 type Props = {
   visible: boolean;
@@ -19,7 +24,12 @@ const ErrorModal = (props: Props) => {
       onRequestClose={() => props.setVisible(false)}
     >
       <View style={commonStyles.centeredView}>
-        <View style={commonStyles.modalView}>
+        <ThemedView
+          style={[
+            commonStyles.modalView,
+            { backgroundColor: useThemeColor({}, "background2") },
+          ]}
+        >
           <Image
             style={commonStyles.modalImg}
             source={getImageFromName("error")}
@@ -34,7 +44,7 @@ const ErrorModal = (props: Props) => {
             textStyle={commonStyles.modalButtonText}
             title={t("ok")}
           />
-        </View>
+        </ThemedView>
       </View>
     </Modal>
   );

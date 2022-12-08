@@ -21,35 +21,39 @@ const Input = (props: TextInputProps & InputProps & ThemeProps) => {
   const [focused, setFocused] = useState(false);
   const [textVisible, setTextVisible] = useState(props.password === undefined);
   const { isValid, icon, password, smallInput, lightColor, darkColor } = props;
-  const iconStyle = [
-    withIconStyles.icon,
-    { color: useThemeColor({ light: lightColor, dark: darkColor }, "text") },
-  ];
+  const textColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "text"
+  );
+  const iconStyle = [withIconStyles.icon, { color: textColor }];
+  const fieldColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "field"
+  );
 
   return (
     <View
-      style={{
-        ...styles.container,
-        ...(focused
-          ? isValid
-            ? styles.inputFocused
-            : styles.invalidInput
-          : {}),
-        ...(smallInput ? { width: "49%" } : {}),
-      }}
+      style={[
+        styles.container,
+        { backgroundColor: fieldColor, borderColor: fieldColor },
+        focused ? (isValid ? styles.inputFocused : styles.invalidInput) : {},
+        smallInput ? { width: "49%" } : {},
+      ]}
     >
       {icon !== undefined && (
         <FontAwesome size={30} style={iconStyle} name={icon as any} />
       )}
       <TextInput
         {...props}
-        style={
+        style={[
+          { color: textColor },
           password
             ? withIconStyles.passwordInput
             : icon
             ? withIconStyles.input
-            : styles.input
-        }
+            : styles.input,
+        ]}
+        placeholderTextColor={textColor}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         secureTextEntry={!textVisible}
@@ -76,12 +80,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    borderColor: "rgba(236, 236, 236, 0.8)",
     borderRadius: 5,
     width: "90%",
     height: 50,
     borderWidth: 1,
-    backgroundColor: "rgba(236, 236, 236, 0.8)",
     marginTop: 20,
   },
   input: {

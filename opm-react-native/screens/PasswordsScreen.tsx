@@ -3,12 +3,19 @@ import { StatusBar } from "expo-status-bar";
 import type { RootStackScreenProps } from "app/types/types";
 import { withTranslation, WithTranslation } from "react-i18next";
 import i18n from "app/i18n";
-import { SafeAreaView, Text, View } from "app/components/OPMComponents";
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "app/components/OPMComponents";
 import { getToken } from "app/utils/Config";
 import axios from "axios";
 import { API_URL } from "app/config.json";
 import type { AxiosCredentialsResponse, Credentials } from "app/types/types";
 import { extractRootDomain } from "app/utils/Utils";
+import PasswordItem from "app/components/PasswordItem";
+import { passwordsStyles } from "app/styles/PasswordsStyles";
 
 type State = {
   isLoading: boolean;
@@ -114,15 +121,16 @@ class PasswordsScreen extends Component<
     const { credentials } = this.state;
     return (
       <SafeAreaView>
-        <View>
+        <ScrollView>
           {credentials
-            ? (credentials as Credentials[]).map((credential, index) => (
-                <Text style={{ color: "white" }} key={index}>
-                  {credential.name}
-                </Text>
+            ? (credentials as Credentials[]).map((credentials, index) => (
+                <PasswordItem
+                  credentials={credentials}
+                  key={"password_" + index}
+                />
               ))
             : ""}
-        </View>
+        </ScrollView>
         <StatusBar style="auto" />
       </SafeAreaView>
     );

@@ -10,7 +10,6 @@ const commonStyles = StyleSheet.create({
   modalTitle: { fontSize: 35, fontFamily: "OpenSansBold" },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",

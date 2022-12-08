@@ -5,6 +5,7 @@ import {
   ButtonProps,
   SafeAreaView as RNSafeAreaView,
   View as RNView,
+  ScrollView as RNScrollView,
   Platform,
   StatusBar,
 } from "react-native";
@@ -87,6 +88,19 @@ export function SafeAreaView(props: ViewProps): JSX.Element {
   );
   return (
     <RNSafeAreaView
+      style={[style, styles.safeArea, { backgroundColor }]}
+      {...otherProps}
+    />
+  );
+}
+export function ScrollView(props: ViewProps): JSX.Element {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "background"
+  );
+  return (
+    <RNScrollView
       style={[style, styles.safeArea, { backgroundColor }]}
       {...otherProps}
     />
