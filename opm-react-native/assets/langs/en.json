@@ -26,9 +26,14 @@
     "confirm-email-to-continue": "Confirm your email to continue",
     "resend-email": "Resend email"
   },
-  "passwords": "Passwords",
+  "passwords": {
+    "passwords": "Passwords",
+    "add": "Add",
+    "no-passwords": "You don't have any saved passwords"
+  },
   "settings": "Settings",
   "my-account": "My account",
   "ok": "OK",
-  "error": "Error"
+  "error": "Error",
+  "search": "Search"
 }

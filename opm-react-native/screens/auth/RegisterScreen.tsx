@@ -30,6 +30,7 @@ import {
 } from "app/styles/AuthStyles";
 import { commonStyles } from "app/styles/CommonStyles";
 import { setToken } from "app/utils/Config";
+import { ErrorModal } from "app/components/Modals";
 
 type State = {
   email: string;
@@ -333,40 +334,15 @@ class RegisterScreen extends Component<
               }
               textStyle={authCommonStyles.link}
             />
-            <Modal
-              animationType="fade"
-              transparent={true}
+            <ErrorModal
               visible={errorModal.visible}
-              onRequestClose={() => {
+              message={errorModal.message}
+              setVisible={(visible) =>
                 this.setState({
-                  errorModal: { ...errorModal, visible: false },
-                });
-              }}
-            >
-              <View style={commonStyles.centeredView}>
-                <View style={commonStyles.modalView}>
-                  <Image
-                    style={commonStyles.modalImg}
-                    source={getImageFromName("error")}
-                  />
-                  <Text style={commonStyles.modalTitle}>{t("error")}</Text>
-
-                  <Text style={commonStyles.modalText}>
-                    {errorModal.message}
-                  </Text>
-                  <Button
-                    onPress={() =>
-                      this.setState({
-                        errorModal: { ...errorModal, visible: false },
-                      })
-                    }
-                    style={commonStyles.modalButton}
-                    textStyle={commonStyles.modalButtonText}
-                    title={t("ok")}
-                  />
-                </View>
-              </View>
-            </Modal>
+                  errorModal: { ...errorModal, visible: visible },
+                })
+              }
+            />
           </>
         )}
         {emailConfirmationEnabled && <EmailConfirmation email={email} />}

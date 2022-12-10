@@ -53,7 +53,6 @@ const emailConfirmationStyles = StyleSheet.create({
     fontSize: 17,
     textAlign: "center",
     fontWeight: "bold",
-    color: "black",
   },
 });
 

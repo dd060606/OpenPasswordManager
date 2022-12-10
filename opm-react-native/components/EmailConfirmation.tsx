@@ -45,7 +45,7 @@ class EmailConfirmation extends Component<Props & WithTranslation, State> {
         <StyledButton
           onPress={() => this.handleResendEmail()}
           title={t("auth.resend-email")}
-          disabled={isButtonDisabled}
+          disabled={true}
           textStyle={{
             ...styles.sendEmailText,
             ...(isButtonDisabled ? { color: "grey" } : {}),

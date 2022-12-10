@@ -26,9 +26,14 @@
     "confirm-email-to-continue": "Confirmez votre adresse email pour continuer",
     "resend-email": "Envoyer l'email à nouveau"
   },
-  "passwords": "Mots de passe",
+  "passwords": {
+    "passwords": "Mots de passe",
+    "add": "Ajouter",
+    "no-passwords": "Vous n'avez pas de mots de passe enregistrés"
+  },
   "settings": "Paramètres",
   "my-account": "Mon compte",
   "ok": "OK",
-  "error": "Erreur"
+  "error": "Erreur",
+  "search": "Rechercher"
 }

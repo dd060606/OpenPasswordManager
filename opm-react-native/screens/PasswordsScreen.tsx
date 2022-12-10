@@ -1,25 +1,34 @@
 import { Component } from "react";
 import { StatusBar } from "expo-status-bar";
 import type { RootStackScreenProps } from "app/types/types";
-import { withTranslation, WithTranslation } from "react-i18next";
+import {
+  useTranslation,
+  withTranslation,
+  WithTranslation,
+} from "react-i18next";
 import i18n from "app/i18n";
 import {
   SafeAreaView,
   ScrollView,
   Text,
+  useThemeColor,
   View,
+  Button,
 } from "app/components/OPMComponents";
+import Input from "app/components/Input";
 import { getToken } from "app/utils/Config";
 import axios from "axios";
 import { API_URL } from "app/config.json";
 import type { AxiosCredentialsResponse, Credentials } from "app/types/types";
 import { extractRootDomain } from "app/utils/Utils";
 import PasswordItem from "app/components/PasswordItem";
-import { passwordsStyles } from "app/styles/PasswordsStyles";
+import { passwordsStyles as styles } from "app/styles/PasswordsStyles";
+import { MaterialIcons } from "@expo/vector-icons";
 
 type State = {
   isLoading: boolean;
   credentials: Credentials[] | undefined;
+  searchValue: string;
   errorModal: {
     visible: boolean;
     message: string;
@@ -33,6 +42,7 @@ class PasswordsScreen extends Component<
   state = {
     isLoading: true,
     credentials: undefined,
+    searchValue: "",
     errorModal: {
       visible: false,
       message: "",
@@ -49,19 +59,6 @@ class PasswordsScreen extends Component<
 
   updateCredentials() {
     const { t } = this.props;
-
-    /*
-        const availablesSortValues = [0, 1, 2];
-    if (
-      cookies.get("credentialsSort") &&
-      availablesSortValues.includes(parseInt(cookies.get("credentialsSort")))
-    ) {
-      this.setState({ sortValue: parseInt(cookies.get("credentialsSort")) });
-    } else {
-      cookies.set("credentialsSort", 2);
-    }
-  */
-
     axios
       .get(`${API_URL}/api/credentials/`, {
         headers: { Authorization: `Bearer ${getToken()}` },
@@ -118,22 +115,65 @@ class PasswordsScreen extends Component<
 
   render() {
     const { t } = this.props;
-    const { credentials } = this.state;
+    const { credentials, searchValue } = this.state;
     return (
       <SafeAreaView>
+        <View style={styles.topView}>
+          <Input
+            isValid={true}
+            icon={"search"}
+            placeholder={t("search")}
+            value={searchValue}
+            onChangeText={(text) => this.setState({ searchValue: text })}
+            autoCorrect={false}
+          ></Input>
+          <Button title={t("passwords.add")}></Button>
+        </View>
         <ScrollView>
-          {credentials
-            ? (credentials as Credentials[]).map((credentials, index) => (
-                <PasswordItem
-                  credentials={credentials}
-                  key={"password_" + index}
-                />
-              ))
-            : ""}
+          <View style={{ paddingBottom: 50 }}>
+            {credentials &&
+              (credentials as Credentials[]).map((credentials, index) => {
+                if (!searchValue) {
+                  return (
+                    <PasswordItem
+                      credentials={credentials}
+                      key={"password_" + index}
+                    />
+                  );
+                } else if (
+                  credentials.name
+                    .toLowerCase()
+                    .includes(searchValue.toLowerCase()) ||
+                  credentials.username
+                    .toLowerCase()
+                    .includes(searchValue.toLowerCase())
+                ) {
+                  return (
+                    <PasswordItem
+                      credentials={credentials}
+                      key={"password_" + index}
+                    />
+                  );
+                }
+              })}
+            {credentials && (credentials as Credentials[]).length === 0 && (
+              <NoPasswordsView />
+            )}
+          </View>
         </ScrollView>
         <StatusBar style="auto" />
       </SafeAreaView>
     );
   }
 }
+const NoPasswordsView = () => {
+  const { t } = useTranslation();
+  const color = useThemeColor({}, "text");
+  return (
+    <View style={styles.noPasswordsView}>
+      <MaterialIcons name="lock-outline" size={150} color={color} />
+      <Text style={styles.noPasswordsText}>{t("passwords.no-passwords")}</Text>
+    </View>
+  );
+};
 export default withTranslation()(PasswordsScreen);

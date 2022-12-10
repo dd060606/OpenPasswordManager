@@ -116,7 +116,7 @@ const TabNavigator = () => {
       <Tab.Screen
         name="Passwords"
         component={PasswordsScreen}
-        options={{ headerShown: false, tabBarLabel: t("passwords") }}
+        options={{ headerShown: false, tabBarLabel: t("passwords.passwords") }}
       />
       <Tab.Screen
         name="Settings"
