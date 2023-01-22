@@ -5,7 +5,6 @@
  */
 //import "react-native-gesture-handler";
 
-import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   NavigationContainer,
@@ -14,14 +13,8 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { ColorSchemeName } from "react-native";
 
-import Colors from "app/constants/Colors";
-import useColorScheme from "app/hooks/useColorScheme";
-import ModalScreen from "app/screens/ModalScreen";
-import NotFoundScreen from "app/screens/NotFoundScreen";
-import TabOneScreen from "app/screens/TabOneScreen";
-import TabTwoScreen from "app/screens/TabTwoScreen";
 import { RootStackParamList } from "app/types/types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
@@ -29,6 +22,7 @@ import LoginScreen from "app/screens/auth/LoginScreen";
 import RegisterScreen from "app/screens/auth/RegisterScreen";
 import PasswordsScreen from "app/screens/PasswordsScreen";
 import { useTranslation } from "react-i18next";
+import SettingsScreen from "app/screens/SettingsScreen";
 
 export default function Navigation({
   colorScheme,
@@ -66,29 +60,10 @@ function RootNavigator() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Passwords"
+        name="Home"
         component={TabNavigator}
         options={{ headerShown: false }}
       />
-
-      {/*
-      
-
-      <Stack.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Account"
-        component={AccountScreen}
-        options={{ headerShown: false }}
-      />
-      
-        <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
-        */}
     </Stack.Navigator>
   );
 }
@@ -120,7 +95,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Settings"
-        component={PasswordsScreen}
+        component={SettingsScreen}
         options={{ headerShown: false, tabBarLabel: t("settings") }}
       />
     </Tab.Navigator>

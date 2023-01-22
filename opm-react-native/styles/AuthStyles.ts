@@ -23,6 +23,9 @@ const authCommonStyles = StyleSheet.create({
     marginTop: 15,
     fontSize: 16,
   },
+  input: {
+    marginTop: 20,
+  },
 });
 
 const loginStyles = StyleSheet.create({});

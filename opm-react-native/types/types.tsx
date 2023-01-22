@@ -18,6 +18,7 @@ export type RootStackParamList = {
   Passwords: RootStackScreenProps<"Passwords">;
   Settings: RootStackScreenProps<"Settings">;
   Account: RootStackScreenProps<"Account">;
+  Home: RootStackScreenProps<"Home">;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

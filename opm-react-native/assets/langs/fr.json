@@ -29,11 +29,22 @@
   "passwords": {
     "passwords": "Mots de passe",
     "add": "Ajouter",
-    "no-passwords": "Vous n'avez pas de mots de passe enregistrés"
+    "no-passwords": "Vous n'avez pas de mots de passe enregistrés",
+    "save": "Sauvegarder",
+    "add-password": "Ajouter un mot de passe",
+    "website": "Site Web",
+    "website-name": "Nom du site",
+    "username": "Identifiant",
+    "add-url": "Ajouter une URL",
+    "confirm-password": "Confirmer le mot de passe",
+    "delete-password": "Supprimer le mot de passe ?",
+    "sort-by": "Trier par",
+    "creation-date": "Date de création"
   },
   "settings": "Paramètres",
   "my-account": "Mon compte",
   "ok": "OK",
   "error": "Erreur",
-  "search": "Rechercher"
+  "search": "Rechercher",
+  "cancel": "Annuler"
 }

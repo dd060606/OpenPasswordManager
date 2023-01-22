@@ -209,8 +209,8 @@ class RegisterScreen extends Component<
                         setToken(res.data.token ? res.data.token : "");
 
                         this.props.navigation.replace(
-                          "Passwords",
-                          {} as RootStackScreenProps<"Passwords">
+                          "Home",
+                          {} as RootStackScreenProps<"Home">
                         );
                       }
                     })
@@ -279,6 +279,7 @@ class RegisterScreen extends Component<
                 onChangeText={(text) => this.handleChangeName(text, true)}
                 icon={"id-badge"}
                 smallInput={true}
+                style={authCommonStyles.input}
               />
               <Input
                 placeholder={t("auth.lastname")}
@@ -287,6 +288,7 @@ class RegisterScreen extends Component<
                 onChangeText={(text) => this.handleChangeName(text, false)}
                 icon={"id-badge"}
                 smallInput={true}
+                style={authCommonStyles.input}
               />
             </View>
             <Input
@@ -296,6 +298,7 @@ class RegisterScreen extends Component<
               onChangeText={(text) => this.handleChangeEmail(text)}
               icon={"user"}
               keyboardType={"email-address"}
+              style={authCommonStyles.input}
             />
             <Input
               placeholder={t("auth.password")}
@@ -304,6 +307,7 @@ class RegisterScreen extends Component<
               onChangeText={(text) => this.handleChangePassword(text)}
               password={true}
               icon={"lock"}
+              style={authCommonStyles.input}
             />
             <Input
               placeholder={t("auth.confirm-password")}
@@ -312,6 +316,7 @@ class RegisterScreen extends Component<
               onChangeText={(text) => this.handleChangePassword(text, true)}
               password={true}
               icon={"lock"}
+              style={authCommonStyles.input}
             />
 
             <Button

@@ -38,6 +38,7 @@ const Input = (props: TextInputProps & InputProps & ThemeProps) => {
         { backgroundColor: fieldColor, borderColor: fieldColor },
         focused ? (isValid ? styles.inputFocused : styles.invalidInput) : {},
         smallInput ? { width: "49%" } : {},
+        props.style,
       ]}
     >
       {icon !== undefined && (
@@ -84,7 +85,6 @@ const styles = StyleSheet.create({
     width: "90%",
     height: 50,
     borderWidth: 1,
-    marginTop: 20,
   },
   input: {
     flex: 1,

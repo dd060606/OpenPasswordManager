@@ -15,11 +15,13 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
+    "@react-native-async-storage/async-storage": "~1.17.3",
     "@react-navigation/bottom-tabs": "^6.0.5",
     "@react-navigation/drawer": "^6.5.0",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.1.0",
     "axios": "^0.27.2",
+    "crypto-js": "^4.1.1",
     "expo": "^47.0.0",
     "expo-asset": "~8.6.2",
     "expo-constants": "~14.0.2",
@@ -43,6 +45,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
+    "@types/crypto-js": "^4.1.1",
     "@types/react": "~18.0.25",
     "@types/react-dom": "~18.0.8",
     "@types/react-native": "~0.70.6",

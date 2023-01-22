@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "OpenPasswordManager",
-    "slug": "opm",
+    "slug": "openpasswordmanager",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -15,7 +15,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -23,10 +25,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "fr.dd06.openpasswordmanager"
     },
     "web": {
       "favicon": "./assets/images/icon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "40195b33-d2c7-4a53-8d51-be066de5e697"
+      }
+    },
+    "owner": "dd_06"
   }
 }

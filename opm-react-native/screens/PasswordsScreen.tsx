@@ -6,7 +6,6 @@ import {
   withTranslation,
   WithTranslation,
 } from "react-i18next";
-import i18n from "app/i18n";
 import {
   SafeAreaView,
   ScrollView,
@@ -24,6 +23,7 @@ import { extractRootDomain } from "app/utils/Utils";
 import PasswordItem from "app/components/PasswordItem";
 import { passwordsStyles as styles } from "app/styles/PasswordsStyles";
 import { MaterialIcons } from "@expo/vector-icons";
+import PasswordModal from "app/components/PasswordModal";
 
 type State = {
   isLoading: boolean;
@@ -32,6 +32,11 @@ type State = {
   errorModal: {
     visible: boolean;
     message: string;
+  };
+  passwdModal: {
+    visible: boolean;
+    edit: boolean;
+    currentCredentials: Credentials | {};
   };
 };
 
@@ -46,6 +51,11 @@ class PasswordsScreen extends Component<
     errorModal: {
       visible: false,
       message: "",
+    },
+    passwdModal: {
+      visible: false,
+      edit: true,
+      currentCredentials: {},
     },
   };
 
@@ -115,7 +125,7 @@ class PasswordsScreen extends Component<
 
   render() {
     const { t } = this.props;
-    const { credentials, searchValue } = this.state;
+    const { credentials, searchValue, passwdModal } = this.state;
     return (
       <SafeAreaView>
         <View style={styles.topView}>
@@ -127,7 +137,18 @@ class PasswordsScreen extends Component<
             onChangeText={(text) => this.setState({ searchValue: text })}
             autoCorrect={false}
           ></Input>
-          <Button title={t("passwords.add")}></Button>
+          <Button
+            title={t("passwords.add")}
+            onPress={() =>
+              this.setState({
+                passwdModal: {
+                  edit: false,
+                  visible: true,
+                  currentCredentials: {},
+                },
+              })
+            }
+          ></Button>
         </View>
         <ScrollView>
           <View style={{ paddingBottom: 50 }}>
@@ -138,6 +159,15 @@ class PasswordsScreen extends Component<
                     <PasswordItem
                       credentials={credentials}
                       key={"password_" + index}
+                      onPress={() =>
+                        this.setState({
+                          passwdModal: {
+                            edit: true,
+                            visible: true,
+                            currentCredentials: credentials,
+                          },
+                        })
+                      }
                     />
                   );
                 } else if (
@@ -152,6 +182,15 @@ class PasswordsScreen extends Component<
                     <PasswordItem
                       credentials={credentials}
                       key={"password_" + index}
+                      onPress={() =>
+                        this.setState({
+                          passwdModal: {
+                            edit: true,
+                            visible: true,
+                            currentCredentials: credentials,
+                          },
+                        })
+                      }
                     />
                   );
                 }
@@ -161,6 +200,20 @@ class PasswordsScreen extends Component<
             )}
           </View>
         </ScrollView>
+        <PasswordModal
+          edit={passwdModal.edit}
+          visible={passwdModal.visible}
+          setVisible={(visible) =>
+            this.setState({
+              passwdModal: {
+                visible: visible,
+                edit: true,
+                currentCredentials: {},
+              },
+            })
+          }
+          credentials={passwdModal.currentCredentials}
+        />
         <StatusBar style="auto" />
       </SafeAreaView>
     );

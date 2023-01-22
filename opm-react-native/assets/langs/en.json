@@ -29,11 +29,22 @@
   "passwords": {
     "passwords": "Passwords",
     "add": "Add",
-    "no-passwords": "You don't have any saved passwords"
+    "no-passwords": "You don't have any saved passwords",
+    "save": "Save",
+    "add-password": "Add password",
+    "website": "Website",
+    "website-name": "Website name",
+    "username": "Username",
+    "add-url": "Add an URL",
+    "confirm-password": "Confirm password",
+    "delete-password": "Delete password?",
+    "sort-by": "Sort by",
+    "creation-date": "Creation date"
   },
   "settings": "Settings",
   "my-account": "My account",
   "ok": "OK",
   "error": "Error",
-  "search": "Search"
+  "search": "Search",
+  "cancel": "Annuler"
 }

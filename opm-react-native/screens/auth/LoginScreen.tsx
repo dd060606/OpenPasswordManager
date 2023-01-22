@@ -29,7 +29,7 @@ import Input from "app/components/Input";
 
 import { API_URL } from "app/config.json";
 import axios from "axios";
-import { Stack } from "app/navigation/index";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type State = {
   email: string;
@@ -66,6 +66,13 @@ class LoginScreen extends Component<
     },
     isAuthenticating: false,
   };
+  componentDidMount() {
+    AsyncStorage.getItem("email").then((value) => {
+      if (value && emailRegex.test(value)) {
+        this.setState({ email: value });
+      }
+    });
+  }
   componentWillUnmount() {
     this.setState({ isAuthenticating: false, password: "" });
   }
@@ -126,9 +133,10 @@ class LoginScreen extends Component<
         .then((res: AxiosAuthResponse) => {
           if (res.data && res.data.token) {
             setToken(res.data.token);
+            AsyncStorage.setItem("email", email);
             this.props.navigation.replace(
-              "Passwords",
-              {} as RootStackScreenProps<"Passwords">
+              "Home",
+              {} as RootStackScreenProps<"Home">
             );
           } else {
             this.setState({ isAuthenticating: false });
@@ -174,6 +182,7 @@ class LoginScreen extends Component<
             autoCorrect={false}
             icon={"user"}
             keyboardType={"email-address"}
+            style={authCommonStyles.input}
           />
           <Input
             placeholder={t("auth.password")}
@@ -183,6 +192,7 @@ class LoginScreen extends Component<
             autoCorrect={false}
             password={true}
             icon={"lock"}
+            style={authCommonStyles.input}
           />
 
           <Button
