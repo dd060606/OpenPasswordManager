@@ -1,5 +1,6 @@
 //Dynamic config
-let token: string = "";
+let token = "";
+let password = "";
 
 function isTokenValid(): boolean {
   return token.length === 0 ? false : true;
@@ -13,4 +14,12 @@ function setToken(newToken: string): void {
   token = newToken;
 }
 
-export { isTokenValid, getToken, setToken };
+function getPassword(): string {
+  return password;
+}
+
+function setPassword(newPassword: string): void {
+  password = newPassword;
+}
+
+export { isTokenValid, getToken, setToken, setPassword, getPassword };

@@ -20,16 +20,21 @@ import {
   Text,
   StyledButton,
 } from "./OPMComponents";
+import { ErrorModal } from "./Modals";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
 import { API_URL } from "app/config.json";
-import CryptoJS from "crypto-js";
+import CryptoES from "crypto-es";
+
+import { getPassword, getToken } from "app/utils/Config";
 
 type Props = {
   visible: boolean;
   setVisible: (visible: boolean) => void;
   edit: boolean;
   credentials: Credentials | {};
+  sendToLoginScreen: () => void;
+  reloadCredentials: () => void;
 };
 type State = {
   showPassword: boolean;
@@ -69,6 +74,21 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
     },
   };
 
+  loadCurrentCredentials = () => {
+    const { credentials } = this.props;
+    if (JSON.stringify(credentials) !== "{}") {
+      let creds = credentials as Credentials;
+      this.setState({
+        url: creds.url,
+        websiteName: creds.name,
+        username: creds.username,
+        password: CryptoES.AES.decrypt(creds.password, getPassword()).toString(
+          CryptoES.enc.Utf8
+        ),
+      });
+    }
+  };
+
   openErrorModal = (message: string) => {
     this.setState({
       errorModal: {
@@ -78,7 +98,7 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
     });
   };
 
-  handleSavePassword() {
+  handleAddPassword = () => {
     const { websiteName, password, username, url } = this.state;
     const { t } = this.props;
 
@@ -86,10 +106,9 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
       this.openErrorModal(t("errors.enter-website-name"));
       return;
     }
-
-    let encryptedPassword = CryptoJS.AES.encrypt(
+    let encryptedPassword = CryptoES.AES.encrypt(
       password,
-      this.props.password
+      getPassword()
     ).toString();
     axios
       .post(
@@ -104,12 +123,11 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
               : `https://${url}`
             : "",
         },
-        { headers: { Authorization: `Bearer ${this.props.token}` } }
+        { headers: { Authorization: `Bearer ${getToken()}` } }
       )
       .then(() => {
-        this.setState({ isLoading: false });
-        this.closeBox();
-        this.reloadCredentials();
+        this.props.setVisible(false);
+        this.props.reloadCredentials();
       })
       .catch((err) => {
         let errorMessage = t("errors.unknown-error");
@@ -117,23 +135,72 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
           if (err.response.data.type === "internal-error") {
             errorMessage = t("errors.internal-error");
           } else if (err.response.data.type === "invalid-token") {
-            sendToAuthPage(this.props);
+            this.props.sendToLoginScreen();
             return;
           }
         }
-        this.openErrorBox(errorMessage);
+        this.openErrorModal(errorMessage);
       });
-  }
+  };
+  handleEditPassword = () => {
+    const { websiteName, password, username, url } = this.state;
+    const { t } = this.props;
+
+    if (!websiteName) {
+      this.openErrorModal(t("errors.enter-website-name"));
+      return;
+    }
+    let encryptedPassword = CryptoES.AES.encrypt(
+      password,
+      getPassword()
+    ).toString();
+
+    axios
+      .put(
+        `${API_URL}/api/credentials/edit/${
+          (this.props.credentials as Credentials).id
+        }`,
+        {
+          username: username,
+          password: encryptedPassword,
+          name: websiteName,
+          url:
+            url.startsWith("http://") || url.startsWith("https://")
+              ? url
+              : `https://${url}`,
+        },
+        { headers: { Authorization: `Bearer ${getToken()}` } }
+      )
+      .then(() => {
+        this.props.setVisible(false);
+        this.props.reloadCredentials();
+      })
+      .catch((err) => {
+        let errorMessage = t("errors.unknown-error");
+        if (err.response && err.response.data) {
+          if (err.response.data.type === "internal-error") {
+            errorMessage = t("errors.internal-error");
+          } else if (err.response.data.type === "invalid-token") {
+            this.props.sendToLoginScreen();
+            return;
+          }
+        }
+
+        this.openErrorModal(errorMessage);
+      });
+  };
+  handleDeleteCredentials = () => {};
 
   render() {
     const { visible, setVisible, t, credentials, edit } = this.props;
-    const { websiteName, url, username, password } = this.state;
+    const { websiteName, url, username, password, errorModal } = this.state;
     return (
       <Modal
         animationType="fade"
         transparent={true}
         visible={visible}
         onRequestClose={() => setVisible(false)}
+        onShow={this.loadCurrentCredentials}
       >
         <View style={commonStyles.centeredView}>
           <ThemedView style={[commonStyles.modalView, style.modalView]}>
@@ -194,7 +261,9 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
             </View>
             <View style={style.buttonBox}>
               <Button
-                onPress={this.handleSavePassword}
+                onPress={() =>
+                  edit ? this.handleEditPassword() : this.handleAddPassword()
+                }
                 style={style.modalButton}
                 textStyle={style.modalButtonText}
                 title={edit ? t("passwords.save") : t("passwords.add")}
@@ -207,7 +276,7 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
               />
               {edit && (
                 <StyledButton
-                  onPress={() => {}}
+                  onPress={this.handleDeleteCredentials}
                   style={[style.trashButton]}
                   textStyle={style.modalButtonText}
                   title={""}
@@ -223,6 +292,13 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
             </View>
           </ThemedView>
         </View>
+        <ErrorModal
+          visible={errorModal.visible}
+          message={errorModal.message}
+          setVisible={(visible) =>
+            this.setState({ errorModal: { ...errorModal, visible: visible } })
+          }
+        />
       </Modal>
     );
   }

@@ -1,7 +1,8 @@
 {
   "errors": {
     "unknown-error": "Unknown error!",
-    "internal-error": "Internal server error!"
+    "internal-error": "Internal server error!",
+    "enter-website-name": "Please enter a website name!"
   },
   "auth": {
     "errors": {

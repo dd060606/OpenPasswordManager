@@ -9,7 +9,7 @@ import {
 import { withTranslation, WithTranslation } from "react-i18next";
 import { getImageFromName } from "app/utils/ImageUtils";
 
-import { setToken } from "app/utils/Config";
+import { setPassword, setToken } from "app/utils/Config";
 
 import type {
   RootStackScreenProps,
@@ -133,6 +133,7 @@ class LoginScreen extends Component<
         .then((res: AxiosAuthResponse) => {
           if (res.data && res.data.token) {
             setToken(res.data.token);
+            setPassword(password);
             AsyncStorage.setItem("email", email);
             this.props.navigation.replace(
               "Home",

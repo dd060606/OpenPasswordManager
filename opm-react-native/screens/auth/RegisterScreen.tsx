@@ -29,8 +29,9 @@ import {
   authCommonStyles,
 } from "app/styles/AuthStyles";
 import { commonStyles } from "app/styles/CommonStyles";
-import { setToken } from "app/utils/Config";
+import { setPassword, setToken } from "app/utils/Config";
 import { ErrorModal } from "app/components/Modals";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type State = {
   email: string;
@@ -207,7 +208,8 @@ class RegisterScreen extends Component<
                     .then((res: AxiosAuthResponse) => {
                       if (res.data.result === "success") {
                         setToken(res.data.token ? res.data.token : "");
-
+                        setPassword(password);
+                        AsyncStorage.setItem("email", email);
                         this.props.navigation.replace(
                           "Home",
                           {} as RootStackScreenProps<"Home">

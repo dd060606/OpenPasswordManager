@@ -67,7 +67,7 @@ class PasswordsScreen extends Component<
     }
   }
 
-  updateCredentials() {
+  updateCredentials = () => {
     const { t } = this.props;
     axios
       .get(`${API_URL}/api/credentials/`, {
@@ -111,7 +111,7 @@ class PasswordsScreen extends Component<
         this.setState({ isLoading: false });
         console.log(err);
       });
-  }
+  };
 
   openErrorModal = (message: string) => {
     this.setState({
@@ -213,6 +213,13 @@ class PasswordsScreen extends Component<
             })
           }
           credentials={passwdModal.currentCredentials}
+          sendToLoginScreen={() =>
+            this.props.navigation.replace(
+              "Login",
+              {} as RootStackScreenProps<"Login">
+            )
+          }
+          reloadCredentials={this.updateCredentials}
         />
         <StatusBar style="auto" />
       </SafeAreaView>
