@@ -78,14 +78,14 @@ class PasswordsScreen extends Component<
         for (let i = 0; i < result.data.credentials.length; i++) {
           result.data.credentials[
             i
-          ].sImageURL = `https://logo.clearbit.com/${extractRootDomain(
+          ].sImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${extractRootDomain(
             result.data.credentials[i].url
-          )}?size=50`;
+          ).replace(".", "_")}@2x.png`;
           result.data.credentials[
             i
-          ].lImageURL = `https://logo.clearbit.com/${extractRootDomain(
+          ].lImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${extractRootDomain(
             result.data.credentials[i].url
-          )}?size=100`;
+          ).replace(".", "_")}@2x.png`;
 
           finalCredentials.push(result.data.credentials[i]);
         }

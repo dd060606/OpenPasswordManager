@@ -53,6 +53,7 @@ type State = {
     visible: boolean;
     message: string;
   };
+  imgError: boolean;
 };
 class PasswordModal extends Component<Props & WithTranslation, State> {
   state = {
@@ -72,6 +73,7 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
       visible: false,
       message: "string",
     },
+    imgError: false,
   };
 
   loadCurrentCredentials = () => {
@@ -191,26 +193,52 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
   };
   handleDeleteCredentials = () => {};
 
+  setVisible = (visible: boolean) => {
+    this.setState({
+      imgError: false,
+      url: "",
+      password: "",
+      websiteName: "",
+      username: "",
+    });
+    this.props.setVisible(visible);
+  };
+
   render() {
-    const { visible, setVisible, t, credentials, edit } = this.props;
-    const { websiteName, url, username, password, errorModal } = this.state;
+    const { visible, t, credentials, edit } = this.props;
+    const { websiteName, url, username, password, errorModal, imgError } =
+      this.state;
     return (
       <Modal
         animationType="fade"
         transparent={true}
         visible={visible}
-        onRequestClose={() => setVisible(false)}
+        onRequestClose={() => this.setVisible(false)}
         onShow={this.loadCurrentCredentials}
       >
         <View style={commonStyles.centeredView}>
-          <ThemedView style={[commonStyles.modalView, style.modalView]}>
+          <ThemedView
+            style={[commonStyles.modalView, style.modalView]}
+            darkColor={"#3D3D3D"}
+          >
             {edit && Object.keys(credentials).length !== 0 && (
               <View style={style.logoView}>
-                <Image
-                  source={{ uri: (credentials as Credentials).lImageURL }}
-                  style={style.image}
-                />
-                <Text style={style.modalText}>
+                {!imgError && (
+                  <Image
+                    source={{ uri: (credentials as Credentials).lImageURL }}
+                    style={style.image}
+                    onError={() => this.setState({ imgError: true })}
+                  />
+                )}
+                {imgError && (
+                  <View style={style.logoErrorView}>
+                    <Text style={style.logoText}>
+                      {websiteName.substring(0, 2)}
+                    </Text>
+                  </View>
+                )}
+
+                <Text style={style.modalSiteName}>
                   {(credentials as Credentials).name}
                 </Text>
               </View>
@@ -230,6 +258,7 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
                 value={websiteName}
                 onChangeText={(text) => this.setState({ websiteName: text })}
                 autoCorrect={false}
+                darkColor={"#000"}
               />
               <Text style={style.modalText}>{t("passwords.website")}:</Text>
               <Input
@@ -238,6 +267,7 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
                 value={url}
                 onChangeText={(text) => this.setState({ url: text })}
                 autoCorrect={false}
+                darkColor={"#000"}
               />
               <Text style={style.modalText}>{t("passwords.username")}:</Text>
               <Input
@@ -247,6 +277,7 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
                 onChangeText={(text) => this.setState({ username: text })}
                 keyboardType={"email-address"}
                 autoCorrect={false}
+                darkColor={"#000"}
               />
               <Text style={style.modalText}>{t("auth.password")}:</Text>
               <Input
@@ -257,6 +288,7 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
                 password={true}
                 autoCorrect={false}
                 icon={"lock"}
+                darkColor={"#000"}
               />
             </View>
             <View style={style.buttonBox}>
@@ -269,7 +301,7 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
                 title={edit ? t("passwords.save") : t("passwords.add")}
               />
               <Button
-                onPress={() => setVisible(false)}
+                onPress={() => this.setVisible(false)}
                 style={style.modalButton}
                 textStyle={style.modalButtonText}
                 title={t("cancel")}
@@ -309,18 +341,33 @@ const style = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "95%",
-    height: 550,
+    height: 650,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 160,
+    height: 106,
     borderRadius: 10,
   },
   logoView: {
-    marginTop: 15,
+    marginTop: 50,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 35,
+  },
+  logoErrorView: {
+    maxWidth: 160,
+    minWidth: 160,
+    minHeight: 106,
+    maxHeight: 106,
+    borderRadius: 20,
+    backgroundColor: "#54c2f0",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  logoText: {
+    color: "white",
+    fontSize: 30,
+    fontWeight: "700",
   },
   buttonBox: {
     flex: 1,
@@ -329,7 +376,7 @@ const style = StyleSheet.create({
     padding: 0,
     maxHeight: 100,
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 10,
   },
   modalButton: {
     padding: 0,
@@ -355,15 +402,20 @@ const style = StyleSheet.create({
     marginBottom: 20,
     textDecorationLine: "underline",
   },
+  modalSiteName: {
+    fontSize: 20,
+    fontWeight: "700",
+    marginTop: 10,
+  },
   modalText: {
     fontSize: 17,
-    margin: 0,
+    marginTop: 15,
   },
   fieldBox: {
-    marginTop: 20,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 15,
   },
 });
 

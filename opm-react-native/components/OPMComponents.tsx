@@ -14,12 +14,19 @@ import { useState } from "react";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
+import { getSecure, getTheme } from "app/utils/Config";
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
   colorName: keyof typeof Colors.light & keyof typeof Colors.dark
 ) {
-  const theme = useColorScheme();
+  let theme = useColorScheme();
+
+  if (getTheme() === "dark") {
+    theme = "dark";
+  } else if (getTheme() === "light") {
+    theme = "light";
+  }
   const colorFromProps = props[theme];
 
   if (colorFromProps) {

@@ -1,5 +1,6 @@
 import { View, Text, useThemeColor } from "./OPMComponents";
 import { StyleSheet, Image, Pressable, Linking } from "react-native";
+import { useState } from "react";
 import type { Credentials } from "app/types/types";
 import { FontAwesome } from "@expo/vector-icons";
 
@@ -9,15 +10,24 @@ const PasswordItem = (props: {
 }) => {
   const { sImageURL, name, username, url } = props.credentials;
   const textColor = useThemeColor({}, "text");
+  const [isImgError, setImgError] = useState(false);
   return (
     <View style={style.container}>
       <Pressable onPress={props.onPress}>
         <View style={style.content}>
-          <Image
-            source={{ uri: sImageURL }}
-            style={style.image}
-            onError={(e) => console.log(e)}
-          />
+          {isImgError && (
+            <View style={[style.logoView, style.image]}>
+              <Text style={style.logoText}>{name.substring(0, 2)}</Text>
+            </View>
+          )}
+          {!isImgError && (
+            <Image
+              source={{ uri: sImageURL }}
+              style={style.image}
+              onError={() => setImgError(true)}
+            />
+          )}
+
           <View style={style.opposed}>
             <View style={style.textView}>
               <Text style={{ fontWeight: "bold" }}>{name}</Text>
@@ -26,7 +36,7 @@ const PasswordItem = (props: {
             <View>
               <FontAwesome
                 name="external-link"
-                style={{ color: textColor }}
+                style={{ color: textColor, marginRight: 10 }}
                 size={30}
                 onPress={() => {
                   Linking.canOpenURL(url).then((supported) => {
@@ -70,12 +80,23 @@ const style = StyleSheet.create({
     width: "75%",
   },
   image: {
-    width: 50,
+    width: 76,
     height: 50,
     resizeMode: "cover",
     borderRadius: 15,
     marginRight: 10,
     marginLeft: 15,
+  },
+  logoView: {
+    backgroundColor: "#54c2f0",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  logoText: {
+    color: "white",
+    fontSize: 30,
+    fontWeight: "700",
   },
   line: {
     height: 1,

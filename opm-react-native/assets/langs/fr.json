@@ -42,7 +42,15 @@
     "sort-by": "Trier par",
     "creation-date": "Date de création"
   },
-  "settings": "Paramètres",
+  "settings": {
+    "settings": "Paramètres",
+    "themes": "Thèmes",
+    "auto": "Auto",
+    "light": "Clair",
+    "dark": "Sombre",
+    "login-options": "Options de connexion",
+    "biometric-auth": "Authentification biométrique"
+  },
   "my-account": "Mon compte",
   "ok": "OK",
   "error": "Erreur",

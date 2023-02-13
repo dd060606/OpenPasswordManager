@@ -17,12 +17,12 @@ const commonStyles = StyleSheet.create({
     height: 300,
     shadowColor: "#000",
     shadowOffset: {
-      width: 2,
-      height: 12,
+      width: 0,
+      height: 13,
     },
-    shadowOpacity: 0.23,
-    shadowRadius: 15,
-    elevation: 15,
+    shadowOpacity: 0.24,
+    shadowRadius: 14.86,
+    elevation: 18,
   },
   modalButton: {
     paddingLeft: 15,

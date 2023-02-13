@@ -21,10 +21,7 @@ const Input = (props: TextInputProps & InputProps & ThemeProps) => {
   const [focused, setFocused] = useState(false);
   const [textVisible, setTextVisible] = useState(props.password === undefined);
   const { isValid, icon, password, smallInput, lightColor, darkColor } = props;
-  const textColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "text"
-  );
+  const textColor = useThemeColor({}, "text");
   const iconStyle = [withIconStyles.icon, { color: textColor }];
   const fieldColor = useThemeColor(
     { light: lightColor, dark: darkColor },

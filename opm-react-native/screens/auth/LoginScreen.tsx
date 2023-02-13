@@ -9,7 +9,15 @@ import {
 import { withTranslation, WithTranslation } from "react-i18next";
 import { getImageFromName } from "app/utils/ImageUtils";
 
-import { setPassword, setToken } from "app/utils/Config";
+import {
+  getProtected,
+  getSecure,
+  isBiometricAuth,
+  saveProtected,
+  saveSecure,
+  setPassword,
+  setToken,
+} from "app/utils/Config";
 
 import type {
   RootStackScreenProps,
@@ -29,7 +37,6 @@ import Input from "app/components/Input";
 
 import { API_URL } from "app/config.json";
 import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type State = {
   email: string;
@@ -67,9 +74,25 @@ class LoginScreen extends Component<
     isAuthenticating: false,
   };
   componentDidMount() {
-    AsyncStorage.getItem("email").then((value) => {
-      if (value && emailRegex.test(value)) {
-        this.setState({ email: value });
+    const { t } = this.props;
+    getSecure("email").then((email) => {
+      if (email && emailRegex.test(email)) {
+        this.setState({ email: email, isAuthenticating: true });
+        if (isBiometricAuth()) {
+          getProtected("password", [t("auth.login"), t("cancel")])
+            .then((password) => {
+              if (password) {
+                this.performAuth(email, password);
+              } else {
+                this.setState({ isAuthenticating: false });
+              }
+            })
+            .catch(() => {
+              this.setState({ isAuthenticating: false });
+            });
+        } else {
+          this.setState({ isAuthenticating: false });
+        }
       }
     });
   }
@@ -106,6 +129,42 @@ class LoginScreen extends Component<
     });
   };
 
+  performAuth = (email: string, password: string) => {
+    const { t } = this.props;
+    axios
+      .post(`${API_URL}/api/auth/login`, {
+        email: email,
+        password: password,
+      })
+      .then((res: AxiosAuthResponse) => {
+        if (res.data && res.data.token) {
+          setToken(res.data.token);
+          setPassword(password);
+          saveSecure("email", email);
+          saveProtected("password", password);
+
+          this.props.navigation.replace(
+            "Home",
+            {} as RootStackScreenProps<"Home">
+          );
+        } else {
+          this.setState({ isAuthenticating: false });
+        }
+      })
+      .catch((err: AxiosError) => {
+        console.log(err);
+        if (err?.response?.data?.type === "internal-error") {
+          this.openErrorModal(t("errors.internal-error"));
+        } else if (err?.response?.data?.type === "invalid-credentials") {
+          this.openErrorModal(t("auth.errors.invalid-credentials"));
+        } else if (err?.response?.data?.type === "email-not-verified") {
+          this.openErrorModal(t("auth.errors.email-not-verified"));
+        } else {
+          this.openErrorModal(err.message);
+        }
+      });
+  };
+
   //Arrow fx for binding
   handleLogin = () => {
     const { email, password, isAuthenticating } = this.state;
@@ -125,36 +184,7 @@ class LoginScreen extends Component<
     } else if (!passwordRegex.test(password)) {
       this.openErrorModal(t("auth.errors.invalid-password"));
     } else {
-      axios
-        .post(`${API_URL}/api/auth/login`, {
-          email: emailWithoutSpaces,
-          password: password,
-        })
-        .then((res: AxiosAuthResponse) => {
-          if (res.data && res.data.token) {
-            setToken(res.data.token);
-            setPassword(password);
-            AsyncStorage.setItem("email", email);
-            this.props.navigation.replace(
-              "Home",
-              {} as RootStackScreenProps<"Home">
-            );
-          } else {
-            this.setState({ isAuthenticating: false });
-          }
-        })
-        .catch((err: AxiosError) => {
-          console.log(err);
-          if (err?.response?.data?.type === "internal-error") {
-            this.openErrorModal(t("errors.internal-error"));
-          } else if (err?.response?.data?.type === "invalid-credentials") {
-            this.openErrorModal(t("auth.errors.invalid-credentials"));
-          } else if (err?.response?.data?.type === "email-not-verified") {
-            this.openErrorModal(t("auth.errors.email-not-verified"));
-          } else {
-            this.openErrorModal(err.message);
-          }
-        });
+      this.performAuth(emailWithoutSpaces, password);
     }
   };
 

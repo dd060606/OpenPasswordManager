@@ -96,7 +96,7 @@ const TabNavigator = () => {
       <Tab.Screen
         name="Settings"
         component={SettingsScreen}
-        options={{ headerShown: false, tabBarLabel: t("settings") }}
+        options={{ headerShown: false, tabBarLabel: t("settings.settings") }}
       />
     </Tab.Navigator>
   );
