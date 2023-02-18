@@ -31,6 +31,11 @@ const commonStyles = StyleSheet.create({
     paddingBottom: 6,
     marginTop: 20,
   },
+  modalButtonBox: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   modalButtonText: { fontSize: 23 },
   modalImg: {
     width: 55,

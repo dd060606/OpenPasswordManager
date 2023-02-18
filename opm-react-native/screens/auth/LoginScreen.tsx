@@ -13,7 +13,6 @@ import {
   getProtected,
   getSecure,
   isBiometricAuth,
-  saveProtected,
   saveSecure,
   setPassword,
   setToken,
@@ -141,7 +140,7 @@ class LoginScreen extends Component<
           setToken(res.data.token);
           setPassword(password);
           saveSecure("email", email);
-          saveProtected("password", password);
+          saveSecure("password", password);
 
           this.props.navigation.replace(
             "Home",

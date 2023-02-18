@@ -34,9 +34,6 @@ export async function getSecure(key: string) {
   const res = await SecureStore.getItemAsync(key);
   return res ? res : null;
 }
-export async function saveProtected(key: string, data: string) {
-  return await SecureStore.setItemAsync(key, data);
-}
 export async function getProtected(key: string, messages: string[]) {
   const biometricAuth = await LocalAuthentication.authenticateAsync({
     promptMessage: messages[0],

@@ -20,7 +20,7 @@ import {
   Text,
   StyledButton,
 } from "./OPMComponents";
-import { ErrorModal } from "./Modals";
+import { ConfirmModal, ErrorModal } from "./Modals";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
 import { API_URL } from "app/config.json";
@@ -53,6 +53,10 @@ type State = {
     visible: boolean;
     message: string;
   };
+  confirmModal: {
+    visible: boolean;
+    message: string;
+  };
   imgError: boolean;
 };
 class PasswordModal extends Component<Props & WithTranslation, State> {
@@ -71,7 +75,11 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
     generatePasswordBoxOpened: false,
     errorModal: {
       visible: false,
-      message: "string",
+      message: "",
+    },
+    confirmModal: {
+      visible: false,
+      message: "",
     },
     imgError: false,
   };
@@ -146,7 +154,7 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
   };
   handleEditPassword = () => {
     const { websiteName, password, username, url } = this.state;
-    const { t } = this.props;
+    const { t, credentials } = this.props;
 
     if (!websiteName) {
       this.openErrorModal(t("errors.enter-website-name"));
@@ -159,9 +167,7 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
 
     axios
       .put(
-        `${API_URL}/api/credentials/edit/${
-          (this.props.credentials as Credentials).id
-        }`,
+        `${API_URL}/api/credentials/edit/${(credentials as Credentials).id}`,
         {
           username: username,
           password: encryptedPassword,
@@ -191,7 +197,41 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
         this.openErrorModal(errorMessage);
       });
   };
-  handleDeleteCredentials = () => {};
+  handleDeleteCredentials = () => {
+    const { t, credentials } = this.props;
+
+    axios
+      .delete(
+        `${API_URL}/api/credentials/delete/${(credentials as Credentials).id}`,
+        { headers: { Authorization: `Bearer ${getToken()}` } }
+      )
+      .then(() => {
+        this.props.setVisible(false);
+        this.props.reloadCredentials();
+      })
+      .catch((err) => {
+        let errorMessage = t("errors.unknown-error");
+        if (err.response && err.response.data) {
+          if (err.response.data.type === "internal-error") {
+            errorMessage = t("errors.internal-error");
+          } else if (err.response.data.type === "invalid-token") {
+            this.props.sendToLoginScreen();
+            return;
+          }
+        }
+
+        this.openErrorModal(errorMessage);
+      });
+  };
+  openDeleteConfirmBox = () => {
+    const { t } = this.props;
+    this.setState({
+      confirmModal: {
+        message: t("passwords.delete-password"),
+        visible: true,
+      },
+    });
+  };
 
   setVisible = (visible: boolean) => {
     this.setState({
@@ -206,8 +246,15 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
 
   render() {
     const { visible, t, credentials, edit } = this.props;
-    const { websiteName, url, username, password, errorModal, imgError } =
-      this.state;
+    const {
+      websiteName,
+      url,
+      username,
+      password,
+      errorModal,
+      confirmModal,
+      imgError,
+    } = this.state;
     return (
       <Modal
         animationType="fade"
@@ -308,7 +355,7 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
               />
               {edit && (
                 <StyledButton
-                  onPress={this.handleDeleteCredentials}
+                  onPress={this.openDeleteConfirmBox}
                   style={[style.trashButton]}
                   textStyle={style.modalButtonText}
                   title={""}
@@ -329,6 +376,21 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
           message={errorModal.message}
           setVisible={(visible) =>
             this.setState({ errorModal: { ...errorModal, visible: visible } })
+          }
+        />
+        <ConfirmModal
+          visible={confirmModal.visible}
+          message={confirmModal.message}
+          onConfirm={() => {
+            this.setState({
+              confirmModal: { ...confirmModal, visible: false },
+            });
+            this.handleDeleteCredentials();
+          }}
+          setVisible={(visible) =>
+            this.setState({
+              confirmModal: { ...confirmModal, visible: visible },
+            })
           }
         />
       </Modal>

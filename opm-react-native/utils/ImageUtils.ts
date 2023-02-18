@@ -9,6 +9,7 @@ const images: Images = {
     logo: require("app/assets/images/logo.png"),
     icon: require("app/assets/images/icon.png"),
     error: require("app/assets/images/error.png"),
+    question: require("app/assets/images/question.png"),
   },
 };
 

@@ -32,6 +32,13 @@ const settingsStyle = StyleSheet.create({
   contentText: {
     fontSize: 16,
   },
+  logoutButton: {
+    padding: 10,
+    backgroundColor: "#F04B1F",
+    borderRadius: 10,
+    marginTop: 20,
+    marginBottom: 20,
+  },
 });
 
 export { settingsStyle };
