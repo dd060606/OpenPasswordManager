@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import type { RootStackScreenProps } from "app/types/types";
 import {
@@ -15,11 +15,11 @@ import {
   Button,
 } from "app/components/OPMComponents";
 import Input from "app/components/Input";
-import { getToken } from "app/utils/Config";
+import { getSortValue, getToken, setSortValue } from "app/utils/Config";
 import axios from "axios";
 import { API_URL } from "app/config.json";
 import type { AxiosCredentialsResponse, Credentials } from "app/types/types";
-import { extractRootDomain } from "app/utils/Utils";
+import { extractRootDomain, sortCredentials } from "app/utils/Utils";
 import PasswordItem from "app/components/PasswordItem";
 import { passwordsStyles as styles } from "app/styles/PasswordsStyles";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -38,6 +38,7 @@ type State = {
     edit: boolean;
     currentCredentials: Credentials | {};
   };
+  sortValue: number;
 };
 
 class PasswordsScreen extends Component<
@@ -57,24 +58,31 @@ class PasswordsScreen extends Component<
       edit: true,
       currentCredentials: {},
     },
+    sortValue: 2,
   };
 
   componentDidMount() {
     const { isLoading } = this.state;
 
     if (isLoading) {
-      this.updateCredentials();
+      const sortVal =
+        getSortValue() === null || getSortValue() === undefined
+          ? 2
+          : getSortValue();
+      this.setState({
+        sortValue: sortVal,
+      });
+      this.updateCredentials(sortVal);
     }
   }
 
-  updateCredentials = () => {
+  updateCredentials = (sortValue: number) => {
     const { t } = this.props;
     axios
       .get(`${API_URL}/api/credentials/`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       })
       .then((result: AxiosCredentialsResponse) => {
-        let finalCredentials = [];
         for (let i = 0; i < result.data.credentials.length; i++) {
           result.data.credentials[
             i
@@ -86,13 +94,11 @@ class PasswordsScreen extends Component<
           ].lImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${extractRootDomain(
             result.data.credentials[i].url
           ).replace(".", "_")}@2x.png`;
-
-          finalCredentials.push(result.data.credentials[i]);
         }
 
         this.setState({
           isLoading: false,
-          credentials: result.data.credentials,
+          credentials: sortCredentials(result.data.credentials, sortValue),
         });
       })
       .catch((err) => {
@@ -113,6 +119,19 @@ class PasswordsScreen extends Component<
       });
   };
 
+  handleSortClick = () => {
+    const { sortValue, credentials } = this.state;
+    let newSortVal = 0;
+    if (sortValue < 2) {
+      newSortVal = sortValue + 1;
+    }
+    setSortValue(newSortVal);
+    this.setState({
+      sortValue: newSortVal,
+      credentials: sortCredentials(credentials as any, newSortVal),
+    });
+  };
+
   openErrorModal = (message: string) => {
     this.setState({
       errorModal: {
@@ -125,7 +144,7 @@ class PasswordsScreen extends Component<
 
   render() {
     const { t } = this.props;
-    const { credentials, searchValue, passwdModal } = this.state;
+    const { credentials, searchValue, passwdModal, sortValue } = this.state;
     return (
       <SafeAreaView>
         <View style={styles.topView}>
@@ -148,6 +167,12 @@ class PasswordsScreen extends Component<
                 },
               })
             }
+          ></Button>
+          <Button
+            title={t("settings.sortval", { returnObjects: true })[sortValue]}
+            onPress={this.handleSortClick}
+            style={styles.sortButton}
+            textStyle={styles.sortButtonText}
           ></Button>
         </View>
         <ScrollView>
@@ -219,7 +244,7 @@ class PasswordsScreen extends Component<
               {} as RootStackScreenProps<"Login">
             )
           }
-          reloadCredentials={this.updateCredentials}
+          reloadCredentials={() => this.updateCredentials(sortValue)}
         />
         <StatusBar style="auto" />
       </SafeAreaView>
@@ -236,4 +261,5 @@ const NoPasswordsView = () => {
     </View>
   );
 };
+
 export default withTranslation()(PasswordsScreen);

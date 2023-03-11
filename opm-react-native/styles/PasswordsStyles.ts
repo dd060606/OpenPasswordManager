@@ -15,6 +15,13 @@ const passwordsStyles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "column",
   },
+  sortButton: {
+    width: 225,
+  },
+  sortButtonText: {
+    fontSize: 13,
+    textAlign: "center",
+  },
 });
 
 export { passwordsStyles };

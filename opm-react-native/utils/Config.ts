@@ -5,7 +5,7 @@ import * as LocalAuthentication from "expo-local-authentication";
 let token = "";
 let password = "";
 
-let settings = { theme: "", biometric: true };
+let settings = { theme: "", biometric: true, sortValue: 2 };
 
 export function isTokenValid(): boolean {
   return token.length === 0 ? false : true;
@@ -75,4 +75,11 @@ export function setBiometricAuth(enabled: boolean) {
 }
 export function isBiometricAuth() {
   return settings.biometric;
+}
+export function getSortValue() {
+  return settings.sortValue;
+}
+export function setSortValue(value: number) {
+  settings.sortValue = value;
+  saveSettings();
 }

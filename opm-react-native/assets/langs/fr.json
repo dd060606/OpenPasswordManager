@@ -42,7 +42,13 @@
     "confirm-password": "Confirmer le mot de passe",
     "delete-password": "Voulez vous supprimer ces identifiants ?",
     "sort-by": "Trier par",
-    "creation-date": "Date de création"
+    "creation-date": "Date de création",
+    "generate": "Générer",
+    "length": "Longueur du mot de passe",
+    "uppercase": "Majuscules",
+    "lowercase": "Minuscules",
+    "numbers": "Nombres",
+    "symbols": "Symboles"
   },
   "settings": {
     "settings": "Paramètres",
@@ -52,7 +58,8 @@
     "dark": "Sombre",
     "login-options": "Options de connexion",
     "biometric-auth": "Authentification biométrique",
-    "account": "Compte"
+    "account": "Compte",
+    "sortval": ["Trier par A-Z", "Trier par Z-A", "Trier par date de création"]
   },
   "my-account": "Mon compte",
   "confirmation": "Confirmation",

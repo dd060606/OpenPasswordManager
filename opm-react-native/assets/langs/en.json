@@ -42,7 +42,13 @@
     "confirm-password": "Confirm password",
     "delete-password": "Are you sure to delete these credentials?",
     "sort-by": "Sort by",
-    "creation-date": "Creation date"
+    "creation-date": "Creation date",
+    "generate": "Generate",
+    "length": "Password length",
+    "uppercase": "Uppercase",
+    "lowercase": "Lowercase",
+    "numbers": "Numbers",
+    "symbols": "Symbols"
   },
   "settings": {
     "settings": "Settings",
@@ -52,7 +58,8 @@
     "dark": "Dark",
     "login-options": "Login options",
     "biometric-auth": "Biometric authentication",
-    "account": "Account"
+    "account": "Account",
+    "sortval": ["Sort by A-Z", "Sort by Z-A", "Sort by creation date"]
   },
   "my-account": "My account",
   "confirmation": "Confirmation",

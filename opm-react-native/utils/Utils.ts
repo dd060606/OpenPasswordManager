@@ -1,4 +1,4 @@
-function extractHostname(url: string) {
+export function extractHostname(url: string) {
   let hostname: string = "";
   if (url.indexOf("//") > -1) {
     hostname =
@@ -20,7 +20,7 @@ function extractHostname(url: string) {
   return hostname;
 }
 
-function extractRootDomain(url: string) {
+export function extractRootDomain(url: string) {
   let domain = extractHostname(url),
     splitArray = domain.split("."),
     arrLength = splitArray.length;
@@ -35,5 +35,19 @@ function extractRootDomain(url: string) {
   }
   return domain;
 }
-
-export { extractHostname, extractRootDomain };
+export function sortCredentials(credentialsArray: any[], sortValue: number) {
+  if (sortValue === 0) {
+    return credentialsArray.sort((a, b) =>
+      (a.name || "").toString().localeCompare((b.name || "").toString())
+    );
+  } else if (sortValue === 1) {
+    return credentialsArray
+      .sort((a, b) =>
+        (a.name || "").toString().localeCompare((b.name || "").toString())
+      )
+      .sort()
+      .reverse();
+  } else {
+    return credentialsArray.sort((a, b) => b.id - a.id);
+  }
+}

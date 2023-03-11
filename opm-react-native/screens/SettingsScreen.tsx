@@ -45,7 +45,11 @@ class SettingsScreen extends Component<
     },
   };
   componentDidMount() {
-    this.setState({ theme: getTheme(), biometricAuth: isBiometricAuth() });
+    const theme =
+      getTheme() === "" || getTheme() === undefined || getTheme() === null
+        ? "auto"
+        : getTheme();
+    this.setState({ theme: theme, biometricAuth: isBiometricAuth() });
   }
 
   setTheme = (theme: string) => {

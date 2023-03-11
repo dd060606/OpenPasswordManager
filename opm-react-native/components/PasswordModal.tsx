@@ -27,6 +27,12 @@ import { API_URL } from "app/config.json";
 import CryptoES from "crypto-es";
 
 import { getPassword, getToken } from "app/utils/Config";
+import GeneratePassModal from "./GeneratePassModal";
+
+type ModalType = {
+  visible: boolean;
+  message?: string;
+};
 
 type Props = {
   visible: boolean;
@@ -49,14 +55,9 @@ type State = {
   symbolsEnabled: boolean;
   generatedPassword: string;
   generatePasswordBoxOpened: boolean;
-  errorModal: {
-    visible: boolean;
-    message: string;
-  };
-  confirmModal: {
-    visible: boolean;
-    message: string;
-  };
+  errorModal: ModalType;
+  confirmModal: ModalType;
+  generateModal: ModalType;
   imgError: boolean;
 };
 class PasswordModal extends Component<Props & WithTranslation, State> {
@@ -80,6 +81,9 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
     confirmModal: {
       visible: false,
       message: "",
+    },
+    generateModal: {
+      visible: false,
     },
     imgError: false,
   };
@@ -253,6 +257,7 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
       password,
       errorModal,
       confirmModal,
+      generateModal,
       imgError,
     } = this.state;
     return (
@@ -334,7 +339,15 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
                 onChangeText={(text) => this.setState({ password: text })}
                 password={true}
                 autoCorrect={false}
+                copyButton={true}
                 icon={"lock"}
+                onIconPress={() => {
+                  this.setState({
+                    generateModal: {
+                      visible: true,
+                    },
+                  });
+                }}
                 darkColor={"#000"}
               />
             </View>
@@ -390,6 +403,20 @@ class PasswordModal extends Component<Props & WithTranslation, State> {
           setVisible={(visible) =>
             this.setState({
               confirmModal: { ...confirmModal, visible: visible },
+            })
+          }
+        />
+        <GeneratePassModal
+          visible={generateModal.visible}
+          onConfirm={(generatedPassword: string) => {
+            this.setState({
+              generateModal: { ...generateModal, visible: false },
+              password: generatedPassword,
+            });
+          }}
+          setVisible={(visible) =>
+            this.setState({
+              generateModal: { ...generateModal, visible: visible },
             })
           }
         />
