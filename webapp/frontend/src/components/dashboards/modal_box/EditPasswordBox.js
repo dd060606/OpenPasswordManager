@@ -8,8 +8,7 @@ import CryptoJS from "crypto-js"
 import Swal from "sweetalert2"
 import axios from "axios"
 import { sendToAuthPage } from "../../../utils/auth-utils"
-import Checkbox from "@material-ui/core/Checkbox"
-import Slider from "@material-ui/core/Slider"
+import { Tooltip, Slider, Checkbox } from "@material-ui/core"
 import { isDarkTheme } from "../../../utils/themes-utils"
 import { extractRootDomain } from "../../../utils/credentials-utils"
 
@@ -34,7 +33,8 @@ class EditPasswordBox extends Component {
         uppercaseEnabled: true,
         symbolsEnabled: true,
         generatedPassword: "",
-        generatePasswordBoxOpened: false
+        generatePasswordBoxOpened: false,
+        passwordCopied: false
 
     }
     constructor(props) {
@@ -117,11 +117,12 @@ class EditPasswordBox extends Component {
             .then(result => {
                 let finalCredentials = []
                 for (let i = 0; i < result.data.credentials.length; i++) {
-                    result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
-                    result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+                    result.data.credentials[i].smallImageURL = `https://logo.clearbit.com/${extractRootDomain(result.data.credentials[i].url)}?size=50`
+                    result.data.credentials[i].largeImageURL = `https://logo.clearbit.com/${extractRootDomain(result.data.credentials[i].url)}?size=100`
 
                     finalCredentials.push(result.data.credentials[i])
                 }
+
                 this.props.reloadCredentials(finalCredentials)
                 this.setState({ isLoading: false })
             })
@@ -323,9 +324,23 @@ class EditPasswordBox extends Component {
         this.setState({ generatePasswordBoxOpened: false })
     }
 
+    copyPassword = () => {
+        const { passwordCopied, password } = this.state
+        navigator.clipboard.writeText(password)
+
+        if (!passwordCopied) {
+            this.setState({ passwordCopied: true })
+
+            setTimeout(() => {
+                this.setState({ passwordCopied: false })
+            }, 1000)
+        }
+
+    }
+
     render() {
         const { showPassword, password, isLoading, url, websiteName, username, passwordFieldFocused, websiteFieldFocused, websiteNameFieldFocused, usernameFieldFocused
-            , passwordLength, numbersEnabled, lowercasesEnabled, uppercaseEnabled, symbolsEnabled, generatePasswordBoxOpened } = this.state
+            , passwordLength, numbersEnabled, lowercasesEnabled, uppercaseEnabled, symbolsEnabled, generatePasswordBoxOpened, passwordCopied } = this.state
         const { t } = this.props
         return (
             <div className="edit-password-overlay" onClick={event => this.handleEditPasswordBoxClosed(event)} >
@@ -438,6 +453,9 @@ class EditPasswordBox extends Component {
                                     onBlur={() => this.setState({ passwordFieldFocused: false })}
                                     onFocus={() => this.setState({ passwordFieldFocused: true })} value={password}
                                     onChange={event => this.setState({ password: event.target.value })} autoCorrect="off" autoCapitalize="off" />
+                                <Tooltip title={!passwordCopied ? t("copy") : t("copied") + " ✔"} placement="top">
+                                    <i className="fal fa-copy fa-lg" onClick={this.copyPassword} />
+                                </Tooltip>
 
                                 <i className={`fal ${showPassword ? "fa-eye" : "fa-eye-slash"} fa-lg`} onClick={() => { this.setState({ showPassword: !showPassword }) }} />
 

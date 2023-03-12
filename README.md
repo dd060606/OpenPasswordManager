@@ -16,6 +16,8 @@ OpenPasswordManager use ReactJS for the frontend and ExpressJS for the backend.
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#start-the-website">Start the website</a></li>
+        <li><a href="#build-the-react-native-app">Build the react native app</a></li>
       </ul>
     </li>
     <li><a href="#features">Features</a></li>
@@ -67,6 +69,19 @@ You need to install NodeJS and NPM and you also need to have a MySQL database
  node server
 ```
 
+### Build the react native app
+1. Install dependencies
+   ```sh
+   cd /opm-react-native
+   yarn install
+   ```
+2. Edit the config.json file and complete it with your backend API
+
+3. Build the app for Android
+    ```sh
+    yarn run build
+    ```
+
 ## Features
 
 - Passwords are securely encrypted with AES
@@ -76,11 +91,12 @@ You need to install NodeJS and NPM and you also need to have a MySQL database
 - Credentials sorting system
 - Electron app for Windows, Linux and MacOS (in dev)
 - The electron app updates itself
+- A react native app (Android and iOS)
 - And more...
 
 ## To do
 
-- A react native app
+- React native app -> Offline mode
 
 ## License
 

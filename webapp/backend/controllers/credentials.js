@@ -78,6 +78,7 @@ exports.delete = (req, res, next) => {
     }
 }
 exports.getCredentials = (req, res, next) => {
+
     db.query(`SELECT * FROM \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` WHERE user_id = ?`, [req.userId], function (err, result) {
         if (err) {
             return res.status(500).json(getJsonForInternalError(err.message))

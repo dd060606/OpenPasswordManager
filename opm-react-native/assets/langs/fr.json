@@ -1,0 +1,71 @@
+{
+  "errors": {
+    "unknown-error": "Erreur inconnue !",
+    "internal-error": "Erreur du serveur !",
+    "enter-website-name": "Veuillez entrer le nom du site !"
+  },
+  "auth": {
+    "errors": {
+      "complete-all-fields": "Veuillez compléter tous les champs !",
+      "invalid-email": "Adresse email invalide !",
+      "invalid-password": "Mot de passe invalide !",
+      "invalid-credentials": "Mauvais identifiants !",
+      "email-not-verified": "Adresse email non vérifiée !",
+      "invalid-names": "Nom ou prénom invalides !",
+      "password-confirmation-not-match": "Les mots de passe ne correspondent pas !",
+      "email-already-exists": "Cette adresse email existe déjà !"
+    },
+    "login": "Connexion",
+    "signup": "S'inscrire",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "lastname": "Nom",
+    "firstname": "Prénom",
+    "confirm-password": "Confirmation du mot de passe",
+    "no-account": "Vous n'avez pas de compte ? Inscription",
+    "already-have-account": "Vous avez déjà un compte ? Connexion",
+    "confirm-email-to-continue": "Confirmez votre adresse email pour continuer",
+    "resend-email": "Envoyer l'email à nouveau",
+    "logout": "Déconnexion",
+    "logout-confirm": "Voulez vous vous déconnecter ?"
+  },
+  "passwords": {
+    "passwords": "Mots de passe",
+    "add": "Ajouter",
+    "no-passwords": "Vous n'avez pas de mots de passe enregistrés",
+    "save": "Sauvegarder",
+    "add-password": "Ajouter un mot de passe",
+    "website": "Site Web",
+    "website-name": "Nom du site",
+    "username": "Identifiant",
+    "add-url": "Ajouter une URL",
+    "confirm-password": "Confirmer le mot de passe",
+    "delete-password": "Voulez vous supprimer ces identifiants ?",
+    "sort-by": "Trier par",
+    "creation-date": "Date de création",
+    "generate": "Générer",
+    "length": "Longueur du mot de passe",
+    "uppercase": "Majuscules",
+    "lowercase": "Minuscules",
+    "numbers": "Nombres",
+    "symbols": "Symboles"
+  },
+  "settings": {
+    "settings": "Paramètres",
+    "themes": "Thèmes",
+    "auto": "Auto",
+    "light": "Clair",
+    "dark": "Sombre",
+    "login-options": "Options de connexion",
+    "biometric-auth": "Authentification biométrique",
+    "account": "Compte",
+    "sortval": ["Trier par A-Z", "Trier par Z-A", "Trier par date de création"]
+  },
+  "my-account": "Mon compte",
+  "confirmation": "Confirmation",
+  "confirm": "Confirmer",
+  "ok": "OK",
+  "error": "Erreur",
+  "search": "Rechercher",
+  "cancel": "Annuler"
+}
