@@ -2,21 +2,22 @@ import "../css/dashboards/PasswordItem.css"
 import Tooltip from "@material-ui/core/Tooltip"
 import { useTranslation } from "react-i18next"
 import "../../i18n"
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { isDarkTheme } from "../../utils/themes-utils"
 
 
 const PasswordItem = ({ credential, index, onClick }) => {
 
     const [t] = useTranslation()
+    const [errorImage, setErrorImage] = useState(false);
 
     useEffect(() => {
         const passwordItemBox = document.querySelector(".password-item-box")
         passwordItemBox.style.setProperty("--text-theme", isDarkTheme() ? "white" : "#121212")
         passwordItemBox.style.setProperty("--line-theme", isDarkTheme() ? "white" : "rgba(0,0,0,0.1)")
-
-
     })
+    let smallName = credential.name[0].toUpperCase() + (credential.name.length >= 2 ? credential.name[1] : "")
+
     return (<div className="password-item-box" >
         <div className="password-item" onClick={event => {
             if (event.currentTarget === event.target) {
@@ -24,10 +25,16 @@ const PasswordItem = ({ credential, index, onClick }) => {
             }
         }}>
             <div className="password-info">
-                <img src={credential.smallImageURL}
-                    alt="" className="website-icon" onError={event => {
-                        event.target.src = `${process.env.PUBLIC_URL}/assets/images/unknown_46x30.png`
-                    }} />
+                {!errorImage &&
+                    <img src={credential.smallImageURL}
+                        alt="" className="website-icon" onError={event => setErrorImage(true)} />
+                }
+                {
+                    errorImage &&
+                    <div className="website-icon" id="no-img-box">
+                        <p>{smallName}</p>
+                    </div>
+                }
                 <div>
                     <p className="password-name">{credential.name}</p>
                     <p className="username-text">{credential.username}</p>

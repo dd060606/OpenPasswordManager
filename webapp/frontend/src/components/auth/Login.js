@@ -91,7 +91,8 @@ class Login extends Component {
                     saveEmail(email)
                     this.props.history.push({
                         pathname: "/", state: {
-                            token: res.data.token
+                            token: res.data.token,
+                            password: password
                         }
                     })
                 }

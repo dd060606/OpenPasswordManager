@@ -16,6 +16,9 @@ OpenPasswordManager use ReactJS for the frontend and ExpressJS for the backend.
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#start-the-website">Start the website</a></li>
+        <li><a href="#build-the-react-native-app">Build the react native app</a></li>
+        <li><a href="#migrate">Migrate from backend 1.0.0 to 1.1.0</a></li>
       </ul>
     </li>
     <li><a href="#features">Features</a></li>
@@ -67,6 +70,32 @@ You need to install NodeJS and NPM and you also need to have a MySQL database
  node server
 ```
 
+### Build the react native app
+
+1. Install dependencies
+   ```sh
+   cd /opm-react-native
+   yarn install
+   ```
+2. Edit the config.json file and complete it with your backend API
+
+3. Build the app for Android
+   ```sh
+   yarn run build
+   ```
+
+### Migrate
+
+You have to migrate only if you already have a backend installation lower than **1.1.0** (check your version in package.json)
+
+1. Go to the backend folder on your server
+2. Make a **backup** of your database
+3. Run the migrate.js script
+   ```sh
+   node migrate.js
+   ```
+4. You are ready to use the new backend!
+
 ## Features
 
 - Passwords are securely encrypted with AES
@@ -76,17 +105,11 @@ You need to install NodeJS and NPM and you also need to have a MySQL database
 - Credentials sorting system
 - Electron app for Windows, Linux and MacOS (in dev)
 - The electron app updates itself
-- And more...
+- A react native app (Android and iOS)
+- Offline mode in the mobile app
 
 ## To do
 
-- A react native app
+...
 
 ## License
-
-Distributed under the GNU General Public License v3.0 License. See `LICENSE` for more information.
-
-## Demo
-
-Demo website -> https://opm.dd06-dev.fr/
-(Don't store important passwords because the app uses a test database)

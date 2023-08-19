@@ -1,0 +1,79 @@
+{
+  "errors": {
+    "unknown-error": "Unknown error!",
+    "internal-error": "Internal server error!",
+    "enter-website-name": "Please enter a website name!",
+    "offline-mode": "You cannot perform this action in offline mode!"
+  },
+  "auth": {
+    "errors": {
+      "complete-all-fields": "Please complete all fields!",
+      "invalid-email": "Invalid email!",
+      "invalid-password": "Invalid password!",
+      "invalid-credentials": "Invalid credentials!",
+      "email-not-verified": "Email not verified!",
+      "invalid-names": "Invalid firstname or lastname!",
+      "password-confirmation-not-match": "Password confirmation doesn't match!",
+      "email-already-exists": "Email already exists!"
+    },
+    "login": "Login",
+    "signup": "Signup",
+    "email": "E-mail",
+    "password": "Password",
+    "lastname": "Lastname",
+    "firstname": "Firstname",
+    "confirm-password": "Confirm password",
+    "no-account": "You don't have an account? Sign up",
+    "already-have-account": "Already have an account? Sign in",
+    "confirm-email-to-continue": "Confirm your email to continue",
+    "resend-email": "Resend email",
+    "logout": "Logout",
+    "logout-confirm": "Are you sure to logout?",
+    "enable-offline-mode": "An error has occurred, do you want to enable offline mode?"
+  },
+  "passwords": {
+    "passwords": "Passwords",
+    "add": "Add",
+    "no-passwords": "You don't have any saved passwords",
+    "save": "Save",
+    "add-password": "Add password",
+    "website": "Website",
+    "website-name": "Website name",
+    "username": "Username",
+    "add-url": "Add an URL",
+    "confirm-password": "Confirm password",
+    "delete-password": "Are you sure to delete these credentials?",
+    "sort-by": "Sort by",
+    "creation-date": "Creation date",
+    "generate": "Generate",
+    "length": "Password length",
+    "uppercase": "Uppercase",
+    "lowercase": "Lowercase",
+    "numbers": "Numbers",
+    "symbols": "Symbols",
+    "no-results": "No results"
+  },
+  "settings": {
+    "settings": "Settings",
+    "themes": "Themes",
+    "auto": "Auto",
+    "light": "Light",
+    "dark": "Dark",
+    "login-options": "Login options",
+    "biometric-auth": "Biometric authentication",
+    "account": "Account",
+    "sortval": ["Sort by A-Z", "Sort by Z-A", "Sort by creation date"]
+  },
+  "security": {
+    "security": "Security",
+    "weak-passwords": "Your weak passwords",
+    "no-weak-passwords": "You don't have weak passwords."
+  },
+  "my-account": "My account",
+  "confirmation": "Confirmation",
+  "confirm": "Confirm",
+  "ok": "OK",
+  "error": "Error",
+  "search": "Search",
+  "cancel": "Annuler"
+}

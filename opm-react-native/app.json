@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "OpenPasswordManager",
+    "slug": "openpasswordmanager",
+    "version": "1.4.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "opm",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 10,
+      "url": "https://u.expo.dev/40195b33-d2c7-4a53-8d51-be066de5e697",
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/app-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "fr.dd06.openpasswordmanager"
+    },
+    "web": {
+      "favicon": "./assets/images/icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "40195b33-d2c7-4a53-8d51-be066de5e697"
+      }
+    },
+    "owner": "dd_06",
+    "runtimeVersion": {
+      "policy": "nativeVersion",
+      "version": "1.4.0"
+    }
+  }
+}

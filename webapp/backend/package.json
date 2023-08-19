@@ -1,10 +1,12 @@
 {
   "name": "backend",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "OpenPasswordManager server",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon server",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate-passwords": "node migrate"
   },
   "author": "dd_06",
   "license": "ISC",
@@ -16,6 +18,7 @@
     "crypto-js": "^4.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-rate-limit": "^6.7.0",
     "express-session": "^1.17.2",
     "handlebars": "^4.7.7",
     "jsonwebtoken": "^8.5.1",

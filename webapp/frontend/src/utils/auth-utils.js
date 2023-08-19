@@ -1,15 +1,13 @@
 import { cookies } from "../index"
 function readToken(props) {
-
     if (props.location.state && props.location.state.token && props.location.state.token !== "") {
         return props.location.state.token
     }
     else {
         return undefined
     }
-
-
 }
+
 function getEmail() {
     return cookies.get("email")
 }

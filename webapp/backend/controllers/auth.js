@@ -3,7 +3,8 @@ const jwt = require("jsonwebtoken")
 const db = require("../utils/database").database
 const logger = require("../utils/logger")
 const fs = require("fs")
-const sendEmail = require("../controllers/emails").sendEmail
+const sendEmail = require("./emails").sendEmail
+const serverSideDecrypt = require("./credentials").serverSideDecrypt
 const CryptoJS = require("crypto-js")
 
 require('dotenv').config()
@@ -11,10 +12,11 @@ require('dotenv').config()
 
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*#?&_]{8,}$/
-const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+module.exports.emailRegex = emailRegex
 
 
-exports.signup = (req, res, next) => {
+exports.signup = (req, res) => {
 
     if (validateSignup(req)) {
 
@@ -43,15 +45,11 @@ exports.signup = (req, res, next) => {
 }
 
 function signupAccount(req, res) {
-
-
     bcyrpt.hash(req.body.password, 10)
         .then(hash => {
 
             const insertAccountSQL = `INSERT INTO \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` (\`id\`, \`email\`, \`password\`, \`lastname\`, \`firstname\`, \`isVerified\`)`
                 + `VALUES (NULL, ?, ?, ?, ?, '0');`
-
-
 
             db.query(insertAccountSQL, [req.body.email, hash, req.body.lastname, req.body.firstname], function (err, result) {
                 if (err) {
@@ -59,22 +57,20 @@ function signupAccount(req, res) {
                 }
 
                 if (req.body.lang) {
-                    fs.exists(`emails/${req.body.lang}/account-confirmation-template.html`, function (exists) {
-                        if (exists) {
-                            sendEmail(req.body.lang, req)
-                        }
-                        else {
-                            sendEmail("en", req)
+                    if (fs.existsSync(`emails/${req.body.lang}/account-confirmation-template.html`)) {
+                        sendEmail(req.body.lang, req)
+                    }
+                    else {
+                        sendEmail("en", req)
+                    }
 
-                        }
-                    });
                 }
                 else {
                     sendEmail("en", req)
                 }
 
 
-                logger.info(`New account created : ${req.body.email} - ${req.body.lastname} ${req.body.firstname} from ${(req.headers['x-real-ip'] || req.connection.remoteAddress)}`)
+                logger.info(`New account created : ${req.body.email} - ${req.body.lastname} ${req.body.firstname} from ${(req.ip)}`)
                 return res.status(201).json({
                     result: "success",
                     type: "account-successfully-created",
@@ -87,7 +83,7 @@ function signupAccount(req, res) {
 
 
 }
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
 
     if (validateLogin(req)) {
 
@@ -113,7 +109,7 @@ exports.login = (req, res, next) => {
                             })
 
                         }
-                        logger.info(`${req.headers['x-real-ip'] || req.connection.remoteAddress} logged to ${req.body.email} (${result[0].id})`)
+                        logger.info(`${req.ip} logged to ${req.body.email} (${result[0].id})`)
 
                         if (result[0].isVerified === 1) {
                             return res.status(200).json({
@@ -175,17 +171,18 @@ exports.changePassword = (req, res, next) => {
                                     if (err3) {
                                         return res.status(500).json(getJsonForInternalError(err3.message))
                                     }
-
+                                    result2 = serverSideDecrypt(result2)
                                     for (let i = 0; i < result2.length; i++) {
                                         const decryptedPassword = CryptoJS.AES.decrypt(result2[i].password, req.body.currentPassword).toString(CryptoJS.enc.Utf8)
-                                        const encryptedPassword = CryptoJS.AES.encrypt(decryptedPassword, req.body.newPassword).toString()
+                                        const encryptedPassword = CryptoJS.AES.encrypt(CryptoJS.AES.encrypt(decryptedPassword, req.body.newPassword).toString(), process.env.PASSWORD_ENCRYPT_KEY).toString()
+
                                         db.query(`UPDATE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\` SET \`password\` = ? WHERE \`${process.env.DB_OPM_CREDENTIALS_TABLE}\`.\`id\` = ?;`, [encryptedPassword, result2[i].id], function (err4) {
                                             if (err4) {
                                                 return res.status(500).json(getJsonForInternalError(err4.message))
                                             }
                                         })
                                     }
-                                    logger.info(`Password modified : (${req.userId}) from ${req.headers["x-real-ip"] || req.connection.remoteAddress}`)
+                                    logger.info(`Password modified : (${req.userId}) from ${req.ip}`)
                                     return res.status(201).json({
                                         result: "success",
                                         type: "password-successfully-modified",
@@ -255,7 +252,7 @@ function getJsonForInternalError(message) {
 }
 
 function validateSignup(req) {
-    const lettersRegex = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/
+    const lettersRegex = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,255}$/
 
     if (req.body.email && req.body.password && req.body.firstname && req.body.lastname) {
         if (emailRegex.test(req.body.email) && passwordRegex.test(req.body.password) && lettersRegex.test(req.body.lastname) && lettersRegex.test(req.body.firstname)) {
@@ -270,7 +267,7 @@ function validateSignup(req) {
     }
 }
 function validateLogin(req) {
-    if (req.body.email && req.body.password) {
+    if (req.body.email && req.body.email.length <= 255 && req.body.password) {
         if (emailRegex.test(req.body.email) && passwordRegex.test(req.body.password)) {
             return true
         }
