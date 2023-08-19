@@ -63,8 +63,9 @@ class PasswordsDashboard extends Component {
     componentDidMount() {
         const { isLoading } = this.state
         this.setState({ token: readToken(this.props) })
-
-
+        if (this.props.location.state && this.props.location.state.password && this.props.location.state.password !== "") {
+            this.setState({ password: this.props.location.state.password })
+        }
 
         if (isLoading) {
             this.updateCredentials()
@@ -87,8 +88,8 @@ class PasswordsDashboard extends Component {
             .then(result => {
                 let finalCredentials = []
                 for (let i = 0; i < result.data.credentials.length; i++) {
-                    result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
-                    result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${extractRootDomain(result.data.credentials[i].url).replaceAll(".", "_")}@2x.png`
+                    result.data.credentials[i].smallImageURL = `https://logo.clearbit.com/${extractRootDomain(result.data.credentials[i].url)}?size=50`
+                    result.data.credentials[i].largeImageURL = `https://logo.clearbit.com/${extractRootDomain(result.data.credentials[i].url)}?size=100`
 
                     finalCredentials.push(result.data.credentials[i])
                 }

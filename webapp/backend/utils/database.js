@@ -8,7 +8,6 @@ const databaseUsername = process.env.DB_USERNAME
 const databasePassword = process.env.DB_PASSWORD
 
 
-module.exports.tokenKey = process.env.AUTH_TOKEN_KEY
 
 const database = mysql.createPool({
     host: databaseHost,
@@ -30,7 +29,7 @@ module.exports.initDatabase = function () {
         + " `isVerified` BOOLEAN NOT NULL DEFAULT FALSE ,"
         + " PRIMARY KEY (`id`)) ENGINE = InnoDB;", function (err, result) {
             if (err) {
-                logger.error(err.sqlMessage)
+                logger.error(err)
                 throw err
             }
             logger.info("Connected to database!")

@@ -91,7 +91,8 @@ class Login extends Component {
                     saveEmail(email)
                     this.props.history.push({
                         pathname: "/", state: {
-                            token: res.data.token
+                            token: res.data.token,
+                            password: password
                         }
                     })
                 }
@@ -181,7 +182,10 @@ class Login extends Component {
 
                         <p className="login-another-account" onClick={this.handleAuthToAnotherAccount}>{t("auth.login-another-account")}</p>
                     }
-                    <button className="login-btn" onClick={this.handleLogin} disabled={isConnecting}
+                    <button className="login-btn" onClick={event => {
+                        event.preventDefault()
+                        this.handleLogin()
+                    }} disabled={isConnecting}
                         style={{ width: isConnecting ? "50px" : "" }}>{isConnecting ? <i className="fad fa-spinner-third fa-spin"></i> : t("auth.login")}
                     </button>
 

@@ -3,23 +3,20 @@ const fs = require("fs")
 const handlebars = require('handlebars')
 const db = require("../utils/database").database
 const logger = require("../utils/logger")
-
 const jwt = require("jsonwebtoken")
 
 require('dotenv').config()
 
+const VALID_LANGS = ["en", "fr"]
 
-exports.resendEmail = (req, res, next) => {
-    if (req.body.lang) {
-        fs.exists(`emails/${req.body.lang}/account-confirmation-template.html`, function (exists) {
-            if (exists) {
-                sendEmail(req.body.lang, req)
-            }
-            else {
-                sendEmail("en", req)
-
-            }
-        });
+exports.resendEmail = (req) => {
+    if (req.body.lang && VALID_LANGS.includes(req.body.lang)) {
+        if (fs.existsSync(`emails/${req.body.lang}/account-confirmation-template.html`)) {
+            sendEmail(req.body.lang, req)
+        }
+        else {
+            sendEmail("en", req)
+        }
     }
     else {
         sendEmail("en", req)
@@ -27,9 +24,12 @@ exports.resendEmail = (req, res, next) => {
 }
 exports.sendEmail = sendEmail
 function sendEmail(lang, req) {
+    if (!VALID_LANGS.includes(req.body.lang)) {
+        return
+    }
     fs.readFile(`emails/${lang}/account-confirmation-template.html`, 'utf8', (err, data) => {
         if (!err) {
-            db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE email = '${req.body.email}'`, function (err, result) {
+            db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE email = ?`, [req.body.email], function (err, result) {
                 if (!err) {
                     const transporter = nodemailer.createTransport({
                         host: process.env.EMAIL_HOST,
@@ -73,7 +73,7 @@ exports.emailConfirmation = (req, res, next) => {
         }
         const decodedToken = jwt.verify(req.body.token, process.env.AUTH_TOKEN_KEY)
         const userId = decodedToken.userId
-        db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE id = '${userId}'`, function (err, result) {
+        db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE id = ?`, [userId], function (err, result) {
             if (err) {
                 return res.status(500).json(getJsonForInternalError(err))
             }
@@ -85,11 +85,11 @@ exports.emailConfirmation = (req, res, next) => {
                         message: "E-mail already verified!"
                     });
                 }
-                db.query(`UPDATE \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` SET \`isVerified\` = '1' WHERE \`${process.env.DB_OPM_ACCOUNTS_TABLE}\`.\`id\` = ${userId};`, function (err2, result2) {
+                db.query(`UPDATE \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` SET \`isVerified\` = '1' WHERE \`${process.env.DB_OPM_ACCOUNTS_TABLE}\`.\`id\` = ?`, [userId], function (err2, result2) {
                     if (err) {
                         return res.status(500).json(getJsonForInternalError(err.message))
                     }
-                    logger.info(`${req.headers['x-real-ip'] || req.connection.remoteAddress} verified e-mail : ${result[0].email} (${result[0].id})`)
+                    logger.info(`${req.ip} verified e-mail : ${result[0].email} (${result[0].id})`)
 
                     return res.status(200).json({
                         result: "success",
@@ -120,7 +120,7 @@ exports.isEmailConfirmed = (req, res, next) => {
     if (req.body.email) {
         const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (emailRegex.test(req.body.email)) {
-            db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE email = '${req.body.email}'`, function (err, result) {
+            db.query(`SELECT * FROM \`${process.env.DB_OPM_ACCOUNTS_TABLE}\` WHERE email = ?`, [req.body.email], function (err, result) {
                 if (err) {
                     return res.status(500).json(getJsonForInternalError(err.message))
                 }

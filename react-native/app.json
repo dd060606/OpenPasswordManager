@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "OpenPasswordManager",
+    "slug": "opm",
+    "version": "1.0.0",
+    "assetBundlePatterns": ["**/*"]
+  },
+  "name": "OpenPasswordManager"
+}

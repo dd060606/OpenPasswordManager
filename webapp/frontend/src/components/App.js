@@ -11,6 +11,7 @@ import "./css/App.css"
 class App extends Component {
     state = {
         token: "",
+        password: "",
         isLoading: true
     }
 
@@ -18,6 +19,10 @@ class App extends Component {
 
         if (readToken(this.props)) {
             this.setState({ token: readToken(this.props) })
+            const password = this.props.location.state.password;
+            if (password && password !== "") {
+                this.setState({ password: password })
+            }
             axios.get(`${process.env.REACT_APP_SERVER_URL}/api/auth/info`, { headers: { "Authorization": `Bearer ${readToken(this.props)}` } })
                 .then(result => {
                     this.setState({ isLoading: false })
@@ -33,13 +38,13 @@ class App extends Component {
 
     }
     render() {
-        const { token, isLoading } = this.state
+        const { token, isLoading, password } = this.state
 
         return (
 
             <>
                 {isLoading && <Loading />}
-                {!isLoading && <Redirect path="/" to={{ pathname: "/dashboard/passwords", state: { token: token } }} />}
+                {!isLoading && <Redirect path="/" to={{ pathname: "/dashboard/passwords", state: { token: token, password: password } }} />}
             </>
 
         )
