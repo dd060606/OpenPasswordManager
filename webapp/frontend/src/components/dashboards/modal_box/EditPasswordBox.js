@@ -27,7 +27,7 @@ class EditPasswordBox extends Component {
         websiteNameFieldFocused: false,
         usernameFieldFocused: false,
         isLoading: false,
-        passwordLength: 16,
+        passwordLength: 20,
         numbersEnabled: true,
         lowercasesEnabled: true,
         uppercaseEnabled: true,
