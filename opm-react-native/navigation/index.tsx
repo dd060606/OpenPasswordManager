@@ -13,7 +13,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName } from "react-native";
+import { ColorSchemeName, useColorScheme } from "react-native";
 
 import { RootStackParamList } from "app/types/types";
 import LinkingConfiguration from "./LinkingConfiguration";
@@ -24,6 +24,7 @@ import PasswordsScreen from "app/screens/PasswordsScreen";
 import { useTranslation } from "react-i18next";
 import SettingsScreen from "app/screens/SettingsScreen";
 import SecurityScreen from "app/screens/SecurityScreen";
+import { getTheme } from "app/utils/Config";
 
 export default function Navigation({
   colorScheme,
@@ -89,6 +90,9 @@ const TabNavigator = () => {
         },
         tabBarActiveTintColor: "#54c2f0",
         tabBarInactiveTintColor: "gray",
+        tabBarStyle: {
+          backgroundColor: getTheme() === "dark" ? "#000" : "#fff",
+        },
       })}
     >
       <Tab.Screen
