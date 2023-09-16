@@ -2,7 +2,7 @@
   "expo": {
     "name": "OpenPasswordManager",
     "slug": "openpasswordmanager",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "opm",
@@ -35,6 +35,6 @@
       }
     },
     "owner": "dd_06",
-    "runtimeVersion": "1.4.1"
+    "runtimeVersion": "1.4.2"
   }
 }
