@@ -11,7 +11,7 @@ import CryptoJS from "crypto-js"
 import Checkbox from "@material-ui/core/Checkbox"
 import Slider from "@material-ui/core/Slider"
 import { isDarkTheme } from "../../../utils/themes-utils"
-import { extractRootDomain } from "../../../utils/credentials-utils"
+import { extractRootDomain, generateRandomPassword } from "../../../utils/credentials-utils"
 
 
 class AddPasswordBox extends Component {
@@ -195,58 +195,7 @@ class AddPasswordBox extends Component {
     }
     generateRandomPassword = () => {
         const { passwordLength, numbersEnabled, lowercasesEnabled, uppercaseEnabled, symbolsEnabled } = this.state
-        let generatedPassword = ""
-        const specialsChars = [..."@$!%*#?&"]
-        const letters = [..."abcdefghijklmnopqrstuvwxyz"]
-        const numbers = [..."0123456789"]
-
-        while (generatedPassword.length !== passwordLength) {
-            const randomResult = this.getRandomNumber(4)
-            if (generatedPassword.length === passwordLength - 1) {
-                const containLowercase = /^(?=.*[a-z])[a-zA-Z\d@$!%*#?&_]{8,}$/
-                const containUppercase = /^(?=.*[A-Z])[a-zA-Z\d@$!%*#?&_]{8,}$/
-                const containSpecialChar = /^(?=.*[$!%*#?&_])[a-zA-Z\d@$!%*#?&_]{8,}$/
-                const containNumber = /^(?=.*\d)[a-zA-Z\d@$!%*#?&_]{8,}$/
-                if (!containLowercase.test(generatedPassword) && lowercasesEnabled) {
-                    generatedPassword += letters[this.getRandomNumber(letters.length)]
-                }
-                else if (!containUppercase.test(generatedPassword) && uppercaseEnabled) {
-                    generatedPassword += letters[this.getRandomNumber(letters.length)].toUpperCase()
-                }
-                else if (!containSpecialChar.test(generatedPassword) && symbolsEnabled) {
-                    generatedPassword += specialsChars[this.getRandomNumber(specialsChars.length)]
-                }
-                else if (!containNumber.test(generatedPassword) && numbersEnabled) {
-                    generatedPassword += numbers[this.getRandomNumber(numbers.length)]
-                }
-                break
-            }
-            if (randomResult === 0) {
-                if (symbolsEnabled) {
-                    generatedPassword += specialsChars[this.getRandomNumber(specialsChars.length)]
-                }
-            }
-            else if (randomResult === 1) {
-                if (uppercaseEnabled) {
-                    generatedPassword += letters[this.getRandomNumber(letters.length)].toUpperCase()
-
-                }
-            }
-            else if (randomResult === 2) {
-                if (lowercasesEnabled) {
-                    generatedPassword += letters[this.getRandomNumber(letters.length)]
-
-                }
-            }
-            else {
-                if (numbersEnabled) {
-                    generatedPassword += numbers[this.getRandomNumber(numbers.length)]
-
-                }
-
-            }
-        }
-        this.setState({ password: generatedPassword, generatePasswordBoxOpened: false })
+        this.setState({ password: generateRandomPassword(passwordLength, numbersEnabled, lowercasesEnabled, uppercaseEnabled, symbolsEnabled), generatePasswordBoxOpened: false })
     }
 
     handleCloseGeneratePasswordBox = event => {
