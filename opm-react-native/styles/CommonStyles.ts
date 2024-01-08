@@ -21,7 +21,7 @@ const commonStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "90%",
-    height: 300,
+    height: 350,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

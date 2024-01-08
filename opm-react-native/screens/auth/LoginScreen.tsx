@@ -171,11 +171,7 @@ class LoginScreen extends Component<
         } else {
           this.openErrorModal(err.message);
         }
-        if (
-          isAccessError &&
-          getOfflineDB() !== undefined &&
-          getOfflineDB().length > 0
-        ) {
+        if (isAccessError && getOfflineDB().length > 0) {
           let failed = false;
           let allEmpty = true;
           try {

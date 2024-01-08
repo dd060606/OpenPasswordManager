@@ -81,10 +81,11 @@ export function getWeakPasswords(
 }
 
 function calculatePasswordStrength(password: string): 15 | 50 | 30 | 100 | 70 {
-  const containUpper = /^(?=.*[A-Z])[a-zA-Z\d@$!%*#?&_]{8,}$/;
-  const containLower = /^(?=.*[a-z])[a-zA-Z\d@$!%*#?&_]{8,}$/;
-  const containNumber = /^(?=.*\d)[a-zA-Z\d@$!%*#?&_]{8,}$/;
-  const containSpecialChar = /^(?=.*[@$!%*#?&_])[a-zA-Z\d@$!%*#?&_]{8,}$/;
+  const containUpper = /^(?=.*[A-Z])[a-zA-Z\d!@#$%^&*()?_+-=.]{8,}$/;
+  const containLower = /^(?=.*[a-z])[a-zA-Z\d!@#$%^&*()?_+-=.]{8,}$/;
+  const containNumber = /^(?=.*\d)[a-zA-Z\d!@#$%^&*()?_+-=.]{8,}$/;
+  const containSpecialChar =
+    /^(?=.*[!@#$%^&*()?_+-=.])[a-zA-Z\d!@#$%^&*()?_+-=.]{8,}$/;
 
   if (password.length < 8) {
     return 15;

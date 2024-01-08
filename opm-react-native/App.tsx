@@ -6,22 +6,27 @@ import Navigation from "./navigation";
 
 import "./i18n";
 import { getTheme, loadSettings } from "./utils/Config";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StatusBar } from "./components/OPMComponents";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
   let colorScheme = useColorScheme();
   const [scheme, setScheme] = useState(colorScheme);
-  loadSettings()
-    .then(() => {
-      if (getTheme() === "dark") {
-        setScheme("dark");
-      } else if (getTheme() === "light") {
-        setScheme("light");
-      }
-    })
-    .catch(() => {});
+  useEffect(() => {
+    loadSettings()
+      .then(() => {
+        if (getTheme() === "dark") {
+          setScheme("dark");
+        } else if (getTheme() === "light") {
+          setScheme("light");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   if (!isLoadingComplete) {
     return null;
   } else {

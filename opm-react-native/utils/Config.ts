@@ -70,13 +70,18 @@ export async function loadSettings() {
   if (storedSettings) {
     settings = JSON.parse(storedSettings);
   }
+  /*
   let num = 0;
   let db = "";
   while ((await SecureStore.getItemAsync("db-" + num)) !== null) {
     db += await SecureStore.getItemAsync("db-" + num);
     num++;
   }
-  offlineDB = JSON.parse(db);
+  */
+  const db = await getSecure("db");
+  if (db) {
+    offlineDB = JSON.parse(db);
+  }
 }
 function saveSettings() {
   saveSecure("settings", JSON.stringify(settings));
@@ -108,6 +113,7 @@ export function getOfflineDB() {
 }
 export async function setOfflineDB(db: Credentials[]) {
   offlineDB = db;
+  /*
   let num = 0;
   while ((await SecureStore.getItemAsync("db-" + num)) !== null) {
     await SecureStore.deleteItemAsync("db-" + num);
@@ -118,14 +124,6 @@ export async function setOfflineDB(db: Credentials[]) {
     saveSecure("db-" + num, chunk);
     num++;
   });
-}
-function chunkString(str: string, length: number) {
-  const size = Math.ceil(str.length / length);
-  const res = Array(size);
-  let offset = 0;
-  for (let i = 0; i < size; i++) {
-    res[i] = str.substr(offset, length);
-    offset += length;
-  }
-  return res;
+  */
+  saveSecure("db", JSON.stringify(offlineDB));
 }

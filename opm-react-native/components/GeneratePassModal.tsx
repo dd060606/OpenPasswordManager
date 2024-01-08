@@ -53,10 +53,10 @@ class GeneratePassModal extends Component<Props & WithTranslation, State> {
       symbolsEnabled,
     } = this.state;
 
-    let generatedPassword = "";
-    const specialsChars = [..."@$!%*#?&"];
-    const letters = [..."abcdefghijklmnopqrstuvwxyz"];
-    const numbers = [..."0123456789"];
+    const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+    const numberChars = "0123456789";
+    const specialChars = "!@#$%^&*()?_+-=.";
 
     if (
       !numbersEnabled &&
@@ -66,54 +66,50 @@ class GeneratePassModal extends Component<Props & WithTranslation, State> {
     ) {
       return "";
     }
+    let possibleChars = "";
+    let password = "";
 
-    while (generatedPassword.length <= passwordLength) {
-      const randomResult = this.getRandomNumber(4);
-      if (generatedPassword.length === passwordLength - 1) {
-        const containLowercase = /^(?=.*[a-z])[a-zA-Z\d@$!%*#?&_]{8,}$/;
-        const containUppercase = /^(?=.*[A-Z])[a-zA-Z\d@$!%*#?&_]{8,}$/;
-        const containSpecialChar = /^(?=.*[$!%*#?&_])[a-zA-Z\d@$!%*#?&_]{8,}$/;
-        const containNumber = /^(?=.*\d)[a-zA-Z\d@$!%*#?&_]{8,}$/;
-        if (!containLowercase.test(generatedPassword) && lowercaseEnabled) {
-          generatedPassword += letters[this.getRandomNumber(letters.length)];
-        } else if (
-          !containUppercase.test(generatedPassword) &&
-          uppercaseEnabled
-        ) {
-          generatedPassword +=
-            letters[this.getRandomNumber(letters.length)].toUpperCase();
-        } else if (
-          !containSpecialChar.test(generatedPassword) &&
-          symbolsEnabled
-        ) {
-          generatedPassword +=
-            specialsChars[this.getRandomNumber(specialsChars.length)];
-        } else if (!containNumber.test(generatedPassword) && numbersEnabled) {
-          generatedPassword += numbers[this.getRandomNumber(numbers.length)];
-        }
-        break;
-      }
-      if (randomResult === 0) {
-        if (symbolsEnabled) {
-          generatedPassword +=
-            specialsChars[this.getRandomNumber(specialsChars.length)];
-        }
-      } else if (randomResult === 1) {
-        if (uppercaseEnabled) {
-          generatedPassword +=
-            letters[this.getRandomNumber(letters.length)].toUpperCase();
-        }
-      } else if (randomResult === 2) {
-        if (lowercaseEnabled) {
-          generatedPassword += letters[this.getRandomNumber(letters.length)];
-        }
-      } else {
-        if (numbersEnabled) {
-          generatedPassword += numbers[this.getRandomNumber(numbers.length)];
-        }
-      }
+    if (uppercaseEnabled) {
+      const randomUppercase =
+        uppercaseChars[this.getRandomNumber(uppercaseChars.length)];
+      possibleChars += uppercaseChars;
+      password += randomUppercase;
     }
-    return generatedPassword;
+
+    if (lowercaseEnabled) {
+      const randomLowercase =
+        lowercaseChars[this.getRandomNumber(lowercaseChars.length)];
+      possibleChars += lowercaseChars;
+      password += randomLowercase;
+    }
+
+    if (numbersEnabled) {
+      const randomNumber =
+        numberChars[this.getRandomNumber(numberChars.length)];
+      possibleChars += numberChars;
+      password += randomNumber;
+    }
+
+    if (symbolsEnabled) {
+      const randomSpecialChar =
+        specialChars[this.getRandomNumber(specialChars.length)];
+      possibleChars += specialChars;
+      password += randomSpecialChar;
+    }
+
+    const remainingChars = passwordLength - password.length;
+
+    for (let i = 0; i < remainingChars; i++) {
+      const randomChar =
+        possibleChars[this.getRandomNumber(possibleChars.length)];
+      password += randomChar;
+    }
+    password = password
+      .split("")
+      .sort(() => Math.random() - 0.5)
+      .join("");
+
+    return password;
   };
 
   getRandomNumber(max: number) {
