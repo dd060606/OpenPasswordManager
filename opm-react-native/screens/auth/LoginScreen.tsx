@@ -39,6 +39,7 @@ import Input from "app/components/Input";
 
 import CryptoES from "crypto-es";
 import { login } from "app/utils/APIUtils";
+import { MaterialIcons } from "@expo/vector-icons";
 
 type State = {
   email: string;
@@ -56,6 +57,7 @@ type State = {
     message: string;
   };
   isAuthenticating: boolean;
+  showBiometricButton: boolean;
 };
 
 const emailRegex =
@@ -82,33 +84,41 @@ class LoginScreen extends Component<
       message: "",
     },
     isAuthenticating: false,
+    showBiometricButton: false,
   };
   componentDidMount() {
-    getSecure("email").then((email) => {
-      if (email && emailRegex.test(email)) {
-        this.setState({ email: email, isAuthenticating: true });
-        this.loadBiometricAuth(email);
-      }
-    });
+    this.loadBiometricAuth();
   }
 
-  loadBiometricAuth = (email: string) => {
-    const { t } = this.props;
-    if (isBiometricAuth()) {
-      getProtected("password", [t("auth.login"), t("cancel")])
-        .then((password) => {
-          if (password) {
-            this.performAuth(email, password);
-          } else {
-            this.setState({ isAuthenticating: false });
-          }
-        })
-        .catch(() => {
-          this.setState({ isAuthenticating: false });
+  loadBiometricAuth = () => {
+    getSecure("email").then((email) => {
+      if (email && emailRegex.test(email)) {
+        this.setState({
+          email: email,
+          isAuthenticating: true,
+          showBiometricButton: false,
         });
-    } else {
-      this.setState({ isAuthenticating: false });
-    }
+        const { t } = this.props;
+        if (isBiometricAuth()) {
+          getProtected("password", [t("auth.login"), t("cancel")])
+            .then((password) => {
+              if (password) {
+                this.performAuth(email, password);
+              } else {
+                this.setState({
+                  isAuthenticating: false,
+                  showBiometricButton: true,
+                });
+              }
+            })
+            .catch(() => {
+              this.setState({ isAuthenticating: false });
+            });
+        } else {
+          this.setState({ isAuthenticating: false });
+        }
+      }
+    });
   };
 
   componentWillUnmount() {
@@ -240,6 +250,7 @@ class LoginScreen extends Component<
       errorModal,
       confirmModal,
       isAuthenticating,
+      showBiometricButton,
     } = this.state;
     const { t } = this.props;
     return (
@@ -285,6 +296,13 @@ class LoginScreen extends Component<
               ) : undefined
             }
           />
+          {showBiometricButton && (
+            <Button
+              onPress={this.loadBiometricAuth}
+              title=""
+              JSX={<MaterialIcons name="fingerprint" size={30} color="white" />}
+            />
+          )}
 
           <StyledButton
             title={t("auth.no-account")}

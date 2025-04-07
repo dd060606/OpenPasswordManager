@@ -21,8 +21,8 @@
     "express-rate-limit": "^6.7.0",
     "express-session": "^1.17.2",
     "handlebars": "^4.7.7",
-    "jsonwebtoken": "^8.5.1",
-    "mysql2": "^2.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.3",
     "nodemailer": "^6.6.0"
   },
   "repository": {

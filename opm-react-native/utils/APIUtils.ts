@@ -126,10 +126,14 @@ export function resendEmail(email: string, lang: string) {
 export function login(email: string, password: string) {
   return new Promise<AxiosAuthResponse>((resolve, reject) => {
     axios
-      .post(`${API_URL}/api/auth/login`, {
-        email: email,
-        password: password,
-      })
+      .post(
+        `${API_URL}/api/auth/login`,
+        {
+          email: email,
+          password: password,
+        },
+        { timeout: 7000 }
+      )
       .then((res: AxiosAuthResponse) => {
         if (res.data && res.data.token) {
           setToken(res.data.token);
