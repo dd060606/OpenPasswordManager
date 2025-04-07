@@ -96,8 +96,8 @@ class AddPasswordBox extends Component {
             .then(result => {
                 let finalCredentials = []
                 for (let i = 0; i < result.data.credentials.length; i++) {
-                    result.data.credentials[i].smallImageURL = `https://logo.clearbit.com/${extractRootDomain(result.data.credentials[i].url)}?size=50`
-                    result.data.credentials[i].largeImageURL = `https://logo.clearbit.com/${extractRootDomain(result.data.credentials[i].url)}?size=100`
+                    result.data.credentials[i].smallImageURL = `https://d2erpoudwvue5y.cloudfront.net/_46x30/${extractRootDomain(result.data.credentials[i].url).replace(".", "_")}@2x.png`
+                    result.data.credentials[i].largeImageURL = `https://d2erpoudwvue5y.cloudfront.net/_160x106/${extractRootDomain(result.data.credentials[i].url).replace(".", "_")}@2x.png`
 
                     finalCredentials.push(result.data.credentials[i])
                 }
